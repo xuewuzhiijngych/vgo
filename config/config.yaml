@@ -1,0 +1,13 @@
+dbconf:
+  driver: mysql
+  hostname: 127.0.0.1
+  hostport: 3306
+  database: go_study
+  username: root
+  password: 111111
+  prefix:
+app:
+  version: 1.0.0
+  #环境状态：dev=开发，pro=生产
+  env: dev
+  port: 8080
