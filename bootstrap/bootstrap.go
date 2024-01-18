@@ -22,6 +22,14 @@ func Start() {
 	}
 
 	app := gin.Default()
+
+	// 找不到路由
+	app.NoRoute(func(c *gin.Context) {
+		path := c.Request.URL.Path
+		method := c.Request.Method
+		c.JSON(404, gin.H{"code": 404, "message": "请求方式：" + method + " 请求地址：" + path + "不存在！！！"})
+	})
+
 	route.CollectRoute(app)
 	err := app.Run(":" + appConf.Port)
 	if err != nil {
