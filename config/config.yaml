@@ -6,6 +6,11 @@ dbconf:
   username: root
   password: 111111
   prefix:
+redisconf:
+  hostname: 192.168.2.253
+  hostport: 6379
+  password: qttx123456
+  db: 11
 app:
   version: 1.0.0
   #环境状态：dev=开发，pro=生产

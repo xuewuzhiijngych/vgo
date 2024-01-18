@@ -3,19 +3,20 @@ package bootstrap
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"vgo/db"
+	"vgo/core/db"
+	"vgo/core/log"
+	"vgo/core/redis"
 	"vgo/global"
-	"vgo/log"
 	"vgo/route"
 )
 
 func Start() {
 	global.App.Config.InitConfig()
-	db.MyInit()
 	log.MyInit()
-	
-	appConf := global.App.Config.App
+	db.MyInit()
+	redis.MyInit()
 
+	appConf := global.App.Config.App
 	if appConf.Env == "pro" {
 		gin.SetMode(gin.ReleaseMode)
 	}

@@ -27,9 +27,18 @@ type DbConf struct {
 	Prefix   string `yaml:"prefix"`
 }
 
+// RedisConf Redis配置
+type RedisConf struct {
+	Hostname string `yaml:"hostname"`
+	HostPort string `yaml:"hostport"`
+	Password string `yaml:"password"`
+	DB       int    `yaml:"db"`
+}
+
 type Config struct {
-	DbConf DbConf `yaml:"dbconf"`
-	App    App    `yaml:"app"`
+	DbConf    DbConf    `yaml:"dbconf"`
+	RedisConf RedisConf `yaml:"redisconf"`
+	App       App       `yaml:"app"`
 }
 
 func (config *Config) InitConfig() *Config {
