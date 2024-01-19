@@ -26,7 +26,7 @@ func MyInit() {
 	sqlDB.SetConnMaxLifetime(time.Hour)
 }
 
-// GetDb 获取数据连接
-func GetDb() *gorm.DB {
+// GetCon 获取数据连接
+func GetCon() *gorm.DB {
 	return db
 }

@@ -13,6 +13,5 @@ redisconf:
   db: 11
 app:
   version: 1.0.0
-  #环境状态：dev=开发，pro=生产
-  env: dev
+  env: dev #环境状态：dev=开发，pro=生产
   port: 8080
