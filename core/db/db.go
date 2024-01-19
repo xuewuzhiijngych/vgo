@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"time"
-	"vgo/global"
+	"vgo/core/global"
 )
 
 var db *gorm.DB

@@ -2,7 +2,7 @@ package global
 
 import (
 	"github.com/spf13/viper"
-	"vgo/config"
+	"vgo/core/config"
 )
 
 type Application struct {

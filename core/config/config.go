@@ -9,11 +9,12 @@ import (
 
 // App 应用配置
 type App struct {
-	Domain  string `yaml:"domain"`
-	Port    string `yaml:"port"`
-	CouNum  string `yaml:"cpu_num"`
-	Version string `yaml:"version"`
-	Env     string `yaml:"env"`
+	Domain     string `yaml:"domain"`
+	Port       string `yaml:"port"`
+	CouNum     string `yaml:"cpu_num"`
+	Version    string `yaml:"version"`
+	Env        string `yaml:"env"`
+	RequestLog int    `yaml:"requestlog"`
 }
 
 // DbConf 数据数据库配置

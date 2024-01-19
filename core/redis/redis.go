@@ -3,7 +3,7 @@ package redis
 import (
 	"fmt"
 	"github.com/go-redis/redis"
-	"vgo/global"
+	"vgo/core/global"
 )
 
 var goredis *redis.Client

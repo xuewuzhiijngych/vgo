@@ -12,6 +12,8 @@ redisconf:
   password: qttx123456
   db: 11
 app:
-  version: 1.0.0
+  domain: 0.0.0.0
   env: dev #环境状态：dev=开发，pro=生产
   port: 8080
+  version: 1.0.0
+  requestlog : 1

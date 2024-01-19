@@ -6,8 +6,8 @@ import (
 	"time"
 	"vgo/core/db"
 	"vgo/core/redis"
+	"vgo/core/response"
 	"vgo/model"
-	"vgo/response"
 )
 
 func Index(ctx *gin.Context) {

@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"time"
 	"vgo/core/db"
+	"vgo/core/global"
 	"vgo/core/log"
 	"vgo/core/middle"
 	"vgo/core/redis"
-	"vgo/global"
 	"vgo/route"
 )
 
@@ -26,7 +26,11 @@ func Start() {
 	app := gin.Default()
 
 	// 请求日志
-	app.Use(middle.RequestLogger())
+	if appConf.RequestLog == 1 {
+		app.Use(middle.RequestLogger())
+	}
+
+	// 限流
 	app.Use(middle.RateLimiter(60, time.Second*60))
 
 	// 找不到路由
@@ -37,7 +41,7 @@ func Start() {
 	})
 
 	route.CollectRoute(app)
-	err := app.Run("0.0.0.0:" + appConf.Port)
+	err := app.Run(appConf.Domain + ":" + appConf.Port)
 	if err != nil {
 		fmt.Println(err)
 		return
