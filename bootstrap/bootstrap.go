@@ -3,8 +3,10 @@ package bootstrap
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"time"
 	"vgo/core/db"
 	"vgo/core/log"
+	"vgo/core/middle"
 	"vgo/core/redis"
 	"vgo/global"
 	"vgo/route"
@@ -23,6 +25,10 @@ func Start() {
 
 	app := gin.Default()
 
+	// 请求日志
+	app.Use(middle.RequestLogger())
+	app.Use(middle.RateLimiter(60, time.Second*60))
+
 	// 找不到路由
 	app.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
@@ -31,7 +37,7 @@ func Start() {
 	})
 
 	route.CollectRoute(app)
-	err := app.Run(":" + appConf.Port)
+	err := app.Run("0.0.0.0:" + appConf.Port)
 	if err != nil {
 		fmt.Println(err)
 		return
