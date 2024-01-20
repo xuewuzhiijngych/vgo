@@ -4,6 +4,7 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"time"
+	"vgo/controller"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 		IdentityKey:     "id",
 		PayloadFunc:     payloadFunc,
 		IdentityHandler: identityHandler,
-		Authenticator:   authenticator,
+		Authenticator:   controller.Authenticator,
 		Authorizator:    authorizator,
 		Unauthorized:    unauthorized,
 		TokenLookup:     "header: Authorization",
@@ -23,21 +24,6 @@ var (
 		TimeFunc:        time.Now,
 	})
 )
-
-// 用户身份验证逻辑
-func authenticator(c *gin.Context) (interface{}, error) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-	if isValidUser(username, password) {
-		return "user_id", nil
-	}
-	return nil, jwt.ErrFailedAuthentication
-}
-
-// 账号密码验证逻辑
-func isValidUser(username, password string) bool {
-	return username == "11" && password == "11"
-}
 
 // 用户身份处理逻辑
 func identityHandler(c *gin.Context) interface{} {
