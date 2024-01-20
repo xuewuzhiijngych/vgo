@@ -36,9 +36,15 @@ type RedisConf struct {
 	DB       int    `yaml:"db"`
 }
 
+// JwtConf Jwt配置
+type JwtConf struct {
+	Key string `yaml:"key"`
+}
+
 type Config struct {
 	DbConf    DbConf    `yaml:"dbconf"`
 	RedisConf RedisConf `yaml:"redisconf"`
+	JwtConf   JwtConf   `yaml:"jwtconf"`
 	App       App       `yaml:"app"`
 }
 

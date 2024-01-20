@@ -5,13 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"time"
 	"vgo/controller"
+	"vgo/core/global"
 	"vgo/core/response"
 )
 
 var (
-	key               = []byte("pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz")
 	AuthMiddleware, _ = jwt.New(&jwt.GinJWTMiddleware{
-		Key:             key,
+		Key:             []byte(getKey()),
 		Timeout:         time.Hour,
 		MaxRefresh:      time.Hour,
 		IdentityKey:     "id",
@@ -30,6 +30,11 @@ var (
 func identityHandler(c *gin.Context) interface{} {
 	claims := jwt.ExtractClaims(c)
 	return claims["id"].(string)
+}
+
+func getKey() string {
+	jwtConf := global.App.Config.JwtConf
+	return jwtConf.Key
 }
 
 // JWT 负载生成逻辑

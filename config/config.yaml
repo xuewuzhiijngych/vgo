@@ -11,6 +11,8 @@ redisconf:
   hostport: 6379
   password: qttx123456
   db: 11
+jwtconf:
+  key: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
 app:
   domain: 0.0.0.0
   env: dev #环境状态：dev=开发，pro=生产
