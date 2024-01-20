@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"time"
 	"vgo/core/db"
@@ -32,6 +33,22 @@ func Start() {
 
 	// 限流
 	app.Use(middle.RateLimiter(60, time.Second*60))
+
+	// 获取token
+	app.POST("/login", middle.AuthMiddleware.LoginHandler)
+
+	// JWT验证
+	app.Use(middle.AuthMiddleware.MiddlewareFunc())
+
+	app.GET("/ping", func(c *gin.Context) {
+		// 从上下文中获取当前用户的 ID
+		claims := jwt.ExtractClaims(c)
+		userID := claims["id"].(string)
+		c.JSON(200, gin.H{
+			"userID":  userID,
+			"message": "pong",
+		})
+	})
 
 	// 找不到路由
 	app.NoRoute(func(c *gin.Context) {
