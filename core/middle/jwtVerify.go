@@ -11,7 +11,7 @@ import (
 
 var (
 	AuthMiddleware, _ = jwt.New(&jwt.GinJWTMiddleware{
-		Key:             []byte(getKey()),
+		Key:             []byte(global.App.Config.JwtConf.Key),
 		Timeout:         time.Hour,
 		MaxRefresh:      time.Hour,
 		IdentityKey:     "id",
@@ -32,11 +32,6 @@ func identityHandler(c *gin.Context) interface{} {
 	return claims["id"].(string)
 }
 
-func getKey() string {
-	jwtConf := global.App.Config.JwtConf
-	return jwtConf.Key
-}
-
 // JWT 负载生成逻辑
 func payloadFunc(data interface{}) jwt.MapClaims {
 	if v, ok := data.(string); ok {
@@ -50,6 +45,7 @@ func payloadFunc(data interface{}) jwt.MapClaims {
 // 用户权限验证逻辑
 func authorizator(data interface{}, c *gin.Context) bool {
 	// 在此处执行您的授权逻辑，例如检查用户是否具有特定权限
+	//fmt.Println(data)
 	return true
 }
 

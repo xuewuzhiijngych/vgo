@@ -53,7 +53,7 @@ func Index(ctx *gin.Context) {
 }
 
 func Detail(ctx *gin.Context) {
-	var res []model.Info
+	var res model.Info
 	id := ctx.PostForm("id")
 	db.GetCon().Table("infos").Where("id = ?", id).Find(&res)
 	response.Success(ctx, "成功", res, nil)

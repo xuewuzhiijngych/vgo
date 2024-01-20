@@ -6,22 +6,22 @@ import (
 	"time"
 )
 
-func Success(ctx *gin.Context, msg string, data interface{}, exdata interface{}) {
+func Success(ctx *gin.Context, msg string, data interface{}, extraData interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    1,
-		"message": msg,
-		"data":    data,
-		"exdata":  exdata,
-		"time":    time.Now().Unix(),
+		"code":       1,
+		"message":    msg,
+		"data":       data,
+		"extra_data": extraData,
+		"time":       time.Now().Unix(),
 	})
 }
 
-func Fail(ctx *gin.Context, msg string, data interface{}, exdata interface{}) {
+func Fail(ctx *gin.Context, msg string, data interface{}, extraData interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    0,
-		"message": msg,
-		"data":    data,
-		"exdata":  exdata,
-		"time":    time.Now().Unix(),
+		"code":       0,
+		"message":    msg,
+		"data":       data,
+		"extra_data": extraData,
+		"time":       time.Now().Unix(),
 	})
 }
