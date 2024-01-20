@@ -9,6 +9,7 @@ import (
 	"vgo/core/log"
 	"vgo/core/middle"
 	"vgo/core/redis"
+	"vgo/core/response"
 	"vgo/route"
 )
 
@@ -45,7 +46,9 @@ func Start() {
 	app.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
 		method := c.Request.Method
-		c.JSON(404, gin.H{"code": 404, "message": "请求方式：" + method + " 请求地址：" + path + "不存在！！！"})
+		response.Fail(c, "请求方式："+method+" 请求地址："+path+"不存在！！！", map[string]interface{}{
+			"HttpCode": 404,
+		}, nil)
 	})
 
 	route.CollectRoute(app)

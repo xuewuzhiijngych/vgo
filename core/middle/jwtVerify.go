@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"time"
 	"vgo/controller"
+	"vgo/core/response"
 )
 
 var (
@@ -49,8 +50,8 @@ func authorizator(data interface{}, c *gin.Context) bool {
 
 // 未授权处理逻辑
 func unauthorized(c *gin.Context, code int, message string) {
-	c.JSON(code, gin.H{
-		"code":    code,
-		"message": "未授权！",
-	})
+	response.Fail(c, "未登录", map[string]interface{}{
+		"HttpCode": code,
+		"HttpMsg":  message,
+	}, nil)
 }
