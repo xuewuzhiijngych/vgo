@@ -39,6 +39,8 @@ func Start() {
 	// JWT验证
 	app.Use(middle.AuthMiddleware.MiddlewareFunc())
 
+	app.GET("/refresh_token", middle.AuthMiddleware.RefreshHandler)
+
 	// 找不到路由
 	app.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
