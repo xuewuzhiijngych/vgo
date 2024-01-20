@@ -34,9 +34,6 @@ func Start() {
 	// 限流
 	app.Use(middle.RateLimiter(60, time.Second*60))
 
-	// 获取token
-	app.POST("/login", middle.AuthMiddleware.LoginHandler)
-
 	// JWT验证
 	app.Use(middle.AuthMiddleware.MiddlewareFunc())
 
