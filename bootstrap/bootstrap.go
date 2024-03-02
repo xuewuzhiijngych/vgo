@@ -3,7 +3,6 @@ package bootstrap
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"time"
 	"vgo/core/db"
 	"vgo/core/global"
 	"vgo/core/log"
@@ -32,15 +31,15 @@ func Start() {
 	}
 
 	// 限流
-	app.Use(middle.RateLimiter(60, time.Second*60))
+	//app.Use(middle.RateLimiter(60, time.Second*60))
 
 	// 登录
-	app.POST("/login", middle.AuthMiddleware.LoginHandler)
+	app.POST("/login", middle.GetMid().LoginHandler)
 
 	// JWT验证
-	app.Use(middle.AuthMiddleware.MiddlewareFunc())
+	app.Use(middle.GetMid().MiddlewareFunc())
 
-	app.GET("/refresh_token", middle.AuthMiddleware.RefreshHandler)
+	app.GET("/refresh_token", middle.GetMid().RefreshHandler)
 
 	// 找不到路由
 	app.NoRoute(func(c *gin.Context) {

@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	cpuNum, _ := strconv.Atoi("8")
+	cpuNum, _ := strconv.Atoi("12")
 	realCpuNum := runtime.NumCPU()
 	if cpuNum > realCpuNum {
 		cpuNum = realCpuNum

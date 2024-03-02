@@ -38,7 +38,9 @@ type RedisConf struct {
 
 // JwtConf Jwt配置
 type JwtConf struct {
-	Key string `yaml:"key"`
+	Key        string `yaml:"key"`
+	Timeout    int    `yaml:"timeout"`
+	MaxRefresh int    `yaml:"maxrefresh"`
 }
 
 type Config struct {

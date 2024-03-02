@@ -7,11 +7,11 @@ import (
 	"vgo/core/db"
 	"vgo/core/redis"
 	"vgo/core/response"
-	"vgo/model"
+	"vgo/model/Info"
 )
 
 func Index(ctx *gin.Context) {
-	var res []model.Info
+	var res []Info.Build
 
 	page := ctx.DefaultQuery("page", "")
 	pageSize := ctx.DefaultQuery("page_size", "")
@@ -19,7 +19,7 @@ func Index(ctx *gin.Context) {
 	Size, _ := strconv.Atoi(pageSize)
 
 	//Where("id in (?)", []int{1, 2})
-	db.GetCon().Table("infos").Offset(pageNo - 1).Limit(Size).Find(&res)
+	db.GetCon().Table(Info.GetTableName()).Offset(pageNo - 1).Limit(Size).Find(&res)
 
 	//url := "http://www.test.com"
 	//log.GetLogger().Info("write log to file",
@@ -53,8 +53,8 @@ func Index(ctx *gin.Context) {
 }
 
 func Detail(ctx *gin.Context) {
-	var res model.Info
+	var res []Info.Build
 	id := ctx.PostForm("id")
-	db.GetCon().Table("infos").Where("id = ?", id).Find(&res)
+	db.GetCon().Table(Info.GetTableName()).Where("id = ?", id).Find(&res)
 	response.Success(ctx, "成功", res, nil)
 }

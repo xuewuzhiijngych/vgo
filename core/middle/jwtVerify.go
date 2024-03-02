@@ -9,11 +9,15 @@ import (
 	"vgo/core/response"
 )
 
-var (
-	AuthMiddleware, _ = jwt.New(&jwt.GinJWTMiddleware{
-		Key:             []byte(global.App.Config.JwtConf.Key),
-		Timeout:         time.Hour,
-		MaxRefresh:      time.Hour,
+// GetMid 中间件实例
+func GetMid() *jwt.GinJWTMiddleware {
+	global.App.Config.InitConfig()
+	JwtConf := global.App.Config.JwtConf
+
+	Mid, _ := jwt.New(&jwt.GinJWTMiddleware{
+		Key:             []byte(JwtConf.Key),
+		Timeout:         time.Hour * time.Duration(JwtConf.Timeout),
+		MaxRefresh:      time.Hour * time.Duration(JwtConf.MaxRefresh),
 		IdentityKey:     "id",
 		PayloadFunc:     payloadFunc,
 		IdentityHandler: identityHandler,
@@ -24,7 +28,8 @@ var (
 		TokenHeadName:   "Bearer",
 		TimeFunc:        time.Now,
 	})
-)
+	return Mid
+}
 
 // 用户身份处理逻辑
 func identityHandler(c *gin.Context) interface{} {

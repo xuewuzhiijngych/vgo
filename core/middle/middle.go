@@ -7,6 +7,7 @@ import (
 	"vgo/core/log"
 )
 
+// RequestLogger 请求日志
 func RequestLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
