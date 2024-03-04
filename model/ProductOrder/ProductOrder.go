@@ -39,23 +39,29 @@ func Query() (tx *gorm.DB) {
 }
 
 // Pagination 分页查询
-func Pagination(ctx *gin.Context) (response PaginationResponse) {
+func Pagination(ctx *gin.Context) (resp PaginationResponse) {
 	var list []Build
+	var total int64
 	pageNo, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	pageSizeNo, _ := strconv.Atoi(ctx.DefaultQuery("page_size", "10"))
-
 	// 总数
-	var total int64
 	Query().Count(&total)
-
 	// 分页查询
 	Query().Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
 	// 响应
-	response = PaginationResponse{
+	resp = PaginationResponse{
 		Page:     pageNo,
 		PageSize: pageSizeNo,
 		Total:    total,
 		List:     list,
 	}
-	return response
+	return resp
+}
+
+// Detail 详情
+func Detail(ctx *gin.Context) Build {
+	var res Build
+	id := ctx.PostForm("id")
+	Query().Where("id = ?", id).Find(&res)
+	return res
 }

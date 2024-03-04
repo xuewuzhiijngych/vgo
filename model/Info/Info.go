@@ -1,7 +1,9 @@
 package Info
 
 import (
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"strconv"
 	"vgo/core/db"
 )
 
@@ -15,6 +17,43 @@ type Build struct {
 	Str         string `json:"str"`
 }
 
+// PaginationResponse 分页响应
+type PaginationResponse struct {
+	Page     int     `json:"page"`
+	PageSize int     `json:"page_size"`
+	Total    int64   `json:"total"`
+	List     []Build `json:"list"`
+}
+
+// Query 查询
 func Query() (tx *gorm.DB) {
 	return db.GetCon().Table(TableName)
+}
+
+// Pagination 分页查询
+func Pagination(ctx *gin.Context) (resp PaginationResponse) {
+	var list []Build
+	var total int64
+	pageNo, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	pageSizeNo, _ := strconv.Atoi(ctx.DefaultQuery("page_size", "10"))
+	// 总数
+	Query().Count(&total)
+	// 分页查询
+	Query().Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
+	// 响应
+	resp = PaginationResponse{
+		Page:     pageNo,
+		PageSize: pageSizeNo,
+		Total:    total,
+		List:     list,
+	}
+	return resp
+}
+
+// Detail 详情
+func Detail(ctx *gin.Context) Build {
+	var res Build
+	id := ctx.PostForm("id")
+	Query().Where("id = ?", id).Find(&res)
+	return res
 }
