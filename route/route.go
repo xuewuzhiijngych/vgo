@@ -15,10 +15,11 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	app.GET("/user/info", controller.UserInfo)
 
 	app.GET("/info", Info.Index)
-	app.POST("/info/detail", Info.Detail)
+	app.POST("/info/create", Info.Create)
+	app.GET("/info/detail", Info.Detail)
 
 	app.GET("/product_order", ProductOrder.Index)
-	app.POST("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
+	app.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
 
 	app.GET("/test", Test.Index)
 

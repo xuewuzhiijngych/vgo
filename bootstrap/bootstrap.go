@@ -3,6 +3,8 @@ package bootstrap
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"runtime"
+	"strconv"
 	"vgo/core/db"
 	"vgo/core/global"
 	"vgo/core/log"
@@ -14,11 +16,28 @@ import (
 
 func Start() {
 	global.App.Config.InitConfig()
+	appConf := global.App.Config.App
+
+	cpuNum, _ := strconv.Atoi(global.App.Config.App.CpuNum)
+	realCpuNum := runtime.NumCPU()
+	if cpuNum > realCpuNum {
+		cpuNum = realCpuNum
+	}
+
+	if appConf.Env == "dev" {
+		if cpuNum > 0 {
+			runtime.GOMAXPROCS(cpuNum)
+			fmt.Printf("当前计算机核数: %v个,调用：%v个\n", realCpuNum, cpuNum)
+		} else {
+			runtime.GOMAXPROCS(realCpuNum)
+			fmt.Printf("当前计算机核数: %v个,调用：%v个\n", realCpuNum, cpuNum)
+		}
+	}
+
 	log.MyInit()
 	db.MyInit()
 	redis.MyInit()
 
-	appConf := global.App.Config.App
 	if appConf.Env == "pro" {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -30,7 +49,7 @@ func Start() {
 		app.Use(middle.RequestLogger())
 	}
 
-	// 限流
+	// 全局限流
 	//app.Use(middle.RateLimiter(60, time.Second*60))
 
 	// 登录

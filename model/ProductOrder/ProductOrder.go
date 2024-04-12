@@ -47,7 +47,7 @@ func Pagination(ctx *gin.Context) (resp PaginationResponse) {
 	// 总数
 	Query().Count(&total)
 	// 分页查询
-	Query().Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
+	Query().Order("id desc").Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
 	// 响应
 	resp = PaginationResponse{
 		Page:     pageNo,
@@ -61,7 +61,7 @@ func Pagination(ctx *gin.Context) (resp PaginationResponse) {
 // Detail 详情
 func Detail(ctx *gin.Context) Build {
 	var res Build
-	id := ctx.PostForm("id")
+	id := ctx.DefaultQuery("id", "0")
 	Query().Where("id = ?", id).Find(&res)
 	return res
 }

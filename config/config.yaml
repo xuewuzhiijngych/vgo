@@ -1,23 +1,24 @@
-dbconf:
+dbConf:
   driver: mysql
   hostname: 127.0.0.1
-  hostport: 3306
+  hostPort: 3306
   database: go_study
   username: root
-  password: 111111
+  password: 110112...
   prefix:
-redisconf:
-  hostname: 192.168.2.253
-  hostport: 6379
-  password: qttx123456
+redisConf:
+  hostname: 127.0.0.1
+  hostPort: 6379
+  password: 
   db: 11
-jwtconf:
+jwtConf:
   key: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
   timeout: 24
-  maxrefresh: 24
+  maxRefresh: 24
 app:
   domain: 0.0.0.0
   env: dev #环境状态：dev=开发，pro=生产
   port: 8080
   version: 1.0.0
-  requestlog: 1
+  requestLog: 1
+  cpuNum: 12

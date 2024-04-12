@@ -56,7 +56,7 @@ func authorizator(data interface{}, c *gin.Context) bool {
 
 // 未授权处理逻辑
 func unauthorized(c *gin.Context, code int, message string) {
-	response.Fail(c, "未登录", map[string]interface{}{
+	response.NotLogin(c, "未登录", map[string]interface{}{
 		"HttpCode": code,
 		"HttpMsg":  message,
 	}, nil)

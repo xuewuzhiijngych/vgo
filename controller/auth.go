@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"vgo/core/response"
@@ -14,7 +15,7 @@ func Authenticator(c *gin.Context) (interface{}, error) {
 	if isValidUser(username, password) {
 		return "user_id", nil
 	}
-	return nil, jwt.ErrFailedAuthentication
+	return nil, errors.New("用户名或密码错误")
 }
 
 // UserInfo 用户信息

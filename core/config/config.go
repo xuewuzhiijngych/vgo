@@ -14,14 +14,15 @@ type App struct {
 	CouNum     string `yaml:"cpu_num"`
 	Version    string `yaml:"version"`
 	Env        string `yaml:"env"`
-	RequestLog int    `yaml:"requestlog"`
+	RequestLog int    `yaml:"requestLog"`
+	CpuNum     string `yaml:"cpuNum"`
 }
 
 // DbConf 数据数据库配置
 type DbConf struct {
 	Driver   string `yaml:"driver"`
 	Hostname string `yaml:"hostname"`
-	HostPort string `yaml:"hostport"`
+	HostPort string `yaml:"hostPort"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
@@ -31,7 +32,7 @@ type DbConf struct {
 // RedisConf Redis配置
 type RedisConf struct {
 	Hostname string `yaml:"hostname"`
-	HostPort string `yaml:"hostport"`
+	HostPort string `yaml:"hostPort"`
 	Password string `yaml:"password"`
 	DB       int    `yaml:"db"`
 }
@@ -40,13 +41,13 @@ type RedisConf struct {
 type JwtConf struct {
 	Key        string `yaml:"key"`
 	Timeout    int    `yaml:"timeout"`
-	MaxRefresh int    `yaml:"maxrefresh"`
+	MaxRefresh int    `yaml:"maxRefresh"`
 }
 
 type Config struct {
-	DbConf    DbConf    `yaml:"dbconf"`
-	RedisConf RedisConf `yaml:"redisconf"`
-	JwtConf   JwtConf   `yaml:"jwtconf"`
+	DbConf    DbConf    `yaml:"dbConf"`
+	RedisConf RedisConf `yaml:"redisConf"`
+	JwtConf   JwtConf   `yaml:"jwtConf"`
 	App       App       `yaml:"app"`
 }
 
