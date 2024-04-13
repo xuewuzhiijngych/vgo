@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"vgo/core/db"
+	"vgo/core/response"
 )
 
 // BaseBuild 数据模型
@@ -28,7 +29,7 @@ func GETQuery(TableName string) (tx *gorm.DB) {
 }
 
 // Pagination 分页查询
-func Pagination(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) (resp PaginationResponse) {
+func Pagination(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) {
 	query := db.GetCon().Table(TableName)
 	orderTypes := "id desc"
 	if len(options) >= 1 {
@@ -45,7 +46,6 @@ func Pagination(ctx *gin.Context, TableName string, Build BaseBuild, options ...
 	if selectFields != "*" {
 		query = query.Select(selectFields)
 	}
-
 	var total int64
 	list := getType(Build)
 	pageNo, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
@@ -54,18 +54,16 @@ func Pagination(ctx *gin.Context, TableName string, Build BaseBuild, options ...
 	query.Count(&total)
 	// 分页查询
 	query.Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
-	// 响应
-	resp = PaginationResponse{
-		Page:     pageNo,
-		PageSize: pageSizeNo,
-		Total:    total,
-		List:     list,
-	}
-	return resp
+	response.Success(ctx, "获取成功", map[string]interface{}{
+		"page":     pageNo,
+		"pageSize": pageSizeNo,
+		"total":    total,
+		"lists":    list,
+	}, nil)
 }
 
 // First 详情
-func First(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) interface{} {
+func First(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) {
 	query := db.GetCon().Table(TableName)
 	res := getType(Build)
 	queryField := "id"
@@ -81,7 +79,7 @@ func First(ctx *gin.Context, TableName string, Build BaseBuild, options ...strin
 		query = query.Select(selectFields)
 	}
 	query.Where(fmt.Sprintf("%s = ?", queryField), id).First(&res)
-	return res
+	response.Success(ctx, "成功", res, nil)
 }
 
 // getType 获取类型

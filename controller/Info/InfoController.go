@@ -3,26 +3,19 @@ package Info
 import (
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"vgo/core/helper"
 	"vgo/core/response"
-	"vgo/helper"
 	"vgo/model/Info"
 )
 
 // Index 列表
 func Index(ctx *gin.Context) {
-	res := helper.Pagination(ctx, Info.TableName, Info.Build{}, "id asc", "id,name,age")
-	response.Success(ctx, "成功", map[string]interface{}{
-		"page":     res.Page,
-		"pageSize": res.PageSize,
-		"total":    res.Total,
-		"lists":    res.List,
-	}, nil)
+	helper.Pagination(ctx, Info.TableName, Info.Build{}, "id asc", "id,name,age")
 }
 
 // Detail 详情
 func Detail(ctx *gin.Context) {
-	detail := helper.First(ctx, Info.TableName, Info.Build{}, "id", "id,name,age")
-	response.Success(ctx, "成功", detail, nil)
+	helper.First(ctx, Info.TableName, Info.Build{}, "id", "id,name,age")
 }
 
 func Create(ctx *gin.Context) {
