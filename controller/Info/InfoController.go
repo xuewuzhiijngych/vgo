@@ -10,7 +10,7 @@ import (
 
 // Index 列表
 func Index(ctx *gin.Context) {
-	res := helper.Pagination(ctx, Info.TableName, Info.Build{})
+	res := helper.Pagination(ctx, Info.TableName, Info.Build{}, "id asc", "id,name,age")
 	response.Success(ctx, "成功", map[string]interface{}{
 		"page":     res.Page,
 		"pageSize": res.PageSize,

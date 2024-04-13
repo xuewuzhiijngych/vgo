@@ -28,16 +28,32 @@ func GETQuery(TableName string) (tx *gorm.DB) {
 }
 
 // Pagination 分页查询
-func Pagination(ctx *gin.Context, TableName string, Build BaseBuild) (resp PaginationResponse) {
-	Query := db.GetCon().Table(TableName)
+func Pagination(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) (resp PaginationResponse) {
+	query := db.GetCon().Table(TableName)
+	orderTypes := "id desc"
+	if len(options) >= 1 {
+		orderTypes = options[0]
+	}
+	if orderTypes != "id desc" {
+		query = query.Order(orderTypes)
+	}
+
+	selectFields := "*"
+	if len(options) >= 2 {
+		selectFields = strings.Join(strings.Split(options[1], ","), ", ")
+	}
+	if selectFields != "*" {
+		query = query.Select(selectFields)
+	}
+
 	var total int64
 	list := getType(Build)
 	pageNo, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	pageSizeNo, _ := strconv.Atoi(ctx.DefaultQuery("page_size", "10"))
 	// 总数
-	Query.Count(&total)
+	query.Count(&total)
 	// 分页查询
-	Query.Order("id desc").Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
+	query.Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
 	// 响应
 	resp = PaginationResponse{
 		Page:     pageNo,
