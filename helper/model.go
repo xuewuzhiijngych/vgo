@@ -30,21 +30,8 @@ func GETQuery(TableName string) (tx *gorm.DB) {
 // Pagination 分页查询
 func Pagination(ctx *gin.Context, TableName string, Build BaseBuild) (resp PaginationResponse) {
 	Query := db.GetCon().Table(TableName)
-	var list interface{}
 	var total int64
-	// 获取Build的实际类型
-	buildType := reflect.TypeOf(Build)
-	// 检查Build是否实现了某个接口或是个具体的结构体
-	switch reflect.TypeOf(Build).Kind() {
-	case reflect.Slice:
-		// 如果Build已经是切片，可以直接转换
-		list = reflect.New(reflect.SliceOf(buildType.Elem())).Interface()
-	case reflect.Struct:
-		// 如果Build是个结构体，创建一个该类型的切片
-		list = reflect.MakeSlice(reflect.SliceOf(buildType), 0, 0).Interface()
-	default:
-		panic("未知类型")
-	}
+	list := getType(Build)
 	pageNo, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	pageSizeNo, _ := strconv.Atoi(ctx.DefaultQuery("page_size", "10"))
 	// 总数
@@ -64,16 +51,7 @@ func Pagination(ctx *gin.Context, TableName string, Build BaseBuild) (resp Pagin
 // First 详情
 func First(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) interface{} {
 	query := db.GetCon().Table(TableName)
-	var res interface{}
-	buildType := reflect.TypeOf(Build)
-	switch reflect.TypeOf(Build).Kind() {
-	case reflect.Slice:
-		res = reflect.New(reflect.SliceOf(buildType.Elem())).Interface()
-	case reflect.Struct:
-		res = reflect.MakeSlice(reflect.SliceOf(buildType), 0, 0).Interface()
-	default:
-		panic("未知类型")
-	}
+	res := getType(Build)
 	queryField := "id"
 	selectFields := "*"
 	if len(options) >= 1 {
@@ -87,5 +65,24 @@ func First(ctx *gin.Context, TableName string, Build BaseBuild, options ...strin
 		query = query.Select(selectFields)
 	}
 	query.Where(fmt.Sprintf("%s = ?", queryField), id).First(&res)
+	return res
+}
+
+// getType 获取类型
+func getType(Build BaseBuild) interface{} {
+	var res interface{}
+	// 获取Build的实际类型
+	buildType := reflect.TypeOf(Build)
+	// 检查Build是否实现了某个接口或是个具体的结构体
+	switch reflect.TypeOf(Build).Kind() {
+	case reflect.Slice:
+		// 如果Build已经是切片，可以直接转换
+		res = reflect.New(reflect.SliceOf(buildType.Elem())).Interface()
+	case reflect.Struct:
+		// 如果Build是个结构体，创建一个该类型的切片
+		res = reflect.MakeSlice(reflect.SliceOf(buildType), 0, 0).Interface()
+	default:
+		panic("未知类型")
+	}
 	return res
 }
