@@ -35,7 +35,7 @@ type PaginationResponse struct {
 
 // Query 查询
 func Query() (tx *gorm.DB) {
-	return db.GetCon().Table(TableName)
+	return db.Con().Table(TableName)
 }
 
 // Pagination 分页查询

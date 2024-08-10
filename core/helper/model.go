@@ -3,12 +3,13 @@ package helper
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"reflect"
 	"strconv"
 	"strings"
 	"vgo/core/db"
-	"vgo/core/response"
+	"vgo/core/log"
 )
 
 // BaseBuild 数据模型
@@ -25,12 +26,12 @@ type PaginationResponse struct {
 
 // GETQuery 获取查询对象
 func GETQuery(TableName string) (tx *gorm.DB) {
-	return db.GetCon().Table(TableName)
+	return db.Con().Table(TableName)
 }
 
 // Pagination 分页查询
-func Pagination(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) {
-	query := db.GetCon().Table(TableName)
+func Pagination(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) (err error, resp PaginationResponse) {
+	query := db.Con().Table(TableName)
 	orderTypes := "id desc"
 	if len(options) >= 1 {
 		orderTypes = options[0]
@@ -53,18 +54,34 @@ func Pagination(ctx *gin.Context, TableName string, Build BaseBuild, options ...
 	// 总数
 	query.Count(&total)
 	// 分页查询
-	query.Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
-	response.Success(ctx, "获取成功", map[string]interface{}{
-		"page":     pageNo,
-		"pageSize": pageSizeNo,
-		"total":    total,
-		"lists":    list,
-	}, nil)
+	result := query.Offset((pageNo - 1) * pageSizeNo).Limit(pageSizeNo).Find(&list)
+	if result.Error != nil {
+		err = result.Error
+		log.GetLogger().Info("Pagination-查询失败-"+TableName, zap.String("err", err.Error()))
+		return gorm.ErrRecordNotFound, resp
+	}
+	resp = PaginationResponse{
+		Page:     pageNo,
+		PageSize: pageSizeNo,
+		Total:    total,
+		List:     list,
+	}
+	return nil, resp
 }
 
-// First 详情
-func First(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) {
-	query := db.GetCon().Table(TableName)
+// First 第一条
+func First(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) (err error, detail interface{}) {
+	return getFirstLast(1, ctx, TableName, Build, options...)
+}
+
+// Last 最后一条
+func Last(ctx *gin.Context, TableName string, Build BaseBuild, options ...string) (err error, detail interface{}) {
+	return getFirstLast(2, ctx, TableName, Build, options...)
+}
+
+// getFirstLast 获取第一条或最后一条
+func getFirstLast(queryType int, ctx *gin.Context, TableName string, Build BaseBuild, options ...string) (err error, detail interface{}) {
+	query := db.Con().Table(TableName)
 	res := getType(Build)
 	queryField := "id"
 	selectFields := "*"
@@ -78,8 +95,24 @@ func First(ctx *gin.Context, TableName string, Build BaseBuild, options ...strin
 	if selectFields != "*" {
 		query = query.Select(selectFields)
 	}
-	query.Where(fmt.Sprintf("%s = ?", queryField), id).First(&res)
-	response.Success(ctx, "成功", res, nil)
+	query = query.Where(fmt.Sprintf("%s = ?", queryField), id)
+	if queryType == 1 {
+		result := query.First(&res)
+		if result.Error != nil {
+			err = result.Error
+			log.GetLogger().Info("First-查询失败-"+TableName, zap.String("err", err.Error()))
+			return gorm.ErrRecordNotFound, detail
+		}
+	} else {
+		result := query.Last(&res)
+		if result.Error != nil {
+			err = result.Error
+			log.GetLogger().Info("Last-查询失败-"+TableName, zap.String("err", err.Error()))
+			return gorm.ErrRecordNotFound, detail
+		}
+	}
+	detail = res
+	return nil, detail
 }
 
 // getType 获取类型

@@ -6,32 +6,32 @@ import (
 	"time"
 )
 
-func Success(ctx *gin.Context, msg string, data interface{}, extraData interface{}) {
+func Success(ctx *gin.Context, msg string, data interface{}, extraData ...interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":       1,
-		"message":    msg,
-		"data":       data,
-		"extra_data": extraData,
-		"time":       time.Now().Unix(),
+		"code":    1,
+		"message": msg,
+		"data":    data,
+		"ext":     extraData,
+		"time":    time.Now().Unix(),
 	})
 }
 
-func Fail(ctx *gin.Context, msg string, data interface{}, extraData interface{}) {
+func Fail(ctx *gin.Context, msg string, data interface{}, extraData ...interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":       0,
-		"message":    msg,
-		"data":       data,
-		"extra_data": extraData,
-		"time":       time.Now().Unix(),
+		"code":    0,
+		"message": msg,
+		"data":    data,
+		"ext":     extraData,
+		"time":    time.Now().Unix(),
 	})
 }
 
-func NotLogin(ctx *gin.Context, msg string, data interface{}, extraData interface{}) {
+func NotLogin(ctx *gin.Context, msg string, data interface{}, extraData ...interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":       -1,
-		"message":    msg,
-		"data":       data,
-		"extra_data": extraData,
-		"time":       time.Now().Unix(),
+		"code":    -1,
+		"message": msg,
+		"data":    data,
+		"ext":     extraData,
+		"time":    time.Now().Unix(),
 	})
 }

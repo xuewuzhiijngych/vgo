@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"time"
 	"vgo/controller"
-	"vgo/controller/Info"
 	"vgo/controller/ProductOrder"
 	"vgo/controller/Test"
 	"vgo/core/middle"
@@ -14,9 +13,9 @@ import (
 func CollectRoute(app *gin.Engine) *gin.Engine {
 	app.GET("/user/info", controller.UserInfo)
 
-	app.GET("/info", Info.Index)
-	app.POST("/info/create", Info.Create)
-	app.GET("/info/detail", Info.Detail)
+	app.GET("/info", controller.Index)
+	//app.POST("/info/create", Info.Create)
+	app.GET("/info/detail", controller.Detail)
 
 	app.GET("/product_order", ProductOrder.Index)
 	app.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)

@@ -10,7 +10,7 @@ import (
 
 var db *gorm.DB
 
-func MyInit() {
+func InitCon() {
 	dbConf := global.App.Config.DbConf
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",
 		dbConf.Username, dbConf.Password, dbConf.Hostname, dbConf.HostPort, dbConf.Database)
@@ -26,7 +26,7 @@ func MyInit() {
 	sqlDB.SetConnMaxLifetime(time.Hour)
 }
 
-// GetCon 获取数据连接
-func GetCon() *gorm.DB {
+// Con 获取数据连接
+func Con() *gorm.DB {
 	return db
 }

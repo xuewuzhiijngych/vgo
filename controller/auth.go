@@ -19,6 +19,7 @@ func Authenticator(c *gin.Context) (interface{}, error) {
 }
 
 // UserInfo 用户信息
+
 func UserInfo(ctx *gin.Context) {
 	claims := jwt.ExtractClaims(ctx)
 	userID := claims["id"].(string)

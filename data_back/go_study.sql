@@ -1,21 +1,86 @@
 /*
- Navicat Premium Data Transfer
+ Navicat Premium Dump SQL
 
  Source Server         : 本机mysql
  Source Server Type    : MySQL
- Source Server Version : 80031
+ Source Server Version : 80031 (8.0.31)
  Source Host           : localhost:3306
  Source Schema         : go_study
 
  Target Server Type    : MySQL
- Target Server Version : 80031
+ Target Server Version : 80031 (8.0.31)
  File Encoding         : 65001
 
- Date: 02/03/2024 17:12:54
+ Date: 10/08/2024 14:49:16
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for card_logs
+-- ----------------------------
+DROP TABLE IF EXISTS `card_logs`;
+CREATE TABLE `card_logs`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `card_id` int NULL DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of card_logs
+-- ----------------------------
+INSERT INTO `card_logs` VALUES (1, '卡1aaaaaa', 1, 0, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `card_logs` VALUES (2, '卡1aaaaaa', 1, 1, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `card_logs` VALUES (5, '卡2bbbbbb', 2, 1, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `card_logs` VALUES (6, '卡2bbbbbb', 2, 0, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+
+-- ----------------------------
+-- Table structure for info_cards
+-- ----------------------------
+DROP TABLE IF EXISTS `info_cards`;
+CREATE TABLE `info_cards`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `info_id` int NULL DEFAULT NULL,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of info_cards
+-- ----------------------------
+INSERT INTO `info_cards` VALUES (1, '卡1', 1, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `info_cards` VALUES (2, '卡2', 2, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+
+-- ----------------------------
+-- Table structure for info_logs
+-- ----------------------------
+DROP TABLE IF EXISTS `info_logs`;
+CREATE TABLE `info_logs`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  `info_id` int NULL DEFAULT NULL,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of info_logs
+-- ----------------------------
+INSERT INTO `info_logs` VALUES (1, '10', 1, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `info_logs` VALUES (2, '66', 1, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `info_logs` VALUES (3, '20', 1, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `info_logs` VALUES (4, '52', 2, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
 
 -- ----------------------------
 -- Table structure for infos
@@ -24,18 +89,20 @@ DROP TABLE IF EXISTS `infos`;
 CREATE TABLE `infos`  (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `hidden_field` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `created_at` int NULL DEFAULT NULL,
+  `age` int NOT NULL DEFAULT 0,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of infos
 -- ----------------------------
-INSERT INTO `infos` VALUES (1, '哈哈哈', '1111', 1704873500);
-INSERT INTO `infos` VALUES (2, 'hhhh', '1222', 1704853500);
-INSERT INTO `infos` VALUES (3, '哈哈哈33333', '1111', 1704851500);
-INSERT INTO `infos` VALUES (4, 'hhhh4444444', '1222', 1704851553);
+INSERT INTO `infos` VALUES (1, '哈哈哈', 10, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `infos` VALUES (2, 'hhhh', 66, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `infos` VALUES (3, '哈哈哈33333', 20, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+INSERT INTO `infos` VALUES (4, 'hhhh4444444', 52, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
 
 -- ----------------------------
 -- Table structure for product_orders
@@ -56,7 +123,7 @@ CREATE TABLE `product_orders`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_order_sn`(`order_sn` ASC) USING BTREE,
   INDEX `idx_type`(`order_type` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '买入卖出单' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 501 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '买入卖出单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of product_orders
@@ -561,5 +628,27 @@ INSERT INTO `product_orders` VALUES (497, 1, 1, '2977222202309132333055008', 49.
 INSERT INTO `product_orders` VALUES (498, 2, 1, '2976807202309132339485493', 49.81, 10, 0, 10, 0, 0, 0);
 INSERT INTO `product_orders` VALUES (499, 1, 1, '2975958202309132345337149', 49.81, 10, 0, 10, 0, 0, 0);
 INSERT INTO `product_orders` VALUES (500, 2, 1, '2974379202309132348137292', 49.81, 10, 0, 10, 0, 0, 0);
+
+-- ----------------------------
+-- Table structure for products
+-- ----------------------------
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE `products`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `price` decimal(11, 2) NOT NULL COMMENT '价格',
+  `stock` int NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_order_sn`(`name` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '买入卖出单' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of products
+-- ----------------------------
+INSERT INTO `products` VALUES (1, '邵嘉伦', 0, 665.15, 902, '2024-04-13 13:21:41', NULL, '2024-04-13 13:21:41');
 
 SET FOREIGN_KEY_CHECKS = 1;

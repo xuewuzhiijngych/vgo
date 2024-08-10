@@ -34,9 +34,9 @@ func Start() {
 		}
 	}
 
-	log.MyInit()
-	db.MyInit()
-	redis.MyInit()
+	log.InitLog()
+	db.InitCon()
+	redis.InitCon()
 
 	if appConf.Env == "pro" {
 		gin.SetMode(gin.ReleaseMode)

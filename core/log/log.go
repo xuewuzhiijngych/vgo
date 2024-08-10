@@ -9,7 +9,7 @@ import (
 
 var logger *zap.Logger
 
-func MyInit() {
+func InitLog() {
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder
 	fileEncoder := zapcore.NewJSONEncoder(config)
