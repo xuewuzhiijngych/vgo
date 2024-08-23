@@ -46,6 +46,7 @@ func GetToken(ctx *gin.Context) {
 	})
 }
 
+// Setback 设置黑名单
 func Setback(ctx *gin.Context) {
 	back := ctx.PostForm("back")
 	auth.PutAdminInvalidateToken(back)
