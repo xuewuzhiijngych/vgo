@@ -7,8 +7,10 @@ import (
 	"os"
 )
 
+// logger 日志类
 var logger *zap.Logger
 
+// InitLog 初始化日志
 func InitLog() {
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder

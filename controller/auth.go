@@ -2,8 +2,9 @@ package controller
 
 import (
 	"errors"
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"strconv"
+	"vgo/core/middle/auth"
 	"vgo/core/response"
 )
 
@@ -19,12 +20,12 @@ func Authenticator(c *gin.Context) (interface{}, error) {
 }
 
 // UserInfo 用户信息
-
 func UserInfo(ctx *gin.Context) {
-	claims := jwt.ExtractClaims(ctx)
-	userID := claims["id"].(string)
+	userID := ctx.GetString("userID")
+	role := ctx.GetString("role")
 	response.Success(ctx, "成功", map[string]interface{}{
 		"userID":  userID,
+		"role":    role,
 		"message": "pong",
 	}, nil)
 }
@@ -32,4 +33,21 @@ func UserInfo(ctx *gin.Context) {
 // 账号密码验证逻辑
 func isValidUser(username, password string) bool {
 	return username == "11" && password == "11"
+}
+
+// GetToken 获取token
+func GetToken(ctx *gin.Context) {
+	token, err := auth.GenAdminToken(strconv.Itoa(10), "admin")
+	if err != nil {
+		response.Fail(ctx, "获取失败", nil)
+	}
+	response.Success(ctx, "成功", gin.H{
+		"token": token,
+	})
+}
+
+func Setback(ctx *gin.Context) {
+	back := ctx.PostForm("back")
+	auth.PutAdminInvalidateToken(back)
+	response.Success(ctx, "成功", nil)
 }

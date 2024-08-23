@@ -6,8 +6,10 @@ import (
 	"vgo/core/global"
 )
 
+// redis redis连接
 var redis *goRedis.Client
 
+// InitCon 初始化redis连接
 func InitCon() {
 	redisConf := global.App.Config.RedisConf
 	addr := fmt.Sprintf("%v:%v", redisConf.Hostname, redisConf.HostPort)

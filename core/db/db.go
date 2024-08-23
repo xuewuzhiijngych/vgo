@@ -8,8 +8,10 @@ import (
 	"vgo/core/global"
 )
 
+// db 数据库连接
 var db *gorm.DB
 
+// InitCon 初始化数据库连接
 func InitCon() {
 	dbConf := global.App.Config.DbConf
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",

@@ -37,13 +37,10 @@ func Start() {
 	log.InitLog()
 	db.InitCon()
 	redis.InitCon()
-
 	if appConf.Env == "pro" {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
 	app := gin.Default()
-
 	// 请求日志
 	if appConf.RequestLog == 1 {
 		app.Use(middle.RequestLogger())
@@ -51,14 +48,6 @@ func Start() {
 
 	// 全局限流
 	//app.Use(middle.RateLimiter(60, time.Second*60))
-
-	// 登录
-	app.POST("/login", middle.GetMid().LoginHandler)
-
-	// JWT验证
-	app.Use(middle.GetMid().MiddlewareFunc())
-
-	app.GET("/refresh_token", middle.GetMid().RefreshHandler)
 
 	// 找不到路由
 	app.NoRoute(func(c *gin.Context) {
