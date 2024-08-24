@@ -1,4 +1,4 @@
-package controller
+package BapiController
 
 import (
 	"errors"
@@ -37,13 +37,11 @@ func isValidUser(username, password string) bool {
 
 // GetToken 获取token
 func GetToken(ctx *gin.Context) {
-	token, err := auth.GenAdminToken(strconv.Itoa(10), "admin")
+	res, err := auth.GenAdminToken(strconv.Itoa(10), "admin")
 	if err != nil {
 		response.Fail(ctx, "获取失败", nil)
 	}
-	response.Success(ctx, "成功", gin.H{
-		"token": token,
-	})
+	response.Success(ctx, "成功", res)
 }
 
 // Setback 设置黑名单

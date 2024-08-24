@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
+	"vgo/core/redis"
 )
 
 // AdminAuthMiddleware 后台管理用户的JWT验证中间件
@@ -22,6 +23,12 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+		claims, err := ParseAdminToken(tokenString)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.Abort()
+			return
+		}
 
 		if AssertIsTokenInvalid(tokenString) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "在黑名单"})
@@ -29,9 +36,9 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		claims, err := ParseAdminToken(tokenString)
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		redisToken := redis.Con().Get("admin_token" + claims.UserID)
+		if redisToken == nil || redisToken.Val() != tokenString {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is invalid -- redis"})
 			c.Abort()
 			return
 		}
@@ -65,6 +72,20 @@ func UserAuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
+		if AssertApiTokenIsInvalid(tokenString) {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "在黑名单-api"})
+			c.Abort()
+			return
+		}
+
+		redisToken := redis.Con().Get("api_token" + claims.UserID)
+		if redisToken == nil || redisToken.Val() != tokenString {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is invalid --api-- redis"})
+			c.Abort()
+			return
+		}
+
 		c.Set("userID", claims.UserID)
 		c.Next()
 	}

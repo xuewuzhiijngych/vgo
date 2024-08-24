@@ -12,11 +12,12 @@ redisConf:
   password: 
   db: 11
 jwtConf:
-  key: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
-  timeout: 24
-  maxRefresh: 24
+  adminKey: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
+  apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz
+  adminTimeout: 24
+  apiTimeout: 24
 app:
-  domain: 0.0.0.0
+  host: 0.0.0.0
   env: dev #环境状态：dev=开发，pro=生产
   port: 8080
   version: 1.0.0

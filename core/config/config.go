@@ -9,7 +9,7 @@ import (
 
 // App 应用配置
 type App struct {
-	Domain     string `yaml:"domain"`
+	Host       string `yaml:"host"`
 	Port       string `yaml:"port"`
 	CouNum     string `yaml:"cpu_num"`
 	Version    string `yaml:"version"`
@@ -39,9 +39,10 @@ type RedisConf struct {
 
 // JwtConf Jwt配置
 type JwtConf struct {
-	Key        string `yaml:"key"`
-	Timeout    int    `yaml:"timeout"`
-	MaxRefresh int    `yaml:"maxRefresh"`
+	AdminKey     string `yaml:"adminKey"`
+	ApiKey       string `yaml:"apikey"`
+	AdminTimeout int64  `yaml:"adminTimeout"`
+	ApiTimeout   int64  `yaml:"apiTimeout"`
 }
 
 type Config struct {
