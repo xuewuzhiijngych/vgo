@@ -11,8 +11,8 @@ var (
 	ApiTokenExpireDuration   time.Duration
 	AdminSecret              []byte
 	ApiSecret                []byte
-	AdminTokenBlacklist      = map[string]bool{}
-	ApiTokenBlacklist        = map[string]bool{}
+	AdminTokenBlacklist      = map[string]bool{} // 不使用redis设置黑名单时使用
+	ApiTokenBlacklist        = map[string]bool{} // 不使用redis设置黑名单时使用
 )
 
 // GenAdminToken 生成后台管理用户的JWT Token
@@ -27,11 +27,23 @@ func GenAdminToken(userID, role string) (map[string]string, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString(AdminSecret)
-	// token放入redis
-	err := redis.Con().Set("admin_token"+userID, tokenString, AdminTokenExpireDuration).Err()
+	//// token放入redis----单个token有效时使用
+	//err := redis.Con().Set("admin_token"+userID, tokenString, AdminTokenExpireDuration).Err()
+	//if err != nil {
+	//	return nil, err
+	//}
+
+	// token放入redis----多个token有效时使用
+	err := redis.Con().LPush("admin_token"+userID, tokenString).Err()
 	if err != nil {
 		return nil, err
 	}
+	// 设置过期时间----多个token有效时使用
+	err = redis.Con().Expire("admin_token"+userID, AdminTokenExpireDuration).Err()
+	if err != nil {
+		return nil, err
+	}
+
 	// 格式化时间为目标格式
 	formattedTime := claims.RegisteredClaims.ExpiresAt.Time.Format("2006-01-02 15:04:05")
 	return map[string]string{
@@ -56,15 +68,15 @@ func ParseAdminToken(tokenString string) (*AdminClaims, error) {
 
 // PutAdminInvalidateToken 将token加入黑名单
 func PutAdminInvalidateToken(tokenString string) {
-	AdminTokenBlacklist[tokenString] = true // 不使用redis
-	//redis.Con().Set("admin_blacklist"+tokenString, tokenString, AdminTokenExpireDuration)
+	//AdminTokenBlacklist[tokenString] = true // 不使用redis
+	redis.Con().Set("admin_blacklist"+tokenString, tokenString, AdminTokenExpireDuration)
 }
 
 // AssertIsTokenInvalid 检查token是否在黑名单中
 func AssertIsTokenInvalid(tokenString string) bool {
-	return AdminTokenBlacklist[tokenString] // 不使用redis
-	//val := redis.Con().Get("admin_blacklist" + tokenString)
-	//return val.Val() == tokenString
+	//return AdminTokenBlacklist[tokenString] // 不使用redis
+	val := redis.Con().Get("admin_blacklist" + tokenString)
+	return val.Val() == tokenString
 }
 
 // GenUserToken 生成前台用户的JWT Token
@@ -79,10 +91,20 @@ func GenUserToken(userID string) (map[string]string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString(ApiSecret)
 	// token放入redis
-	err := redis.Con().Set("api_token"+userID, tokenString, AdminTokenExpireDuration).Err()
+	err := redis.Con().Set("api_token"+userID, tokenString, ApiTokenExpireDuration).Err()
 	if err != nil {
 		return nil, err
 	}
+	//// token放入redis----多个token有效时使用
+	//err := redis.Con().LPush("api_token"+userID, tokenString).Err()
+	//if err != nil {
+	//	return nil, err
+	//}
+	//// 设置过期时间----多个token有效时使用
+	//err = redis.Con().Expire("api_token"+userID, ApiTokenExpireDuration).Err()
+	//if err != nil {
+	//	return nil, err
+	//}
 	// 格式化时间为目标格式
 	formattedTime := claims.RegisteredClaims.ExpiresAt.Time.Format("2006-01-02 15:04:05")
 	return map[string]string{
@@ -107,13 +129,13 @@ func ParseUserToken(tokenString string) (*UserClaims, error) {
 
 // PutApiTokenInvalidateToken 将token加入黑名单
 func PutApiTokenInvalidateToken(tokenString string) {
-	ApiTokenBlacklist[tokenString] = true // 不使用redis
-	//redis.Con().Set("api_blacklist"+tokenString, tokenString, ApiTokenExpireDuration)
+	//ApiTokenBlacklist[tokenString] = true // 不使用redis
+	redis.Con().Set("api_blacklist"+tokenString, tokenString, ApiTokenExpireDuration)
 }
 
 // AssertApiTokenIsInvalid 检查token是否在黑名单中
 func AssertApiTokenIsInvalid(tokenString string) bool {
-	return ApiTokenBlacklist[tokenString] // 不使用redis
-	//val := redis.Con().Get("api_blacklist" + tokenString)
-	//return val.Val() == tokenString
+	//return ApiTokenBlacklist[tokenString] // 不使用redis
+	val := redis.Con().Get("api_blacklist" + tokenString)
+	return val.Val() == tokenString
 }
