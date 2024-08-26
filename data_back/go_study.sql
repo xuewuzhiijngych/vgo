@@ -11,7 +11,7 @@
  Target Server Version : 80031 (8.0.31)
  File Encoding         : 65001
 
- Date: 23/08/2024 17:55:09
+ Date: 26/08/2024 16:54:14
 */
 
 SET NAMES utf8mb4;
@@ -635,20 +635,26 @@ INSERT INTO `product_orders` VALUES (500, 2, 1, '2974379202309132348137292', 49.
 DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `price` decimal(11, 2) NOT NULL COMMENT '价格',
-  `stock` int NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '产品名',
+  `status` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态:1-上架，2-下架',
+  `stock` bigint NOT NULL DEFAULT 0 COMMENT '库存',
+  `price` decimal(10, 2) NOT NULL DEFAULT 0 COMMENT '价格',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_order_sn`(`name` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '买入卖出单' ROW_FORMAT = DYNAMIC;
+  INDEX `idx_products_deleted_at`(`deleted_at` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of products
 -- ----------------------------
-INSERT INTO `products` VALUES (1, '邵嘉伦', 0, 665.15, 902, '2024-04-13 13:21:41', NULL, '2024-04-13 13:21:41');
+INSERT INTO `products` VALUES (1, '2024-08-26 16:37:56.737', '2024-08-26 16:44:19.283', NULL, '产品1', 1, 10, 88.00);
+INSERT INTO `products` VALUES (2, '2024-08-26 16:38:14.947', '2024-08-26 16:38:14.947', NULL, '产品2', 1, 900, 9.99);
+INSERT INTO `products` VALUES (3, '2024-08-26 16:46:49.702', '2024-08-26 16:46:49.702', '2024-08-26 16:47:02.757', '产品3', 1, 900, 9.99);
+INSERT INTO `products` VALUES (4, '2024-08-26 16:46:52.977', '2024-08-26 16:46:52.977', NULL, '产品4', 1, 900, 9.99);
+INSERT INTO `products` VALUES (5, '2024-08-26 16:46:55.108', '2024-08-26 16:53:40.804', NULL, '产品5', 1, 10, 88.00);
+INSERT INTO `products` VALUES (6, '2024-08-26 16:53:29.787', '2024-08-26 16:53:29.787', NULL, '产品6', 1, 900, 9.99);
+INSERT INTO `products` VALUES (7, '2024-08-26 16:53:34.929', '2024-08-26 16:53:34.929', NULL, '产品7', 1, 900, 9.99);
 
 SET FOREIGN_KEY_CHECKS = 1;

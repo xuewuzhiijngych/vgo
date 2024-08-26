@@ -6,6 +6,7 @@ import (
 	"vgo/controller/ApiController"
 	"vgo/controller/BapiController"
 	"vgo/controller/BapiController/Info"
+	"vgo/controller/BapiController/Product"
 	"vgo/controller/BapiController/ProductOrder"
 	"vgo/controller/Test"
 	"vgo/core/middle"
@@ -14,6 +15,8 @@ import (
 
 // CollectRoute 注册路由
 func CollectRoute(app *gin.Engine) *gin.Engine {
+	app.GET("/test", Test.Index)
+
 	admin := app.Group("/admin")
 	admin.POST("/user/get_token", BapiController.GetToken)
 	admin.POST("/user/set_back", BapiController.Setback)
@@ -25,10 +28,14 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 		//app.POST("/info/create", Info.Create)
 		admin.GET("/info/detail", Info.Detail)
 
+		admin.GET("/product", Product.Index)
+		admin.GET("/product/detail", Product.Detail)
+		admin.POST("/product/create", Product.Create)
+		admin.POST("/product/update/:id", Product.Update)
+		admin.POST("/product/delete/:id", Product.Delete)
+
 		admin.GET("/product_order", ProductOrder.Index)
 		admin.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
-
-		admin.GET("/test", Test.Index)
 	}
 
 	api := app.Group("/api")

@@ -20,36 +20,26 @@ func Index(ctx *gin.Context) {
 		})
 	}).Offset(pageNo - 1).Limit(Size).Find(&res)
 
-	//url := "http://www.test.com"
-	//log.GetLogger().Info("write log to file",
-	//	zap.String("url", url),
-	//	zap.Int("attemp", 3),
-	//	zap.Any("哦吼哈哈哈哈哈", 3),
-	//)
+	for i := 0; i < len(res); i++ {
+		res[i].Str = "每条额外添加"
+	}
 
-	//err := redis.Con().Set("foo", "bar", time.Minute*10).Err()
-	//if err != nil {
-	//	return
-	//}
-	//str := redis.Con().Get("foo")
+	//var ext map[int]string
+	//ext = make(map[int]string, 10)
+	//ext[0] = "整体额外数据1"
+	//ext[1] = "整体额外数据2"
 
-	//for i := 0; i < len(res); i++ {
-	//	res[i].Str = "哈哈哈哈哈哈"
-	//}
-	//
-	//var a map[int]string
-	//a = make(map[int]string, 10)
-	//a[20095452] = "张三"
-	//a[20095387] = "李四"
-	//a[20097291] = "王五"
-	//a[20095387] = "朱六"
-	//a[20096699] = "张三"
+	// //定义一个数组
+	//ext := [2]string{"整体额外数据1", "整体额外数据2"}
+
+	// 定义一个切片
+	ext := []string{"整体额外数据1", "整体额外数据2", "整体额外数据3"}
 
 	response.Success(ctx, "成功", map[string]interface{}{
 		"page":     pageNo,
 		"pageSize": Size,
 		"lists":    res,
-	}, nil)
+	}, ext)
 }
 
 // Detail 详细信息

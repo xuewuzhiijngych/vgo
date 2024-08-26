@@ -2,9 +2,8 @@ package Test
 
 import (
 	"github.com/gin-gonic/gin"
-	"vgo/core/helper"
-	"vgo/core/response"
-	"vgo/model/Product"
+	"vgo/core/db"
+	Model "vgo/model"
 )
 
 func Index(ctx *gin.Context) {
@@ -14,11 +13,8 @@ func Index(ctx *gin.Context) {
 	//query := db.GetCon().Model(&Product.Product{}).Find(&Product.Product{})
 	//response.Success(ctx, "查询成功", query, nil)
 
-	err, lists := helper.Pagination(ctx, "products", Product.Product{}, "id asc", "id,name,price,stock,created_at")
+	err := db.Con().AutoMigrate(&Model.Product{})
 	if err != nil {
-		response.Fail(ctx, "查询失败", nil, nil)
 		return
 	}
-	response.Success(ctx, "查询成功", lists, nil)
-
 }

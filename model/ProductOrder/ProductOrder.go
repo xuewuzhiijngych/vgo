@@ -43,7 +43,7 @@ func Pagination(ctx *gin.Context) (resp PaginationResponse) {
 	var list []Build
 	var total int64
 	pageNo, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
-	pageSizeNo, _ := strconv.Atoi(ctx.DefaultQuery("page_size", "10"))
+	pageSizeNo, _ := strconv.Atoi(ctx.DefaultQuery("pageSize", "10"))
 	// 总数
 	Query().Count(&total)
 	// 分页查询
