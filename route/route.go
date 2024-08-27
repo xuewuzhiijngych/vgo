@@ -8,6 +8,7 @@ import (
 	"vgo/controller/BapiController/Info"
 	"vgo/controller/BapiController/Product"
 	"vgo/controller/BapiController/ProductOrder"
+	"vgo/controller/BapiController/System"
 	"vgo/controller/Test"
 	"vgo/core/middle"
 	"vgo/core/middle/auth"
@@ -20,6 +21,7 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	admin := app.Group("/admin")
 	admin.POST("/user/get_token", BapiController.GetToken)
 	admin.POST("/user/set_back", BapiController.Setback)
+	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
 	admin.Use(auth.AdminAuthMiddleware())
 	{
 		admin.GET("/user/info", BapiController.UserInfo)
