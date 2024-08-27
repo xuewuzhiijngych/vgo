@@ -37,7 +37,7 @@ func Detail(ctx *gin.Context) {
 // Create 创建产品
 func Create(ctx *gin.Context) {
 	var product Model.Product
-	if err := ctx.ShouldBind(&product); err != nil {
+	if err := ctx.ShouldBindJSON(&product); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -54,7 +54,7 @@ func Update(ctx *gin.Context) {
 		return
 	}
 	var product Model.Product
-	if err := ctx.ShouldBind(&product); err != nil {
+	if err := ctx.ShouldBindJSON(&product); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}

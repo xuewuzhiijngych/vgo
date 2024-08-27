@@ -5,6 +5,7 @@ import (
 	"time"
 	"vgo/controller/ApiController"
 	"vgo/controller/BapiController"
+	"vgo/controller/BapiController/AdminUser"
 	"vgo/controller/BapiController/Info"
 	"vgo/controller/BapiController/Product"
 	"vgo/controller/BapiController/ProductOrder"
@@ -22,6 +23,10 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	admin.POST("/user/get_token", BapiController.GetToken)
 	admin.POST("/user/set_back", BapiController.Setback)
 	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
+
+	admin.POST("/admin_user/create", AdminUser.Create)
+	admin.POST("/admin_user/login", AdminUser.Login)
+
 	admin.Use(auth.AdminAuthMiddleware())
 	{
 		admin.GET("/user/info", BapiController.UserInfo)

@@ -13,7 +13,7 @@ func Index(ctx *gin.Context) {
 	//query := db.GetCon().Model(&Product.Product{}).Find(&Product.Product{})
 	//response.Success(ctx, "查询成功", query, nil)
 
-	err := db.Con().AutoMigrate(&Model.Product{})
+	err := db.Con().AutoMigrate(&Model.AdminUser{})
 	if err != nil {
 		return
 	}

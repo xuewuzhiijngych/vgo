@@ -1,23 +1,11 @@
 package BapiController
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"vgo/core/middle/auth"
 	"vgo/core/response"
 )
-
-// Authenticator 用户身份验证逻辑
-func Authenticator(c *gin.Context) (interface{}, error) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-
-	if isValidUser(username, password) {
-		return "user_id", nil
-	}
-	return nil, errors.New("用户名或密码错误")
-}
 
 // UserInfo 用户信息
 func UserInfo(ctx *gin.Context) {
@@ -28,11 +16,6 @@ func UserInfo(ctx *gin.Context) {
 		"role":    role,
 		"message": "pong",
 	}, nil)
-}
-
-// 账号密码验证逻辑
-func isValidUser(username, password string) bool {
-	return username == "11" && password == "11"
 }
 
 // GetToken 获取token
