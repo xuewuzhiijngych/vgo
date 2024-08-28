@@ -5,7 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
+	"vgo/core/db"
 	"vgo/core/response"
+	Model "vgo/model"
 )
 
 // GetBingBackgroundImage 获取必应每日背景图
@@ -20,7 +22,7 @@ func GetBingBackgroundImage(ctx *gin.Context) {
 	response.Success(ctx, "成功", map[string]string{"url": url}, nil)
 }
 
-// getBingImageURL 获取必应每日背景图URL
+// getBingImageURL 联网获取必应每日背景图URL
 func getBingImageURL(isAbroad bool, defaultURL string) (string, error) {
 	var domain string
 	if isAbroad {
@@ -49,5 +51,24 @@ func getBingImageURL(isAbroad bool, defaultURL string) (string, error) {
 		return domain + content.Images[0].URL, nil
 	}
 	return defaultURL, nil
+}
 
+// GetInfo 获取管理员权限和菜单
+func GetInfo(ctx *gin.Context) {
+	userID := ctx.GetString("userID")
+	// 无限极分类菜单结构
+	var menus []Model.Menu
+	db.Con().Order("sort desc").Find(&menus)
+	menuTree := Model.BuildMenuTree(menus, 0)
+
+	// 管理员信息
+	var adminUser Model.AdminUser
+	db.Con().First(&adminUser, "id = ?", userID)
+
+	response.Success(ctx, "成功", gin.H{
+		"codes":   []string{"*"},
+		"roles":   []string{"superAdmin"},
+		"routers": menuTree,
+		"user":    adminUser,
+	}, nil)
 }

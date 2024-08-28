@@ -13,6 +13,7 @@ func Success(ctx *gin.Context, msg string, data interface{}, extraData ...interf
 		"data":    data,
 		"ext":     extraData,
 		"time":    time.Now().Unix(),
+		"success": true,
 	})
 }
 
@@ -23,6 +24,7 @@ func Fail(ctx *gin.Context, msg string, data interface{}, extraData ...interface
 		"data":    data,
 		"ext":     extraData,
 		"time":    time.Now().Unix(),
+		"success": false,
 	})
 }
 
@@ -33,5 +35,6 @@ func NotLogin(ctx *gin.Context, msg string, data interface{}, extraData ...inter
 		"data":    data,
 		"ext":     extraData,
 		"time":    time.Now().Unix(),
+		"success": false,
 	})
 }

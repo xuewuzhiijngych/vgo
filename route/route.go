@@ -29,6 +29,7 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 
 	admin.Use(auth.AdminAuthMiddleware())
 	{
+		admin.GET("/system/getInfo", System.GetInfo)
 		admin.GET("/user/info", BapiController.UserInfo)
 
 		admin.GET("/info", Info.Index)

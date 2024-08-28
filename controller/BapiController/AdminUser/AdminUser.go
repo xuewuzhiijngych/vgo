@@ -26,7 +26,6 @@ func Create(ctx *gin.Context) {
 		return
 	}
 	user.Password = string(hashedPassword)
-
 	// 插入用户数据
 	if err := db.Con().Create(&user).Error; err != nil {
 		// 检查是否是唯一键冲突错误
