@@ -41,3 +41,46 @@ func Buttons(ctx *gin.Context) {
 	}
 	response.Success(ctx, "成功", data, nil)
 }
+
+// MenuSelect 下拉树结构
+type MenuSelect struct {
+	Value    uint64       `json:"value"`
+	Label    string       `json:"label"`
+	Children []MenuSelect `json:"children"`
+}
+
+func convertToMenuSelect(menu Model.Menu) MenuSelect {
+	menuSelect := MenuSelect{
+		Value:    menu.ID,    // 假设Menu结构体中有ID字段
+		Label:    menu.Title, // 假设Menu结构体中有Name字段
+		Children: []MenuSelect{},
+	}
+	for _, child := range menu.Children {
+		menuSelect.Children = append(menuSelect.Children, convertToMenuSelect(child))
+	}
+	return menuSelect
+}
+
+// GetSelectTree 获取下拉树结构
+func GetSelectTree(ctx *gin.Context) {
+	//var menus []Model.Menu
+	//db.Con().Order("sort desc").Find(&menus)
+	//menuTree := Model.BuildMenuTree(menus, 0)
+	//var menuSelects []MenuSelect
+	//for _, menu := range menuTree {
+	//	menuSelects = append(menuSelects, convertToMenuSelect(menu))
+	//}
+	//response.Success(ctx, "查询成功", menuSelects, nil)
+	var menus []Model.Menu
+	if err := db.Con().Order("sort desc").Find(&menus).Error; err != nil {
+		response.Fail(ctx, "数据库查询失败", err)
+		return
+	}
+	menuTree := Model.BuildMenuTree(menus, 0)
+	menuSelects := make([]MenuSelect, len(menuTree))
+	for i, menu := range menuTree {
+		menuSelects[i] = convertToMenuSelect(menu)
+	}
+	response.Success(ctx, "查询成功", menuSelects, nil)
+
+}
