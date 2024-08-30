@@ -63,3 +63,9 @@ func Login(ctx *gin.Context) {
 	}
 	response.Success(ctx, "登录成功", res)
 }
+
+// LogOut 退出登录
+func LogOut(ctx *gin.Context) {
+	auth.DelAdminToken(ctx)
+	response.Success(ctx, "退出成功", nil)
+}

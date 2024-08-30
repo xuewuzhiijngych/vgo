@@ -7,9 +7,12 @@ import (
 	"vgo/controller/BapiController"
 	"vgo/controller/BapiController/AdminUser"
 	"vgo/controller/BapiController/Info"
+	"vgo/controller/BapiController/Menu"
+	"vgo/controller/BapiController/Notice"
 	"vgo/controller/BapiController/Product"
 	"vgo/controller/BapiController/ProductOrder"
 	"vgo/controller/BapiController/System"
+	"vgo/controller/Common"
 	"vgo/controller/Test"
 	"vgo/core/middle"
 	"vgo/core/middle/auth"
@@ -24,11 +27,18 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	admin.POST("/user/set_back", BapiController.Setback)
 	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
 
+	admin.GET("/common/get_gender", Common.GetGender)
+	admin.GET("/common/get_status", Common.GetStatus)
+
 	admin.POST("/admin_user/create", AdminUser.Create)
 	admin.POST("/admin_user/login", AdminUser.Login)
 
 	admin.Use(auth.AdminAuthMiddleware())
 	{
+		admin.POST("/admin_user/logout", AdminUser.LogOut)
+		admin.GET("/menu/list", Menu.Index)
+		admin.GET("/button/list", Menu.Buttons)
+
 		admin.GET("/system/getInfo", System.GetInfo)
 		admin.GET("/user/info", BapiController.UserInfo)
 
@@ -42,6 +52,13 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 		admin.POST("/product/update/:id", Product.Update)
 		admin.POST("/product/delete/:id", Product.Delete)
 
+		admin.GET("/notice", Notice.Index)
+		admin.GET("/notice/detail", Notice.Detail)
+		admin.POST("/notice/create", Notice.Create)
+		admin.POST("/notice/update", Notice.Update)
+		admin.POST("/notice/change", Notice.Change)
+		admin.POST("/notice/delete/:id", Notice.Delete)
+
 		admin.GET("/product_order", ProductOrder.Index)
 		admin.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
 	}
@@ -54,4 +71,13 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 		api.GET("/user/info", ApiController.UserInfo)
 	}
 	return app
+}
+
+// RegisterBaseRoutes 基本路由注册函数
+func RegisterBaseRoutes(group *gin.RouterGroup, path string, handlers ...gin.HandlerFunc) {
+	group.GET(path, handlers...)
+	group.GET(path+"/detail", handlers...)
+	group.POST(path+"/create", handlers...)
+	group.POST(path+"/update/:id", handlers...)
+	group.POST(path+"/delete/:id", handlers...)
 }

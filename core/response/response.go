@@ -8,8 +8,8 @@ import (
 
 func Success(ctx *gin.Context, msg string, data interface{}, extraData ...interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    1,
-		"message": msg,
+		"code":    http.StatusOK,
+		"msg":     msg,
 		"data":    data,
 		"ext":     extraData,
 		"time":    time.Now().Unix(),
@@ -19,8 +19,8 @@ func Success(ctx *gin.Context, msg string, data interface{}, extraData ...interf
 
 func Fail(ctx *gin.Context, msg string, data interface{}, extraData ...interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    0,
-		"message": msg,
+		"code":    http.StatusInternalServerError,
+		"msg":     msg,
 		"data":    data,
 		"ext":     extraData,
 		"time":    time.Now().Unix(),
@@ -30,8 +30,8 @@ func Fail(ctx *gin.Context, msg string, data interface{}, extraData ...interface
 
 func NotLogin(ctx *gin.Context, msg string, data interface{}, extraData ...interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    -1,
-		"message": msg,
+		"code":    http.StatusUnauthorized,
+		"msg":     msg,
 		"data":    data,
 		"ext":     extraData,
 		"time":    time.Now().Unix(),
