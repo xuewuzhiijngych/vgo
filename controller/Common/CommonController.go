@@ -26,28 +26,3 @@ func GetGender(ctx *gin.Context) {
 	}
 	response.Success(ctx, "成功", data, nil)
 }
-
-// GetStatus 获取状态选项
-func GetStatus(ctx *gin.Context) {
-	seed := []map[string]interface{}{
-		{
-			"label": "启用",
-			"value": 1,
-			"tag":   "success",
-		},
-		{
-			"label": "禁用",
-			"value": 0,
-			"tag":   "danger",
-		},
-	}
-	data := make([]map[string]interface{}, len(seed))
-	for k, item := range seed {
-		data[k] = map[string]interface{}{
-			"tagType": item["tag"],
-			"Label":   item["label"],
-			"Status":  item["value"],
-		}
-	}
-	response.Success(ctx, "成功", data, nil)
-}

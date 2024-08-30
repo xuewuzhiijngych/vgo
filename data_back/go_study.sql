@@ -11,11 +11,45 @@
  Target Server Version : 80031 (8.0.31)
  File Encoding         : 65001
 
- Date: 26/08/2024 16:54:14
+ Date: 30/08/2024 16:32:42
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for admin_users
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_users`;
+CREATE TABLE `admin_users`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
+  `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
+  `user_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '100' COMMENT '用户类型：(100系统用户)',
+  `nickname` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户昵称',
+  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '手机',
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户邮箱',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户头像',
+  `signed` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '个人签名',
+  `dashboard` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '后台首页类型',
+  `status` bigint NOT NULL DEFAULT 1 COMMENT '状态 (1正常 2停用)',
+  `login_ip` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '最后登陆IP',
+  `login_time` datetime(3) NULL DEFAULT NULL COMMENT '最后登陆时间',
+  `backend_setting` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '后台设置数据',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `username`(`username` ASC) USING BTREE,
+  INDEX `idx_admin_users_deleted_at`(`deleted_at` ASC) USING BTREE,
+  INDEX `idx_admin_users_user_name`(`username` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of admin_users
+-- ----------------------------
+INSERT INTO `admin_users` VALUES (1, '2024-07-11 00:00:00.000', '2024-08-19 17:25:46.000', NULL, 'superAdmin', '$2y$12$zpo8rhu.QGhb5Ty7bFTfaOYy7FfecukttS1Qn6oA2XfZ9MKTMNXJe', '100', 'superAdmin', '13888888888', 'admin@qq.com', '', '行胜于言，质胜于华。', 'statistics', 1, '127.0.0.1', '2024-07-11 00:00:00.000', '{\"mode\":\"light\",\"tag\":true,\"menuCollapse\":false,\"menuWidth\":230,\"layout\":\"classic\",\"skin\":\"mine\",\"i18n\":false,\"language\":\"zh_CN\",\"animation\":\"ma-slide-down\",\"color\":\"#165dff\",\"ws\":false}', '');
 
 -- ----------------------------
 -- Table structure for card_logs
@@ -103,6 +137,78 @@ INSERT INTO `infos` VALUES (1, '哈哈哈', 10, '2024-08-09 15:22:44.000', '2024
 INSERT INTO `infos` VALUES (2, 'hhhh', 66, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
 INSERT INTO `infos` VALUES (3, '哈哈哈33333', 20, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
 INSERT INTO `infos` VALUES (4, 'hhhh4444444', 52, '2024-08-09 15:22:44.000', '2024-08-09 15:22:44.000', NULL);
+
+-- ----------------------------
+-- Table structure for menus
+-- ----------------------------
+DROP TABLE IF EXISTS `menus`;
+CREATE TABLE `menus`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  `parent_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '父ID',
+  `path` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '路由访问路径',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '路由name',
+  `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '路由重定向地址',
+  `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '视图文件路径',
+  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单和面包屑对应的图标',
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '路由标题(菜单名称)',
+  `activeMenu` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '是否在菜单中隐藏,需要高亮的path',
+  `isLink` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '路由外链时填写的访问地址',
+  `isHide` smallint NOT NULL DEFAULT 2 COMMENT '是否在菜单中隐藏 (1是 2否)',
+  `isFull` smallint NOT NULL DEFAULT 2 COMMENT '菜单是否全屏 (1是 2否)',
+  `isAffix` smallint NOT NULL DEFAULT 1 COMMENT '菜单是否固定在标签页中 (1是 2否)',
+  `isKeepAlive` smallint NOT NULL DEFAULT 2 COMMENT '当前路由是否缓存 (1是 2否)',
+  `status` smallint NOT NULL DEFAULT 1 COMMENT '状态 (1正常 2停用)',
+  `type` smallint NOT NULL DEFAULT 1 COMMENT '类型 (1菜单2按钮3外链4Iframe)',
+  `sort` bigint NOT NULL DEFAULT 0 COMMENT '排序',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_menus_deleted_at`(`deleted_at` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of menus
+-- ----------------------------
+INSERT INTO `menus` VALUES (1, NULL, NULL, NULL, 0, '/home/index', 'home', '', '/home/index', 'HomeFilled', '首页', '', '', 2, 2, 1, 2, 1, 1, 0);
+INSERT INTO `menus` VALUES (2, NULL, NULL, NULL, 0, '/dataScreen', 'dataScreen', '', '/dataScreen/index', 'Histogram', '数据大屏', '', '', 2, 1, 2, 2, 1, 1, 0);
+INSERT INTO `menus` VALUES (13, NULL, NULL, NULL, 0, '/cms', 'cms', '/cms/notice', '', 'Lollipop', '内容管理', '', '', 2, 2, 2, 2, 1, 1, 0);
+INSERT INTO `menus` VALUES (14, NULL, NULL, NULL, 13, '/cms/notice', 'notice', '', '/cms/notice/index', 'Menu', '公告管理', '', '', 2, 2, 2, 2, 1, 1, 0);
+INSERT INTO `menus` VALUES (15, NULL, NULL, NULL, 14, '/cms/notice/detail/:id', 'noticeDetail', '', '/cms/notice/detail', 'Menu', '公告 详情', '/cms/notice', '', 1, 2, 2, 2, 1, 1, 0);
+INSERT INTO `menus` VALUES (16, NULL, NULL, NULL, 14, '', 'add', '', '', '', '添加', '', '', 1, 2, 2, 2, 1, 2, 0);
+INSERT INTO `menus` VALUES (17, NULL, NULL, NULL, 14, '', 'edit', '', '', '', '编辑', '', '', 1, 2, 2, 2, 1, 2, 0);
+INSERT INTO `menus` VALUES (18, NULL, NULL, NULL, 14, '', 'delete', '', '', '', '删除', '', '', 1, 2, 2, 2, 1, 2, 0);
+INSERT INTO `menus` VALUES (20, NULL, NULL, NULL, 14, '', 'export', '', '', '', '导出', '', '', 1, 2, 2, 2, 1, 2, 0);
+INSERT INTO `menus` VALUES (22, NULL, NULL, NULL, 14, '', 'status', '', '', '', '修改状态', '', '', 1, 2, 2, 2, 1, 2, 0);
+INSERT INTO `menus` VALUES (23, NULL, NULL, NULL, 14, '', 'view', '', '', '', '详情', '', '', 1, 2, 2, 2, 1, 2, 0);
+INSERT INTO `menus` VALUES (24, NULL, NULL, NULL, 0, '/authority', 'authority', '/authority/menu', '', 'Lock', '权限管理', '', '', 2, 2, 2, 2, 1, 1, 0);
+INSERT INTO `menus` VALUES (25, NULL, NULL, NULL, 24, '/authority/menu', 'menuAuthority', '', '/authority/menu/index', 'Menu', '菜单权限', '', '', 2, 2, 2, 2, 1, 1, 0);
+
+-- ----------------------------
+-- Table structure for notices
+-- ----------------------------
+DROP TABLE IF EXISTS `notices`;
+CREATE TABLE `notices`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '标题',
+  `type` smallint NOT NULL DEFAULT 0 COMMENT '公告类型（1通知 2公告）',
+  `status` smallint NOT NULL DEFAULT 1 COMMENT '状态 (1启用 2禁用)',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '公告内容',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_notices_deleted_at`(`deleted_at` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of notices
+-- ----------------------------
+INSERT INTO `notices` VALUES (1, '2024-08-30 09:55:59.657', '2024-08-30 10:15:43.317', NULL, '公告1111', 0, 1, '<p>公告1</p>', '');
+INSERT INTO `notices` VALUES (2, '2024-08-30 10:11:10.500', '2024-08-30 16:12:40.549', NULL, '公告222', 0, 1, '<p>公告222公告222公告222公告222公告222</p>', '');
+INSERT INTO `notices` VALUES (3, '2024-08-30 10:11:30.438', '2024-08-30 10:11:30.438', '2024-08-30 10:11:33.181', '哈哈哈哈', 0, 1, '<p>哈哈哈哈哈哈哈哈哈哈哈哈</p>', '');
+INSERT INTO `notices` VALUES (4, '2024-08-30 10:12:53.230', '2024-08-30 10:12:53.230', '2024-08-30 10:12:56.246', '山东省', 0, 1, '<p>山东省山东省山东省</p>', '');
 
 -- ----------------------------
 -- Table structure for product_orders
@@ -641,10 +747,10 @@ CREATE TABLE `products`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '产品名',
   `status` tinyint UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态:1-上架，2-下架',
   `stock` bigint NOT NULL DEFAULT 0 COMMENT '库存',
-  `price` decimal(10, 2) NOT NULL DEFAULT 0 COMMENT '价格',
+  `price` decimal(10, 2) NOT NULL COMMENT '价格',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_products_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of products
@@ -653,8 +759,13 @@ INSERT INTO `products` VALUES (1, '2024-08-26 16:37:56.737', '2024-08-26 16:44:1
 INSERT INTO `products` VALUES (2, '2024-08-26 16:38:14.947', '2024-08-26 16:38:14.947', NULL, '产品2', 1, 900, 9.99);
 INSERT INTO `products` VALUES (3, '2024-08-26 16:46:49.702', '2024-08-26 16:46:49.702', '2024-08-26 16:47:02.757', '产品3', 1, 900, 9.99);
 INSERT INTO `products` VALUES (4, '2024-08-26 16:46:52.977', '2024-08-26 16:46:52.977', NULL, '产品4', 1, 900, 9.99);
-INSERT INTO `products` VALUES (5, '2024-08-26 16:46:55.108', '2024-08-26 16:53:40.804', NULL, '产品5', 1, 10, 88.00);
+INSERT INTO `products` VALUES (5, '2024-08-26 16:46:55.108', '2024-08-27 17:55:53.722', NULL, '产品1', 1, 10, 88.00);
 INSERT INTO `products` VALUES (6, '2024-08-26 16:53:29.787', '2024-08-26 16:53:29.787', NULL, '产品6', 1, 900, 9.99);
 INSERT INTO `products` VALUES (7, '2024-08-26 16:53:34.929', '2024-08-26 16:53:34.929', NULL, '产品7', 1, 900, 9.99);
+INSERT INTO `products` VALUES (8, '2024-08-27 17:13:12.073', '2024-08-27 17:13:12.073', NULL, '产品5', 1, 900, 9.99);
+INSERT INTO `products` VALUES (9, '2024-08-27 17:56:03.935', '2024-08-27 17:56:03.935', NULL, '产品1', 1, 10, 88.00);
+INSERT INTO `products` VALUES (10, '2024-08-27 17:56:09.749', '2024-08-27 17:56:09.749', NULL, '产品100', 1, 10, 88.00);
+INSERT INTO `products` VALUES (11, '2024-08-27 17:56:38.377', '2024-08-27 17:56:38.377', NULL, '产品100', 1, 10, 88.00);
+INSERT INTO `products` VALUES (12, '2024-08-27 17:56:43.361', '2024-08-27 17:56:43.361', '2024-08-27 17:57:16.490', '产品100山东省', 1, 10, 88.00);
 
 SET FOREIGN_KEY_CHECKS = 1;

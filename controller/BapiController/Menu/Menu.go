@@ -40,5 +40,4 @@ func Buttons(ctx *gin.Context) {
 		}
 	}
 	response.Success(ctx, "成功", data, nil)
-
 }

@@ -28,7 +28,6 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
 
 	admin.GET("/common/get_gender", Common.GetGender)
-	admin.GET("/common/get_status", Common.GetStatus)
 
 	admin.POST("/admin_user/create", AdminUser.Create)
 	admin.POST("/admin_user/login", AdminUser.Login)
