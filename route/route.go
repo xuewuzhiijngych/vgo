@@ -37,6 +37,9 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 		admin.POST("/admin_user/logout", AdminUser.LogOut)
 		admin.GET("/menu/list", Menu.Index)
 		admin.GET("/menu/select_tree", Menu.GetSelectTree)
+		admin.POST("/menu/create", Menu.Create)
+		admin.POST("/menu/update", Menu.Update)
+		admin.POST("/menu/delete/:id", Menu.Delete)
 		admin.GET("/button/list", Menu.Buttons)
 
 		admin.GET("/system/getInfo", System.GetInfo)

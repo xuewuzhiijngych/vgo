@@ -2,6 +2,7 @@ package Menu
 
 import (
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"vgo/core/db"
 	"vgo/core/response"
 	Model "vgo/model"
@@ -49,6 +50,7 @@ type MenuSelect struct {
 	Children []MenuSelect `json:"children"`
 }
 
+// convertToMenuSelect 将Menu结构体转换为MenuSelect结构体
 func convertToMenuSelect(menu Model.Menu) MenuSelect {
 	menuSelect := MenuSelect{
 		Value:    menu.ID,    // 假设Menu结构体中有ID字段
@@ -63,14 +65,6 @@ func convertToMenuSelect(menu Model.Menu) MenuSelect {
 
 // GetSelectTree 获取下拉树结构
 func GetSelectTree(ctx *gin.Context) {
-	//var menus []Model.Menu
-	//db.Con().Order("sort desc").Find(&menus)
-	//menuTree := Model.BuildMenuTree(menus, 0)
-	//var menuSelects []MenuSelect
-	//for _, menu := range menuTree {
-	//	menuSelects = append(menuSelects, convertToMenuSelect(menu))
-	//}
-	//response.Success(ctx, "查询成功", menuSelects, nil)
 	var menus []Model.Menu
 	if err := db.Con().Order("sort desc").Find(&menus).Error; err != nil {
 		response.Fail(ctx, "数据库查询失败", err)
@@ -82,5 +76,48 @@ func GetSelectTree(ctx *gin.Context) {
 		menuSelects[i] = convertToMenuSelect(menu)
 	}
 	response.Success(ctx, "查询成功", menuSelects, nil)
+}
 
+// Create 创建
+func Create(ctx *gin.Context) {
+	var product Model.Menu
+	if err := ctx.ShouldBindJSON(&product); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+	db.Con().Create(&product)
+	response.Success(ctx, "成功", product, nil)
+}
+
+// Update 更新
+func Update(ctx *gin.Context) {
+	var notice Model.Notice
+	if err := ctx.ShouldBindJSON(&notice); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+	if err := db.Con().Model(&Model.Notice{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
+		response.Fail(ctx, "更新失败", err.Error())
+		return
+	}
+	response.Success(ctx, "成功", nil, nil)
+}
+
+// Delete 删除
+func Delete(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		response.Fail(ctx, "ID参数无效", nil)
+		return
+	}
+	if err := db.Con().Model(&Model.Menu{}).Where("parent_id = ?", id).Error; err != nil {
+		response.Fail(ctx, "删除失败", err.Error())
+		return
+	}
+	if err := db.Con().Delete(&Model.Menu{}, id).Error; err != nil {
+		response.Fail(ctx, "删除失败", err.Error())
+		return
+	}
+	response.Success(ctx, "成功", nil, nil)
 }
