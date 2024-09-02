@@ -2,20 +2,17 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	"time"
-	"vgo/controller/ApiController"
-	"vgo/controller/BapiController"
-	"vgo/controller/BapiController/AdminUser"
-	"vgo/controller/BapiController/Info"
-	"vgo/controller/BapiController/Menu"
-	"vgo/controller/BapiController/Notice"
-	"vgo/controller/BapiController/Product"
-	"vgo/controller/BapiController/ProductOrder"
-	"vgo/controller/BapiController/System"
-	"vgo/controller/Common"
-	"vgo/controller/Test"
-	"vgo/core/middle"
+	AdminUserController "vgo/app/AdminUser/Bapi"
+	AdminUser "vgo/app/AdminUser/Router"
+	Common "vgo/app/Common/Bapi"
+	Menu "vgo/app/Menu/Router"
+	Notice "vgo/app/Notice/Router"
+	System "vgo/app/System/Bapi"
+	"vgo/app/Test"
+	UserController "vgo/app/User/Api"
+	User "vgo/app/User/Router"
 	"vgo/core/middle/auth"
+	"vgo/core/router"
 )
 
 // CollectRoute 注册路由
@@ -23,64 +20,33 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	app.GET("/test", Test.Index)
 
 	admin := app.Group("/admin")
-	admin.POST("/user/get_token", BapiController.GetToken)
-	admin.POST("/user/set_back", BapiController.Setback)
-	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
-
 	admin.GET("/common/get_gender", Common.GetGender)
-
-	admin.POST("/admin_user/create", AdminUser.Create)
-	admin.POST("/admin_user/login", AdminUser.Login)
-
+	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
+	admin.POST("/admin_user/login", AdminUserController.Login)
+	bapiRouters := router.CollectRoutesFromModules(
+		Notice.CollectRoutes,
+		Menu.CollectRoutes,
+		AdminUser.CollectRoutes,
+	)
 	admin.Use(auth.AdminAuthMiddleware())
 	{
-		admin.POST("/admin_user/logout", AdminUser.LogOut)
-		admin.GET("/menu/list", Menu.Index)
-		admin.GET("/menu/select_tree", Menu.GetSelectTree)
-		admin.POST("/menu/create", Menu.Create)
-		admin.POST("/menu/update", Menu.Update)
-		admin.POST("/menu/delete/:id", Menu.Delete)
-		admin.GET("/button/list", Menu.Buttons)
-
-		admin.GET("/system/getInfo", System.GetInfo)
-		admin.GET("/user/info", BapiController.UserInfo)
-
-		admin.GET("/info", Info.Index)
-		//app.POST("/info/create", Info.Create)
-		admin.GET("/info/detail", Info.Detail)
-
-		admin.GET("/product", Product.Index)
-		admin.GET("/product/detail", Product.Detail)
-		admin.POST("/product/create", Product.Create)
-		admin.POST("/product/update/:id", Product.Update)
-		admin.POST("/product/delete/:id", Product.Delete)
-
-		admin.GET("/notice", Notice.Index)
-		admin.GET("/notice/detail", Notice.Detail)
-		admin.POST("/notice/create", Notice.Create)
-		admin.POST("/notice/update", Notice.Update)
-		admin.POST("/notice/change", Notice.Change)
-		admin.POST("/notice/delete/:id", Notice.Delete)
-
-		admin.GET("/product_order", ProductOrder.Index)
-		admin.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
+		for _, route := range bapiRouters {
+			admin.Handle(route.Method, route.Path, route.Handler)
+		}
+		//admin.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
 	}
 
 	api := app.Group("/api")
-	api.POST("/user/get_token", ApiController.GetToken)
-	api.POST("/user/set_back", ApiController.Setback)
+	api.POST("/user/get_token", UserController.GetToken)
+	api.POST("/user/set_back", UserController.Setback)
+	apiRouters := router.CollectRoutesFromModules(
+		User.CollectRoutes,
+	)
 	api.Use(auth.UserAuthMiddleware())
 	{
-		api.GET("/user/info", ApiController.UserInfo)
+		for _, route := range apiRouters {
+			api.Handle(route.Method, route.Path, route.Handler)
+		}
 	}
 	return app
-}
-
-// RegisterBaseRoutes 基本路由注册函数
-func RegisterBaseRoutes(group *gin.RouterGroup, path string, handlers ...gin.HandlerFunc) {
-	group.GET(path, handlers...)
-	group.GET(path+"/detail", handlers...)
-	group.POST(path+"/create", handlers...)
-	group.POST(path+"/update/:id", handlers...)
-	group.POST(path+"/delete/:id", handlers...)
 }

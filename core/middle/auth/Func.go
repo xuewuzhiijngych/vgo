@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"time"
 	"vgo/core/redis"
@@ -54,12 +53,12 @@ func GenAdminToken(userID, role string) (map[string]string, error) {
 }
 
 // DelAdminToken 删除后台管理用户的JWT Token
-func DelAdminToken(ctx *gin.Context) {
-	userID := ctx.GetString("userID")
+func DelAdminToken(userID string) error {
 	err := redis.Con().Del("admin_token" + userID).Err()
 	if err != nil {
-		return
+		return nil
 	}
+	return nil
 }
 
 // ParseAdminToken 解析后台管理用户的JWT Token
