@@ -69,13 +69,15 @@ func Update(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	idStr := ctx.Param("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		response.Fail(ctx, "ID参数无效", nil)
+	type Ids struct {
+		ID any `json:"id"`
+	}
+	var ids Ids
+	if err := ctx.ShouldBindJSON(&ids); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-	if err := db.Con().Delete(&NoticeModel.Role{}, id).Error; err != nil {
+	if err := db.Con().Delete(&NoticeModel.Role{}, "id in (?)", ids.ID).Error; err != nil {
 		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}

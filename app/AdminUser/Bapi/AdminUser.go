@@ -125,21 +125,22 @@ func Update(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	idStr := ctx.Param("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		response.Fail(ctx, "ID参数无效", nil)
+	type Ids struct {
+		ID []int64 `json:"id"`
+	}
+	var ids Ids
+	if err := ctx.ShouldBindJSON(&ids); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-	if id == 1 {
-		response.Fail(ctx, "超级管理员不能删除！！", nil)
-		return
+	// 删除token
+	for _, values := range ids.ID {
+		err := auth.DelAdminToken(strconv.Itoa(int(values)))
+		if err != nil {
+			continue
+		}
 	}
-	err = auth.DelAdminToken(strconv.Itoa(id))
-	if err != nil {
-		return
-	}
-	if err := db.Con().Delete(&AdminUserModel.AdminUser{}, id).Error; err != nil {
+	if err := db.Con().Delete(&AdminUserModel.AdminUser{}, "id in (?)", ids.ID).Error; err != nil {
 		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}

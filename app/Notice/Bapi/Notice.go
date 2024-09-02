@@ -2,11 +2,9 @@ package Notice
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"strconv"
 	NoticeModel "vgo/app/Notice/Model"
 	"vgo/core/db"
-	"vgo/core/log"
 	"vgo/core/response"
 )
 
@@ -71,10 +69,15 @@ func Update(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	log.GetLogger().Info("Delete", zap.Any("ctx", ctx))
-
-	ids := ctx.QueryArray("id")
-	if err := db.Con().Model(&NoticeModel.Notice{}).Where("id in (?)", ids).Error; err != nil {
+	type Ids struct {
+		ID any `json:"id"`
+	}
+	var ids Ids
+	if err := ctx.ShouldBindJSON(&ids); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+	if err := db.Con().Delete(&NoticeModel.Notice{}, "id in (?)", ids.ID).Error; err != nil {
 		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}

@@ -10,6 +10,6 @@ func CollectRoutes() []router.BaseRoute {
 		{"GET", "/role", Role.Index},
 		{"POST", "/role/create", Role.Create},
 		{"POST", "/role/update", Role.Update},
-		{"POST", "/role/delete/:id", Role.Delete},
+		{"POST", "/role/delete", Role.Delete},
 	}
 }

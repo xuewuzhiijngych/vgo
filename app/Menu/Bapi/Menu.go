@@ -2,7 +2,6 @@ package Menu
 
 import (
 	"github.com/gin-gonic/gin"
-	"strconv"
 	MenuModel "vgo/app/Menu/Model"
 	"vgo/core/db"
 	"vgo/core/response"
@@ -105,17 +104,19 @@ func Update(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	idStr := ctx.Param("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		response.Fail(ctx, "ID参数无效", nil)
+	type Ids struct {
+		ID any `json:"id"`
+	}
+	var ids Ids
+	if err := ctx.ShouldBindJSON(&ids); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-	if err := db.Con().Model(&MenuModel.Menu{}).Where("parent_id = ?", id).Error; err != nil {
+	if err := db.Con().Delete(&MenuModel.Menu{}, "parent_id in (?)", ids.ID).Error; err != nil {
 		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}
-	if err := db.Con().Delete(&MenuModel.Menu{}, id).Error; err != nil {
+	if err := db.Con().Delete(&MenuModel.Menu{}, "id in (?)", ids.ID).Error; err != nil {
 		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}
