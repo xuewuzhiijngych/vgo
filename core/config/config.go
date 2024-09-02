@@ -59,7 +59,7 @@ func (config *Config) InitConfig() *Config {
 	}
 
 	vp := viper.New()
-	vp.AddConfigPath(path + "/config")        //设置读取的文件路径
+	vp.AddConfigPath(path)                    //设置读取的文件路径
 	vp.SetConfigName("config")                //设置读取的文件名
 	vp.SetConfigType("yaml")                  //设置文件的类型
 	if err := vp.ReadInConfig(); err != nil { //尝试进行配置读取

@@ -12,7 +12,6 @@ import (
 	"vgo/core/middle"
 	"vgo/core/middle/auth"
 	"vgo/core/redis"
-	"vgo/core/response"
 	"vgo/route"
 )
 
@@ -53,19 +52,7 @@ func Start() {
 	if appConf.Env == "pro" {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
-	// 全局限流
-	//app.Use(middle.RateLimiter(60, time.Second*60))
-
-	// 找不到路由
-	app.NoRoute(func(c *gin.Context) {
-		path := c.Request.URL.Path
-		method := c.Request.Method
-		response.Fail(c, "请求方式："+method+" 请求地址："+path+"不存在！！！", map[string]interface{}{
-			"HttpCode": 404,
-		}, nil)
-	})
-
+	// 收集路由
 	route.CollectRoute(app)
 	err := app.Run(appConf.Host + ":" + appConf.Port)
 	if err != nil {

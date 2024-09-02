@@ -1,18 +1,16 @@
-package Notice
+package Role
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"strconv"
-	NoticeModel "vgo/app/Notice/Model"
+	NoticeModel "vgo/app/Role/Model"
 	"vgo/core/db"
-	"vgo/core/log"
 	"vgo/core/response"
 )
 
 // Index 列表
 func Index(ctx *gin.Context) {
-	var res []NoticeModel.Notice
+	var res []NoticeModel.Role
 	var total int64
 	pageNo, err := strconv.Atoi(ctx.DefaultQuery("pageNum", "1"))
 	if err != nil {
@@ -24,7 +22,7 @@ func Index(ctx *gin.Context) {
 		response.Fail(ctx, "每页大小参数无效", nil)
 		return
 	}
-	if err := db.Con().Model(&NoticeModel.Notice{}).Count(&total).Error; err != nil {
+	if err := db.Con().Model(&NoticeModel.Role{}).Count(&total).Error; err != nil {
 		response.Fail(ctx, "数据库查询失败", err.Error())
 		return
 	}
@@ -46,7 +44,7 @@ func Index(ctx *gin.Context) {
 
 // Create 创建
 func Create(ctx *gin.Context) {
-	var product NoticeModel.Notice
+	var product NoticeModel.Role
 	if err := ctx.ShouldBindJSON(&product); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
@@ -57,12 +55,12 @@ func Create(ctx *gin.Context) {
 
 // Update 更新
 func Update(ctx *gin.Context) {
-	var notice NoticeModel.Notice
+	var notice NoticeModel.Role
 	if err := ctx.ShouldBindJSON(&notice); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-	if err := db.Con().Model(&NoticeModel.Notice{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
+	if err := db.Con().Model(&NoticeModel.Role{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
 		response.Fail(ctx, "更新失败", err.Error())
 		return
 	}
@@ -71,10 +69,13 @@ func Update(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	log.GetLogger().Info("Delete", zap.Any("ctx", ctx))
-
-	ids := ctx.QueryArray("id")
-	if err := db.Con().Model(&NoticeModel.Notice{}).Where("id in (?)", ids).Error; err != nil {
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		response.Fail(ctx, "ID参数无效", nil)
+		return
+	}
+	if err := db.Con().Delete(&NoticeModel.Role{}, id).Error; err != nil {
 		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}
@@ -83,12 +84,12 @@ func Delete(ctx *gin.Context) {
 
 // Change 改变状态
 func Change(ctx *gin.Context) {
-	var notice NoticeModel.Notice
+	var notice NoticeModel.Role
 	if err := ctx.ShouldBindJSON(&notice); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-	if err := db.Con().Model(&NoticeModel.Notice{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
+	if err := db.Con().Model(&NoticeModel.Role{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
 		response.Fail(ctx, "更新失败", err.Error())
 		return
 	}

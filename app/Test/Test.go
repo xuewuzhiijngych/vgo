@@ -5,6 +5,7 @@ import (
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gin-gonic/gin"
+	Role "vgo/app/Role/Model"
 	"vgo/core/db"
 )
 
@@ -15,11 +16,10 @@ func Index(ctx *gin.Context) {
 	//query := db.GetCon().Model(&Product.Product{}).Find(&Product.Product{})
 	//response.Success(ctx, "查询成功", query, nil)
 
-	//err := db.Con().AutoMigrate(&Model.Notice{})
-	//if err != nil {
-	//	return
-	//}
-	InitCasbin()
+	err := db.Con().AutoMigrate(&Role.Role{})
+	if err != nil {
+		return
+	}
 }
 
 func InitCasbin() {

@@ -11,6 +11,6 @@ func CollectRoutes() []router.BaseRoute {
 		{"POST", "/notice/create", Notice.Create},
 		{"POST", "/notice/update", Notice.Update},
 		{"POST", "/notice/change", Notice.Change},
-		{"POST", "/notice/delete/:id", Notice.Delete},
+		{"POST", "/notice/delete", Notice.Delete},
 	}
 }

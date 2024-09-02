@@ -8,7 +8,7 @@ import (
 func CollectRoutes() []router.BaseRoute {
 	return []router.BaseRoute{
 		{"GET", "/menu/list", Menu.Index},
-		{"GET", "/menu/select_tree", Menu.GetSelectTree},
+		{"GET", "/menu/selectTreeDataSource", Menu.GetSelectTree},
 		{"POST", "/menu/create", Menu.Create},
 		{"POST", "/menu/update", Menu.Update},
 		{"POST", "/menu/delete/:id", Menu.Delete},
