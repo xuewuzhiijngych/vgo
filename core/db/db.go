@@ -24,7 +24,11 @@ func InitCon() {
 		panic("请检查数据库连接！！")
 	}
 	db = d
-	sqlDB, _ := db.DB()
+	sqlDB, err := db.DB()
+	if err != nil {
+		fmt.Println("获取数据库连接池失败：", err)
+		panic("请检查数据库连接池配置！！")
+	}
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(500)
 	sqlDB.SetConnMaxLifetime(time.Hour)

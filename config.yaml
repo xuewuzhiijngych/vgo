@@ -12,6 +12,8 @@ redisConf:
   username:
   password: 
   db: 11
+queueConf:
+  enable: 0
 jwtConf:
   adminKey: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
   apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz

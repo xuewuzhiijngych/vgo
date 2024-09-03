@@ -10,6 +10,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/hibiken/asynq v0.24.1
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/spf13/viper v1.18.2
 	go.uber.org/zap v1.26.0
@@ -43,7 +44,6 @@ require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/hibiken/asynq v0.24.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgx/v5 v5.6.0 // indirect

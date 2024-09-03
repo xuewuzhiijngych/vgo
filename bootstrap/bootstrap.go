@@ -11,6 +11,7 @@ import (
 	"vgo/core/log"
 	"vgo/core/middle"
 	"vgo/core/middle/auth"
+	"vgo/core/queue"
 	"vgo/core/redis"
 	"vgo/route"
 )
@@ -37,7 +38,13 @@ func Start() {
 	log.InitLog()
 	db.InitCon()
 	redis.InitCon()
-
+	queueConf := global.App.Config.QueueConf
+	if queueConf.Enable == 1 {
+		// 运行 Asynq 任务队列
+		go func() {
+			queue.InitQueue()
+		}()
+	}
 	jwtConf := global.App.Config.JwtConf
 	auth.AdminTokenExpireDuration = time.Duration(jwtConf.AdminTimeout) * time.Hour
 	auth.ApiTokenExpireDuration = time.Duration(jwtConf.ApiTimeout) * time.Hour
@@ -59,29 +66,4 @@ func Start() {
 		fmt.Println(err)
 		return
 	}
-
-	//redisConf := global.App.Config.RedisConf
-	//redisAddr := fmt.Sprintf("%v:%v", redisConf.Hostname, redisConf.HostPort)
-	//srv := asynq.NewServer(
-	//	asynq.RedisClientOpt{
-	//		Addr:     redisAddr,
-	//		Username: redisConf.UserName,
-	//		Password: redisConf.Password,
-	//	},
-	//	asynq.Config{
-	//		// Specify how many concurrent workers to use
-	//		Concurrency: 10,
-	//		// Optionally specify multiple queues with different priority.
-	//		Queues: map[string]int{
-	//			"critical": 6,
-	//			"default":  3,
-	//			"low":      1,
-	//		},
-	//	},
-	//)
-	//mux := asynq.NewServeMux()
-	//mux.HandleFunc(tasks.TestDelivery, tasks.HandleTestDeliveryTask)
-	//if err := srv.Run(mux); err != nil {
-	//	log.GetLogger().Error("could not run server: %v", zap.Any("error", err))
-	//}
 }

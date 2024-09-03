@@ -31,6 +31,6 @@ func HandleTestDeliveryTask(ctx context.Context, t *asynq.Task) error {
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
 		log.GetLogger().Error("json.Unmarshal failed: %v", zap.Any("task-err", err), zap.Any("task-asynq", asynq.SkipRetry))
 	}
-	log.GetLogger().Info(fmt.Sprintf("Sending Email to User: user_id=%d, template_id=%s", p.UserID, p.TemplateID))
+	fmt.Println(fmt.Sprintf("Sending Email to User: user_id=%d, template_id=%s", p.UserID, p.TemplateID))
 	return nil
 }

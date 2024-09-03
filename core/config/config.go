@@ -38,6 +38,11 @@ type RedisConf struct {
 	DB       int    `yaml:"db"`
 }
 
+// QueueConf Queue配置
+type QueueConf struct {
+	Enable int `yaml:"enable"`
+}
+
 // JwtConf Jwt配置
 type JwtConf struct {
 	AdminKey     string `yaml:"adminKey"`
@@ -49,6 +54,7 @@ type JwtConf struct {
 type Config struct {
 	DbConf    DbConf    `yaml:"dbConf"`
 	RedisConf RedisConf `yaml:"redisConf"`
+	QueueConf QueueConf `yaml:"queueConf"`
 	JwtConf   JwtConf   `yaml:"jwtConf"`
 	App       App       `yaml:"app"`
 }
