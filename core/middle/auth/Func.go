@@ -3,6 +3,7 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"strconv"
 	"time"
 	"vgo/core/redis"
 )
@@ -17,7 +18,7 @@ var (
 )
 
 // GenAdminToken 生成后台管理用户的JWT Token
-func GenAdminToken(ctx *gin.Context, userID string, role []string, super int) (map[string]string, error) {
+func GenAdminToken(ctx *gin.Context, userID uint64, role []string, super int) (map[string]string, error) {
 	claims := AdminClaims{
 		UserID: userID,
 		Role:   role,
@@ -36,12 +37,12 @@ func GenAdminToken(ctx *gin.Context, userID string, role []string, super int) (m
 	//}
 
 	// token放入redis----多个token有效时使用
-	err := redis.Con().LPush(ctx, "admin_token"+userID, tokenString).Err()
+	err := redis.Con().LPush(ctx, "admin_token"+strconv.Itoa(int(userID)), tokenString).Err()
 	if err != nil {
 		return nil, err
 	}
 	// 设置过期时间----多个token有效时使用
-	err = redis.Con().Expire(ctx, "admin_token"+userID, AdminTokenExpireDuration).Err()
+	err = redis.Con().Expire(ctx, "admin_token"+strconv.Itoa(int(userID)), AdminTokenExpireDuration).Err()
 	if err != nil {
 		return nil, err
 	}
@@ -55,8 +56,8 @@ func GenAdminToken(ctx *gin.Context, userID string, role []string, super int) (m
 }
 
 // DelAdminToken 删除后台管理用户的JWT Token
-func DelAdminToken(ctx *gin.Context, userID string) error {
-	err := redis.Con().Del(ctx, "admin_token"+userID).Err()
+func DelAdminToken(ctx *gin.Context, userID uint64) error {
+	err := redis.Con().Del(ctx, "admin_token"+strconv.Itoa(int(userID))).Err()
 	if err != nil {
 		return nil
 	}

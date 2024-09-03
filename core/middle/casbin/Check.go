@@ -3,9 +3,11 @@ package casbin
 import (
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
+	"regexp"
 	"vgo/core/response"
 )
 
+// CheckMiddleware 权限检查中间件
 func CheckMiddleware(e *casbin.Enforcer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		super := c.GetInt("super") // 超级管理员
@@ -13,8 +15,14 @@ func CheckMiddleware(e *casbin.Enforcer) gin.HandlerFunc {
 			c.Next()
 			return
 		}
-		sub := c.GetStringSlice("role") // 获取角色
 		obj := c.Request.URL.Path
+		// 排除数据源权限判断
+		re := regexp.MustCompile(`DataSource`)
+		if re.MatchString(obj) {
+			c.Next()
+			return
+		}
+		sub := c.GetStringSlice("role") // 获取角色
 		for _, v := range sub {
 			if ok, _ := e.Enforce(v, obj); ok {
 				c.Next()

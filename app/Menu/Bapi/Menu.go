@@ -2,15 +2,28 @@ package Menu
 
 import (
 	"github.com/gin-gonic/gin"
+	"strconv"
 	MenuModel "vgo/app/Menu/Model"
+	Role "vgo/app/Role/Model"
 	"vgo/core/db"
+	"vgo/core/middle/casbin"
 	"vgo/core/response"
 )
 
 // Index 无限极分类菜单结构
 func Index(ctx *gin.Context) {
 	var menus []MenuModel.Menu
-	db.Con().Order("sort desc").Find(&menus)
+	var err error
+	if ctx.GetInt("super") == 1 { // 超级管理员
+		err = db.Con().Order("sort desc").Find(&menus).Error
+	} else {
+		menuIDs := Role.GetMenuIdsByRoleId(ctx.GetUint64("userID"))
+		err = db.Con().Order("sort desc").Find(&menus, "id in (?)", menuIDs).Error
+	}
+	if err != nil {
+		response.Fail(ctx, "数据库查询失败", err)
+		return
+	}
 	menuTree := MenuModel.BuildMenuTree(menus, 0)
 	response.Success(ctx, "成功", menuTree, nil)
 }
@@ -19,23 +32,69 @@ func Index(ctx *gin.Context) {
 func Buttons(ctx *gin.Context) {
 	var data = make(map[string][]string)
 	var menus []MenuModel.Menu
+	var err error
 
-	if err := db.Con().Where("type = ?", 1).Find(&menus).Error; err != nil {
-		response.Fail(ctx, "数据库查询失败", err)
-		return
-	}
-
-	for _, menu := range menus {
-		var buttonMenus []MenuModel.Menu
-		if err := db.Con().Where("parent_id = ? and type = ?", menu.ID, 2).Find(&buttonMenus).Error; err != nil {
+	if ctx.GetInt("super") == 1 { // 超级管理员
+		if err = db.Con().Where("type = ?", 1).Find(&menus).Error; err != nil {
 			response.Fail(ctx, "数据库查询失败", err)
 			return
 		}
-		if len(buttonMenus) > 0 {
-			bbt := make([]string, len(buttonMenus))
-			for i, buttonMenu := range buttonMenus {
-				bbt[i] = buttonMenu.Name
+		for _, menu := range menus {
+			var buttonMenus []MenuModel.Menu
+			if err = db.Con().Where("parent_id = ? and type = ?", menu.ID, 2).Find(&buttonMenus).Error; err != nil {
+				response.Fail(ctx, "数据库查询失败", err)
+				return
 			}
+			if len(buttonMenus) > 0 {
+				bbt := make([]string, len(buttonMenus))
+				for i, buttonMenu := range buttonMenus {
+					bbt[i] = buttonMenu.Name
+				}
+				data[menu.Name] = bbt
+			}
+		}
+		response.Success(ctx, "成功", data, nil)
+		return
+	}
+	menuIDs := Role.GetMenuIdsByRoleId(ctx.GetUint64("userID"))
+	if err = db.Con().Where("type = ? and id in (?)", 1, menuIDs).Find(&menus).Error; err != nil {
+		response.Fail(ctx, "数据库查询失败", err)
+		return
+	}
+	// 获取角色
+	enforcer := casbin.SetupCasbin()
+	roles, err := enforcer.GetRolesForUser(strconv.FormatUint(ctx.GetUint64("userID"), 10))
+	if err != nil {
+		response.Fail(ctx, "角色获取失败", err)
+		return
+	}
+	for _, menu := range menus {
+		var buttonMenus []MenuModel.Menu
+		if err = db.Con().Where("parent_id = ? and type = ?", menu.ID, 2).Find(&buttonMenus).Error; err != nil {
+			response.Fail(ctx, "数据库查询失败", err)
+			return
+		}
+		if len(buttonMenus) == 0 {
+			continue
+		}
+		bbt := make([]string, 0, len(buttonMenus))
+		for _, buttonMenu := range buttonMenus {
+			if buttonMenu.Name == "" {
+				continue
+			}
+			// 判断按钮是否有权限
+			hasPermission := false
+			for _, role := range roles {
+				if policy, err := enforcer.HasPolicy(role, buttonMenu.Api); err == nil && policy {
+					hasPermission = true
+					break
+				}
+			}
+			if hasPermission {
+				bbt = append(bbt, buttonMenu.Name)
+			}
+		}
+		if len(bbt) > 0 {
 			data[menu.Name] = bbt
 		}
 	}
@@ -104,10 +163,9 @@ func Update(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	type Ids struct {
-		ID any `json:"id"`
+	var ids struct {
+		ID []int64 `json:"id"`
 	}
-	var ids Ids
 	if err := ctx.ShouldBindJSON(&ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return

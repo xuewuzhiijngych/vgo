@@ -7,8 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	Role "vgo/app/Role/Model"
 	"vgo/core/db"
-	casbin2 "vgo/core/middle/casbin"
-	"vgo/core/response"
 )
 
 func Index(ctx *gin.Context) {
@@ -18,7 +16,7 @@ func Index(ctx *gin.Context) {
 	//query := db.GetCon().Model(&Product.Product{}).Find(&Product.Product{})
 	//response.Success(ctx, "查询成功", query, nil)
 
-	err := db.Con().AutoMigrate(&Role.Role{})
+	err := db.Con().AutoMigrate(&Role.RoleMenu{})
 	if err != nil {
 		return
 	}
@@ -36,12 +34,12 @@ func Index(ctx *gin.Context) {
 	//}
 	//response.Success(ctx, "添加成功", res, nil)
 
-	enforcer := casbin2.SetupCasbin()
-	updated, err := enforcer.UpdatePolicy([]string{"admin", "/admin/notice"}, []string{"admin", "/admin/notice1"})
-	if err != nil {
-		response.Fail(ctx, err.Error(), nil)
-	}
-	response.Success(ctx, "添加成功", updated, nil)
+	//enforcer := casbin2.SetupCasbin()
+	//updated, err := enforcer.UpdatePolicy([]string{"admin", "/admin/notice"}, []string{"admin", "/admin/notice1"})
+	//if err != nil {
+	//	response.Fail(ctx, err.Error(), nil)
+	//}
+	//response.Success(ctx, "添加成功", updated, nil)
 
 }
 

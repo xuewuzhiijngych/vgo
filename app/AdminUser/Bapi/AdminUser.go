@@ -7,9 +7,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"strconv"
 	AdminUserModel "vgo/app/AdminUser/Model"
-	MenuModel "vgo/app/Menu/Model"
 	"vgo/core/db"
 	"vgo/core/middle/auth"
+	"vgo/core/middle/casbin"
 	"vgo/core/response"
 )
 
@@ -31,7 +31,7 @@ func Index(ctx *gin.Context) {
 		response.Fail(ctx, "数据库查询失败", err.Error())
 		return
 	}
-	if err := db.Con().Order("id desc").Offset((pageNo - 1) * Size).Limit(Size).Find(&res).Error; err != nil {
+	if err := db.Con().Order("id desc").Offset((pageNo-1)*Size).Limit(Size).Where("super = ?", 2).Find(&res).Error; err != nil {
 		response.Fail(ctx, "数据库查询失败", err.Error())
 		return
 	}
@@ -45,6 +45,52 @@ func Index(ctx *gin.Context) {
 		"pageSize": Size,
 		"list":     res,
 	}, nil)
+}
+
+// SetRole 设置角色
+func SetRole(ctx *gin.Context) {
+	var codes struct {
+		ID    uint64   `json:"id"`
+		Roles []string `json:"roles"`
+	}
+	if err := ctx.ShouldBindJSON(&codes); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+	userID := codes.ID
+	enforcer := casbin.SetupCasbin()
+	_, err := enforcer.DeleteRolesForUser(strconv.FormatUint(userID, 10))
+	if err != nil {
+		response.Fail(ctx, err.Error(), nil)
+		return
+	}
+	for _, role := range codes.Roles {
+		_, err2 := enforcer.AddRoleForUser(strconv.FormatUint(userID, 10), role)
+		if err2 != nil {
+			response.Fail(ctx, err2.Error(), nil)
+			return
+		}
+	}
+	response.Success(ctx, "设置成功", nil, nil)
+}
+
+// GetRole 获取角色
+func GetRole(ctx *gin.Context) {
+	var codes struct {
+		ID uint64 `json:"id"`
+	}
+	if err := ctx.ShouldBindJSON(&codes); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+	userID := codes.ID
+	enforcer := casbin.SetupCasbin()
+	roles, err := enforcer.GetRolesForUser(strconv.FormatUint(userID, 10))
+	if err != nil {
+		response.Fail(ctx, "获取错误", err.Error(), nil)
+		return
+	}
+	response.Success(ctx, "获取成功", roles, nil)
 }
 
 // Create 创建用户
@@ -91,8 +137,15 @@ func Login(ctx *gin.Context) {
 		response.Fail(ctx, "用户名或密码错误002", err.Error(), nil)
 		return
 	}
+	// 获取角色
+	enforcer := casbin.SetupCasbin()
+	roles, err := enforcer.GetRolesForUser(strconv.FormatUint(dbUser.ID, 10))
+	if err != nil {
+		response.Fail(ctx, "获取错误", err.Error(), nil)
+		return
+	}
 	// 生成token
-	res, err := auth.GenAdminToken(ctx, strconv.Itoa(int(dbUser.ID)), []string{"admin"}, dbUser.Super)
+	res, err := auth.GenAdminToken(ctx, dbUser.ID, roles, dbUser.Super)
 	if err != nil {
 		response.Fail(ctx, err.Error(), nil)
 		return
@@ -102,7 +155,7 @@ func Login(ctx *gin.Context) {
 
 // LogOut 退出登录
 func LogOut(ctx *gin.Context) {
-	userID := ctx.GetString("userID")
+	userID := ctx.GetUint64("userID")
 	err := auth.DelAdminToken(ctx, userID)
 	if err != nil {
 		return
@@ -126,17 +179,16 @@ func Update(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	type Ids struct {
-		ID []int64 `json:"id"`
+	var ids struct {
+		ID []uint64 `json:"id"`
 	}
-	var ids Ids
 	if err := ctx.ShouldBindJSON(&ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
 	// 删除token
 	for _, values := range ids.ID {
-		err := auth.DelAdminToken(ctx, strconv.Itoa(int(values)))
+		err := auth.DelAdminToken(ctx, values)
 		if err != nil {
 			continue
 		}
@@ -150,31 +202,11 @@ func Delete(ctx *gin.Context) {
 
 // UserInfo 用户信息
 func UserInfo(ctx *gin.Context) {
-	userID := ctx.GetString("userID")
+	userID := ctx.GetUint64("userID")
 	role := ctx.GetString("Role")
 	response.Success(ctx, "成功", map[string]interface{}{
 		"userID":  userID,
 		"role":    role,
 		"message": "pong",
-	}, nil)
-}
-
-// GetInfo 获取管理员权限和菜单
-func GetInfo(ctx *gin.Context) {
-	userID := ctx.GetString("userID")
-	// 无限极分类菜单结构
-	var menus []MenuModel.Menu
-	db.Con().Order("sort desc").Find(&menus)
-	menuTree := MenuModel.BuildMenuTree(menus, 0)
-
-	// 管理员信息
-	var adminUser AdminUserModel.AdminUser
-	db.Con().First(&adminUser, "id = ?", userID)
-
-	response.Success(ctx, "成功", gin.H{
-		"codes":   []string{"*"},
-		"roles":   []string{"superAdmin"},
-		"routers": menuTree,
-		"user":    adminUser,
 	}, nil)
 }

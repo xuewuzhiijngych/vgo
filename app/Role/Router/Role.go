@@ -11,5 +11,8 @@ func CollectRoutes() []router.BaseRoute {
 		{"POST", "/role/create", Role.Create},
 		{"POST", "/role/update", Role.Update},
 		{"POST", "/role/delete", Role.Delete},
+		{"GET", "/role/allDataSource", Role.GetAll},
+		{"POST", "/role/set/menu", Role.SetMenu},
+		{"POST", "/role/get/menu", Role.GetMenu},
 	}
 }

@@ -69,10 +69,9 @@ func Update(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	type Ids struct {
-		ID any `json:"id"`
+	var ids struct {
+		ID []int64 `json:"id"`
 	}
-	var ids Ids
 	if err := ctx.ShouldBindJSON(&ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return

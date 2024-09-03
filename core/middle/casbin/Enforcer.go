@@ -11,6 +11,7 @@ import (
 	"vgo/core/global"
 )
 
+// SetupCasbin 初始化Casbin
 func SetupCasbin() *casbin.Enforcer {
 	adapter, err := gormadapter.NewAdapterByDB(db.Con())
 	if err != nil {

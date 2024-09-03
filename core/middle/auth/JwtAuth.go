@@ -2,6 +2,7 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"strings"
 	"vgo/core/redis"
 	"vgo/core/response"
@@ -45,7 +46,7 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 		//}
 
 		// redis内读取token----多个token有效时使用
-		redisToken := redis.Con().LRange(c, "admin_token"+claims.UserID, 0, -1)
+		redisToken := redis.Con().LRange(c, "admin_token"+strconv.Itoa(int(claims.UserID)), 0, -1)
 		if redisToken == nil || len(redisToken.Val()) == 0 {
 			response.NotLogin(c, "Token is invalid --Bapi-- redis01", nil)
 			c.Abort()
