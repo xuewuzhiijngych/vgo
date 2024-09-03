@@ -1,12 +1,12 @@
 package Test
 
 import (
-	"github.com/casbin/casbin/v2"
-	"github.com/casbin/casbin/v2/model"
-	gormadapter "github.com/casbin/gorm-adapter/v3"
+	"fmt"
 	"github.com/gin-gonic/gin"
-	Role "vgo/app/Role/Model"
-	"vgo/core/db"
+	"github.com/hibiken/asynq"
+	"vgo/core/global"
+	"vgo/core/log"
+	"vgo/tasks"
 )
 
 func Index(ctx *gin.Context) {
@@ -16,54 +16,32 @@ func Index(ctx *gin.Context) {
 	//query := db.GetCon().Model(&Product.Product{}).Find(&Product.Product{})
 	//response.Success(ctx, "查询成功", query, nil)
 
-	err := db.Con().AutoMigrate(&Role.RoleMenu{})
-	if err != nil {
-		return
-	}
-
-	//enforcer := casbinCore.SetupCasbin()
-	////user, err := enforcer.AddRolesForUser(strconv.Itoa(1), []string{"admin"})
-	////if err != nil {
-	////	return
-	////}
-	////response.Success(ctx, "添加成功", user, nil)
-	//
-	//res, err := enforcer.AddPolicy("admin", "/notice")
+	//err := db.Con().AutoMigrate(&Role.RoleMenu{})
 	//if err != nil {
 	//	return
 	//}
-	//response.Success(ctx, "添加成功", res, nil)
 
-	//enforcer := casbin2.SetupCasbin()
-	//updated, err := enforcer.UpdatePolicy([]string{"admin", "/admin/notice"}, []string{"admin", "/admin/notice1"})
-	//if err != nil {
-	//	response.Fail(ctx, err.Error(), nil)
-	//}
-	//response.Success(ctx, "添加成功", updated, nil)
+	redisConf := global.App.Config.RedisConf
+	redisAddr := fmt.Sprintf("%v:%v", redisConf.Hostname, redisConf.HostPort)
+	client := asynq.NewClient(asynq.RedisClientOpt{
+		Addr:     redisAddr,
+		Username: redisConf.UserName,
+		Password: redisConf.Password,
+	})
+	defer client.Close()
 
-}
+	// ------------------------------------------------------
+	// Example 1: Enqueue task to be processed immediately.
+	//            Use (*Client).Enqueue method.
+	// ------------------------------------------------------
 
-func InitCasbin() {
-	text := `
-		[request_definition]
-		r = sub, obj, act
-		
-		[policy_definition]
-		p = sub, obj, act
-		
-		[role_definition]
-		g = _, _
-		
-		[policy_effect]
-		e = some(where (p.eft == allow))
-		
-		[matchers]
-		m = g(r.sub, p.sub) && keyMatch2(r.obj, p.obj) && r.act == p.act
-		`
-	m, err := model.NewModelFromString(text)
+	task, err := tasks.NewTestDelivery(42, "some:template:id")
 	if err != nil {
-		return
+		log.GetLogger().Error(fmt.Sprintf("could not create task: %v", err))
 	}
-	adapter, _ := gormadapter.NewAdapterByDB(db.Con())
-	_, _ = casbin.NewSyncedCachedEnforcer(m, adapter)
+	info, err := client.Enqueue(task)
+	if err != nil {
+		log.GetLogger().Error(fmt.Sprintf("could not enqueue task: %v", err))
+	}
+	log.GetLogger().Info(fmt.Sprintf("enqueued task: id=%s queue=%s", info.ID, info.Queue))
 }

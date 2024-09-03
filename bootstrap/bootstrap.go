@@ -59,4 +59,29 @@ func Start() {
 		fmt.Println(err)
 		return
 	}
+
+	//redisConf := global.App.Config.RedisConf
+	//redisAddr := fmt.Sprintf("%v:%v", redisConf.Hostname, redisConf.HostPort)
+	//srv := asynq.NewServer(
+	//	asynq.RedisClientOpt{
+	//		Addr:     redisAddr,
+	//		Username: redisConf.UserName,
+	//		Password: redisConf.Password,
+	//	},
+	//	asynq.Config{
+	//		// Specify how many concurrent workers to use
+	//		Concurrency: 10,
+	//		// Optionally specify multiple queues with different priority.
+	//		Queues: map[string]int{
+	//			"critical": 6,
+	//			"default":  3,
+	//			"low":      1,
+	//		},
+	//	},
+	//)
+	//mux := asynq.NewServeMux()
+	//mux.HandleFunc(tasks.TestDelivery, tasks.HandleTestDeliveryTask)
+	//if err := srv.Run(mux); err != nil {
+	//	log.GetLogger().Error("could not run server: %v", zap.Any("error", err))
+	//}
 }
