@@ -9,6 +9,7 @@ dbConf:
 redisConf:
   hostname: 127.0.0.1
   hostPort: 6379
+  username:
   password: 
   db: 11
 jwtConf:

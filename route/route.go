@@ -13,6 +13,7 @@ import (
 	UserController "vgo/app/User/Api"
 	User "vgo/app/User/Router"
 	"vgo/core/middle/auth"
+	"vgo/core/middle/casbin"
 	"vgo/core/response"
 	"vgo/core/router"
 )
@@ -43,7 +44,9 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 		AdminUser.CollectRoutes,
 		Role.CollectRoutes,
 	)
-	admin.Use(auth.AdminAuthMiddleware(), auth.CasbinCheckMiddleware())
+
+	enforcer := casbin.SetupCasbin()
+	admin.Use(auth.AdminAuthMiddleware(), casbin.CheckMiddleware(enforcer))
 	{
 		for _, route := range bapiRouters {
 			admin.Handle(route.Method, route.Path, route.Handler)

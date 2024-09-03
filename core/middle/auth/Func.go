@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"time"
 	"vgo/core/redis"
@@ -16,30 +17,31 @@ var (
 )
 
 // GenAdminToken 生成后台管理用户的JWT Token
-func GenAdminToken(userID, role string) (map[string]string, error) {
+func GenAdminToken(ctx *gin.Context, userID string, role []string, super int) (map[string]string, error) {
 	claims := AdminClaims{
 		UserID: userID,
 		Role:   role,
+		Super:  super,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(AdminTokenExpireDuration)),
-			Issuer:    "admin",
+			Issuer:    "vgo-admin",
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString(AdminSecret)
 	//// token放入redis----单个token有效时使用
-	//err := redis.Con().Set("admin_token"+userID, tokenString, AdminTokenExpireDuration).Err()
+	//err := redis.Con().Set(ctx,"admin_token"+userID, tokenString, AdminTokenExpireDuration).Err()
 	//if err != nil {
 	//	return nil, err
 	//}
 
 	// token放入redis----多个token有效时使用
-	err := redis.Con().LPush("admin_token"+userID, tokenString).Err()
+	err := redis.Con().LPush(ctx, "admin_token"+userID, tokenString).Err()
 	if err != nil {
 		return nil, err
 	}
 	// 设置过期时间----多个token有效时使用
-	err = redis.Con().Expire("admin_token"+userID, AdminTokenExpireDuration).Err()
+	err = redis.Con().Expire(ctx, "admin_token"+userID, AdminTokenExpireDuration).Err()
 	if err != nil {
 		return nil, err
 	}
@@ -53,8 +55,8 @@ func GenAdminToken(userID, role string) (map[string]string, error) {
 }
 
 // DelAdminToken 删除后台管理用户的JWT Token
-func DelAdminToken(userID string) error {
-	err := redis.Con().Del("admin_token" + userID).Err()
+func DelAdminToken(ctx *gin.Context, userID string) error {
+	err := redis.Con().Del(ctx, "admin_token"+userID).Err()
 	if err != nil {
 		return nil
 	}
@@ -76,20 +78,20 @@ func ParseAdminToken(tokenString string) (*AdminClaims, error) {
 }
 
 // PutAdminInvalidateToken 将token加入黑名单
-func PutAdminInvalidateToken(tokenString string) {
+func PutAdminInvalidateToken(ctx *gin.Context, tokenString string) {
 	//AdminTokenBlacklist[tokenString] = true // 不使用redis
-	redis.Con().Set("admin_blacklist"+tokenString, tokenString, AdminTokenExpireDuration)
+	redis.Con().Set(ctx, "admin_blacklist"+tokenString, tokenString, AdminTokenExpireDuration)
 }
 
 // AssertIsTokenInvalid 检查token是否在黑名单中
-func AssertIsTokenInvalid(tokenString string) bool {
+func AssertIsTokenInvalid(ctx *gin.Context, tokenString string) bool {
 	//return AdminTokenBlacklist[tokenString] // 不使用redis
-	val := redis.Con().Get("admin_blacklist" + tokenString)
+	val := redis.Con().Get(ctx, "admin_blacklist"+tokenString)
 	return val.Val() == tokenString
 }
 
 // GenUserToken 生成前台用户的JWT Token
-func GenUserToken(userID string) (map[string]string, error) {
+func GenUserToken(ctx *gin.Context, userID string) (map[string]string, error) {
 	claims := UserClaims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -100,7 +102,7 @@ func GenUserToken(userID string) (map[string]string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString(ApiSecret)
 	// token放入redis
-	err := redis.Con().Set("api_token"+userID, tokenString, ApiTokenExpireDuration).Err()
+	err := redis.Con().Set(ctx, "api_token"+userID, tokenString, ApiTokenExpireDuration).Err()
 	if err != nil {
 		return nil, err
 	}
@@ -137,14 +139,14 @@ func ParseUserToken(tokenString string) (*UserClaims, error) {
 }
 
 // PutApiTokenInvalidateToken 将token加入黑名单
-func PutApiTokenInvalidateToken(tokenString string) {
+func PutApiTokenInvalidateToken(ctx *gin.Context, tokenString string) {
 	//ApiTokenBlacklist[tokenString] = true // 不使用redis
-	redis.Con().Set("api_blacklist"+tokenString, tokenString, ApiTokenExpireDuration)
+	redis.Con().Set(ctx, "api_blacklist"+tokenString, tokenString, ApiTokenExpireDuration)
 }
 
 // AssertApiTokenIsInvalid 检查token是否在黑名单中
-func AssertApiTokenIsInvalid(tokenString string) bool {
+func AssertApiTokenIsInvalid(ctx *gin.Context, tokenString string) bool {
 	//return ApiTokenBlacklist[tokenString] // 不使用redis
-	val := redis.Con().Get("api_blacklist" + tokenString)
+	val := redis.Con().Get(ctx, "api_blacklist"+tokenString)
 	return val.Val() == tokenString
 }

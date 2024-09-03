@@ -1,7 +1,9 @@
 package Role
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/go-sql-driver/mysql"
 	"strconv"
 	NoticeModel "vgo/app/Role/Model"
 	"vgo/core/db"
@@ -44,13 +46,21 @@ func Index(ctx *gin.Context) {
 
 // Create 创建
 func Create(ctx *gin.Context) {
-	var product NoticeModel.Role
-	if err := ctx.ShouldBindJSON(&product); err != nil {
+	var role NoticeModel.Role
+	if err := ctx.ShouldBindJSON(&role); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-	db.Con().Create(&product)
-	response.Success(ctx, "成功", product, nil)
+	// 插入数据
+	if err := db.Con().Create(&role).Error; err != nil {
+		// 检查是否是唯一键冲突错误
+		var mysqlErr *mysql.MySQLError
+		if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
+			response.Fail(ctx, "角色标识已存在", err.Error(), nil)
+		}
+		return
+	}
+	response.Success(ctx, "成功", role, nil)
 }
 
 // Update 更新

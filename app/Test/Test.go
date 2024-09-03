@@ -7,6 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	Role "vgo/app/Role/Model"
 	"vgo/core/db"
+	casbin2 "vgo/core/middle/casbin"
+	"vgo/core/response"
 )
 
 func Index(ctx *gin.Context) {
@@ -20,6 +22,27 @@ func Index(ctx *gin.Context) {
 	if err != nil {
 		return
 	}
+
+	//enforcer := casbinCore.SetupCasbin()
+	////user, err := enforcer.AddRolesForUser(strconv.Itoa(1), []string{"admin"})
+	////if err != nil {
+	////	return
+	////}
+	////response.Success(ctx, "添加成功", user, nil)
+	//
+	//res, err := enforcer.AddPolicy("admin", "/notice")
+	//if err != nil {
+	//	return
+	//}
+	//response.Success(ctx, "添加成功", res, nil)
+
+	enforcer := casbin2.SetupCasbin()
+	updated, err := enforcer.UpdatePolicy([]string{"admin", "/admin/notice"}, []string{"admin", "/admin/notice1"})
+	if err != nil {
+		response.Fail(ctx, err.Error(), nil)
+	}
+	response.Success(ctx, "添加成功", updated, nil)
+
 }
 
 func InitCasbin() {

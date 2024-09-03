@@ -2,7 +2,7 @@ package redis
 
 import (
 	"fmt"
-	goRedis "github.com/go-redis/redis"
+	goRedis "github.com/redis/go-redis/v9"
 	"vgo/core/global"
 )
 
@@ -15,6 +15,7 @@ func InitCon() {
 	addr := fmt.Sprintf("%v:%v", redisConf.Hostname, redisConf.HostPort)
 	d := goRedis.NewClient(&goRedis.Options{
 		Addr:     addr,
+		Username: redisConf.UserName,
 		Password: redisConf.Password,
 		DB:       redisConf.DB,
 	})

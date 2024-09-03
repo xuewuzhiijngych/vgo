@@ -30,14 +30,14 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if AssertIsTokenInvalid(tokenString) {
+		if AssertIsTokenInvalid(c, tokenString) {
 			response.NotLogin(c, "Token is invalid --Bapi-- 黑名单", nil)
 			c.Abort()
 			return
 		}
 
 		//// redis内读取token----单个token有效时使用
-		//redisToken := redis.Con().Get("admin_token" + claims.UserID)
+		//redisToken := redis.Con().Get(c,"admin_token" + claims.UserID)
 		//if redisToken == nil || redisToken.Val() != tokenString {
 		//response.NotLogin(c, "Token is invalid --Bapi-- redis00", nil)
 		//	c.Abort()
@@ -45,7 +45,7 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 		//}
 
 		// redis内读取token----多个token有效时使用
-		redisToken := redis.Con().LRange("admin_token"+claims.UserID, 0, -1)
+		redisToken := redis.Con().LRange(c, "admin_token"+claims.UserID, 0, -1)
 		if redisToken == nil || len(redisToken.Val()) == 0 {
 			response.NotLogin(c, "Token is invalid --Bapi-- redis01", nil)
 			c.Abort()
@@ -59,6 +59,7 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 		}
 		c.Set("userID", claims.UserID)
 		c.Set("role", claims.Role)
+		c.Set("super", claims.Super)
 		c.Next()
 	}
 }
@@ -87,21 +88,21 @@ func UserAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if AssertApiTokenIsInvalid(tokenString) {
+		if AssertApiTokenIsInvalid(c, tokenString) {
 			response.NotLogin(c, "Token is invalid --api-- 黑名单", nil)
 			c.Abort()
 			return
 		}
 
 		// redis内读取token----单个token有效时使用
-		redisToken := redis.Con().Get("api_token" + claims.UserID)
+		redisToken := redis.Con().Get(c, "api_token"+claims.UserID)
 		if redisToken == nil || redisToken.Val() != tokenString {
 			response.NotLogin(c, "Token is invalid --api-- redis00", nil)
 			c.Abort()
 			return
 		}
 		//// redis内读取token----多个token有效时使用
-		//redisToken := redis.Con().LRange("api_token"+claims.UserID, 0, -1)
+		//redisToken := redis.Con().LRange(c,"api_token"+claims.UserID, 0, -1)
 		//if redisToken == nil || len(redisToken.Val()) == 0 {
 		//response.NotLogin(c, "Token is invalid --api-- redis01", nil)
 		//	c.Abort()

@@ -9,7 +9,7 @@ import (
 
 // GetToken 获取token
 func GetToken(ctx *gin.Context) {
-	res, err := auth.GenUserToken(strconv.Itoa(12))
+	res, err := auth.GenUserToken(ctx, strconv.Itoa(12))
 	if err != nil {
 		response.Fail(ctx, "获取失败", nil)
 	}
@@ -19,7 +19,7 @@ func GetToken(ctx *gin.Context) {
 // Setback 设置黑名单
 func Setback(ctx *gin.Context) {
 	back := ctx.PostForm("back")
-	auth.PutApiTokenInvalidateToken(back)
+	auth.PutApiTokenInvalidateToken(ctx, back)
 	response.Success(ctx, "成功", nil)
 }
 

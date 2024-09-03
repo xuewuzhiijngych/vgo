@@ -92,9 +92,10 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	// 生成token
-	res, err := auth.GenAdminToken(strconv.Itoa(int(dbUser.ID)), "admin")
+	res, err := auth.GenAdminToken(ctx, strconv.Itoa(int(dbUser.ID)), []string{"admin"}, dbUser.Super)
 	if err != nil {
-		response.Fail(ctx, "登录失败", nil)
+		response.Fail(ctx, err.Error(), nil)
+		return
 	}
 	response.Success(ctx, "登录成功", res)
 }
@@ -102,7 +103,7 @@ func Login(ctx *gin.Context) {
 // LogOut 退出登录
 func LogOut(ctx *gin.Context) {
 	userID := ctx.GetString("userID")
-	err := auth.DelAdminToken(userID)
+	err := auth.DelAdminToken(ctx, userID)
 	if err != nil {
 		return
 	}
@@ -135,7 +136,7 @@ func Delete(ctx *gin.Context) {
 	}
 	// 删除token
 	for _, values := range ids.ID {
-		err := auth.DelAdminToken(strconv.Itoa(int(values)))
+		err := auth.DelAdminToken(ctx, strconv.Itoa(int(values)))
 		if err != nil {
 			continue
 		}
@@ -150,7 +151,7 @@ func Delete(ctx *gin.Context) {
 // UserInfo 用户信息
 func UserInfo(ctx *gin.Context) {
 	userID := ctx.GetString("userID")
-	role := ctx.GetString("role")
+	role := ctx.GetString("Role")
 	response.Success(ctx, "成功", map[string]interface{}{
 		"userID":  userID,
 		"role":    role,

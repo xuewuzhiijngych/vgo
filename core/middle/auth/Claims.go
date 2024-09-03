@@ -6,8 +6,9 @@ import (
 
 // AdminClaims 后台管理用户的Claims
 type AdminClaims struct {
-	UserID string `json:"user_id"`
-	Role   string `json:"role"`
+	UserID string   `json:"user_id"`
+	Role   []string `json:"role"`
+	Super  int      `json:"super"`
 	jwt.RegisteredClaims
 }
 
