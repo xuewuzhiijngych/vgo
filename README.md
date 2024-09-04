@@ -52,7 +52,6 @@ Vgo
 │  ├─ logs                    # 日志
 ├─ asynq.yml                  # asynq配置文件
 ├─ config.yaml                # 框架配置文件
-├─ .env.development        # 开发环境配置
 ```
 
 ### 其他功能还在实现 🏗
