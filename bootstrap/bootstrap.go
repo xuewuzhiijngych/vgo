@@ -28,16 +28,18 @@ func Start() {
 	if appConf.Env == "dev" {
 		if cpuNum > 0 {
 			runtime.GOMAXPROCS(cpuNum)
-			fmt.Printf("当前计算机核数: %v个,调用：%v个\n", realCpuNum, cpuNum)
+			fmt.Printf("计算机核数: %v个,调用：%v个\n", realCpuNum, cpuNum)
 		} else {
 			runtime.GOMAXPROCS(realCpuNum)
-			fmt.Printf("当前计算机核数: %v个,调用：%v个\n", realCpuNum, cpuNum)
+			fmt.Printf("计算机核数: %v个,调用：%v个\n", realCpuNum, cpuNum)
 		}
 	}
 
 	log.InitLog()
 	db.InitCon()
 	redis.InitCon()
+
+	// 是否需要队列
 	queueConf := global.App.Config.QueueConf
 	if queueConf.Enable == 1 {
 		// 运行 Asynq 任务队列
@@ -45,6 +47,8 @@ func Start() {
 			queue.InitQueue()
 		}()
 	}
+
+	// jwt相关配置
 	jwtConf := global.App.Config.JwtConf
 	auth.AdminTokenExpireDuration = time.Duration(jwtConf.AdminTimeout) * time.Hour
 	auth.ApiTokenExpireDuration = time.Duration(jwtConf.ApiTimeout) * time.Hour
