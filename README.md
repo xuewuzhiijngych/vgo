@@ -5,7 +5,7 @@
 Vgo 一款基于 Gin 开源的服务端框架，使用了Redis、Mysql、JWT、队列、等技术栈。
 非常适合Golang初学者作为学习项目学习。
 
-### 代码仓库 ⭐
+### 代码仓库 ⭐(记得 Star⭐)
 
 - Vgo-Gitee：https://gitee.com/yan_chunhao_admin/vgo.git
 - VgoAdmin-Gitee：https://gitee.com/yan_chunhao_admin/vgo-admin.git
@@ -19,7 +19,7 @@ git clone -b dev https://gitee.com/yan_chunhao_admin/vgo.git
 ```
 
 - **Install：**
-- 
+
 ```text
 mysql 8导入根目录sql、准备好redis
 ```
