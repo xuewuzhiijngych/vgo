@@ -4,21 +4,22 @@ import (
 	"fmt"
 	"github.com/hibiken/asynq"
 	"vgo/core/global"
-	"vgo/tasks"
+	"vgo/job"
 )
 
 // InitQueue 初始化队列
 func InitQueue() {
-	redisConf := global.App.Config.RedisConf
-	redisAddr := fmt.Sprintf("%v:%v", redisConf.Hostname, redisConf.HostPort)
+	queueConf := global.App.Config.QueueConf
+	redisAddr := fmt.Sprintf("%v:%v", queueConf.Hostname, queueConf.HostPort)
 	srv := asynq.NewServer(
 		asynq.RedisClientOpt{
 			Addr:     redisAddr,
-			Username: redisConf.UserName,
-			Password: redisConf.Password,
+			Username: queueConf.UserName,
+			Password: queueConf.Password,
+			DB:       queueConf.DB,
 		},
 		asynq.Config{
-			Concurrency: 10,
+			Concurrency: queueConf.Concurrency,
 			Queues: map[string]int{
 				"critical": 6,
 				"default":  3,
@@ -27,20 +28,28 @@ func InitQueue() {
 		},
 	)
 	mux := asynq.NewServeMux()
-	mux.HandleFunc(tasks.TestDelivery, tasks.HandleTestDeliveryTask)
+	SetupJobHandlers(mux)
 	if err := srv.Run(mux); err != nil {
 		fmt.Println("Failed to start server:", err)
 	}
 }
 
+// SetupJobHandlers 注册任务处理器
+func SetupJobHandlers(mux *asynq.ServeMux) {
+	for jobName, handler := range job.JobMaps {
+		mux.HandleFunc(jobName, handler)
+	}
+}
+
 // NewRedisClient 创建一个新的 asynq.Client 并返回
 func NewRedisClient() (*asynq.Client, error) {
-	redisConf := global.App.Config.RedisConf
-	redisAddr := fmt.Sprintf("%v:%v", redisConf.Hostname, redisConf.HostPort)
+	queueConf := global.App.Config.QueueConf
+	redisAddr := fmt.Sprintf("%v:%v", queueConf.Hostname, queueConf.HostPort)
 	client := asynq.NewClient(asynq.RedisClientOpt{
 		Addr:     redisAddr,
-		Username: redisConf.UserName,
-		Password: redisConf.Password,
+		Username: queueConf.UserName,
+		Password: queueConf.Password,
+		DB:       queueConf.DB,
 	})
 	return client, nil
 }

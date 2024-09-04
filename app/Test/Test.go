@@ -7,7 +7,7 @@ import (
 	"time"
 	"vgo/core/log"
 	"vgo/core/queue"
-	"vgo/tasks"
+	"vgo/job"
 )
 
 func Index(ctx *gin.Context) {
@@ -15,30 +15,17 @@ func Index(ctx *gin.Context) {
 	//if err != nil {
 	//	return
 	//}
-	//redisConf := global.App.Config.RedisConf
-	//redisAddr := fmt.Sprintf("%v:%v", redisConf.Hostname, redisConf.HostPort)
-	//client := asynq.NewClient(asynq.RedisClientOpt{
-	//	Addr:     redisAddr,
-	//	Username: redisConf.UserName,
-	//	Password: redisConf.Password,
-	//})
-	//defer func(client *asynq.Client) {
-	//	err := client.Close()
-	//	if err != nil {
-	//		fmt.Println(err)
-	//	}
-	//}(client)
 	client, err := queue.NewRedisClient()
 	if err != nil {
 		fmt.Println("Failed to create redis client:", err)
 		return
 	}
 	defer queue.CloseRedisClient(client)
-	task, err := tasks.NewTestDelivery(42, "some:template:id")
+	task, err := job.NewTestJob(42, "666666")
 	if err != nil {
 		log.GetLogger().Error(fmt.Sprintf("could not create task: %v", err))
 	}
-	info, err := client.Enqueue(task, asynq.ProcessIn(3*time.Second))
+	info, err := client.Enqueue(task, asynq.ProcessIn(time.Second*3))
 	if err != nil {
 		log.GetLogger().Error(fmt.Sprintf("could not enqueue task: %v", err))
 	}
