@@ -7,7 +7,10 @@ Vgo 一款基于 Gin 开源的服务端框架，使用了Redis、Mysql、JWT、�
 
 ### 代码仓库 ⭐(记得 Star⭐)
 
+- Vgo-Github：https://github.com/xuewuzhiijngych/vgo.git
 - Vgo-Gitee：https://gitee.com/yan_chunhao_admin/vgo.git
+- 
+- VgoAdmin-Github：https://github.com/xuewuzhiijngych/vgo-admin.git
 - VgoAdmin-Gitee：https://gitee.com/yan_chunhao_admin/vgo-admin.git
 
 ### 安装使用步骤 📔
@@ -15,6 +18,9 @@ Vgo 一款基于 Gin 开源的服务端框架，使用了Redis、Mysql、JWT、�
 - **Clone：**
 
 ```text
+Github:
+git clone -b https://github.com/xuewuzhiijngych/vgo.git
+Gitee:
 git clone -b dev https://gitee.com/yan_chunhao_admin/vgo.git
 ```
 
