@@ -69,6 +69,14 @@ Vgo
 - 前端项目地址：https://github.com/xuewuzhiijngych/vgo-admin.git
 
 
+### 代码生成 🏢
+- 生成基本增删改查的golang代码，可使用命令：
+```text
+go run vTools.go --module=Product --note=产品
+```
+- 执行代码后，会在app目录下生成一个Product模块，里面包含了增删改查的相关代码。
+- 随后需要自己在根目录route/router.go文件中注册路由。【后期实现自动注册】
+
 ### 后续计划 🔮
 - 后续将陆续增加更多功能，欢迎大家共同参与进来。
 - 如有任何问题，请联系作者：<601266867@qq.com>
