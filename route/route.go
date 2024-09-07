@@ -12,6 +12,7 @@ import (
 	"vgo/app/Test"
 	UserController "vgo/app/User/Api"
 	User "vgo/app/User/Router"
+	"vgo/app/Ws"
 	"vgo/core/middle/auth"
 	"vgo/core/middle/casbin"
 	"vgo/core/response"
@@ -34,7 +35,9 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 
 	app.GET("/test", Test.Index)
 	app.GET("/test2", Test.Index2)
-	app.POST("/send_ws", Test.SendWs)
+
+	app.GET("/ws/link", Ws.Link)
+	app.POST("/ws/send", Ws.Send)
 
 	admin := app.Group("/admin")
 	admin.GET("/common/get_gender", Common.GetGender)

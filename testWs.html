@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket 客户端</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        #messageInput {
+            width: 80%;
+            padding: 5px;
+        }
+        #sendButton {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>WebSocket 客户端</h1>
+<div id="messages"></div>
+<input type="text" id="messageInput" placeholder="Enter message">
+<button id="sendButton">发消息</button>
+
+<script>
+    const ws = new WebSocket('ws://localhost:8080/ws/link');
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+
+    ws.onopen = () => {
+        console.log('WebSocket connection established.');
+    };
+
+    ws.onmessage = (event) => {
+        const message = event.data;
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `服务端: ${message}`;
+        messagesDiv.appendChild(messageElement);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+
+    ws.onclose = () => {
+        console.log('WebSocket connection closed.');
+    };
+
+    ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+
+    sendButton.addEventListener('click', () => {
+        const message = messageInput.value;
+        if (message) {
+            ws.send(message);
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `客户端: ${message}`;
+            messagesDiv.appendChild(messageElement);
+            messageInput.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    });
+</script>
+</body>
+</html>
