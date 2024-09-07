@@ -57,12 +57,18 @@ type JwtConf struct {
 	ApiTimeout   int64  `yaml:"apiTimeout"`
 }
 
+// SnowflakeConf Snowflake配置
+type SnowflakeConf struct {
+	Node int64 `yaml:"node"`
+}
+
 type Config struct {
-	DbConf    DbConf    `yaml:"dbConf"`
-	RedisConf RedisConf `yaml:"redisConf"`
-	QueueConf QueueConf `yaml:"queueConf"`
-	JwtConf   JwtConf   `yaml:"jwtConf"`
-	App       App       `yaml:"app"`
+	DbConf        DbConf        `yaml:"dbConf"`
+	RedisConf     RedisConf     `yaml:"redisConf"`
+	QueueConf     QueueConf     `yaml:"queueConf"`
+	JwtConf       JwtConf       `yaml:"jwtConf"`
+	SnowflakeConf SnowflakeConf `yaml:"snowflakeConf"`
+	App           App           `yaml:"app"`
 }
 
 func (config *Config) InitConfig() *Config {

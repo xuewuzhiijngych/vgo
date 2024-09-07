@@ -13,6 +13,7 @@ import (
 	"vgo/core/middle/auth"
 	"vgo/core/queue"
 	"vgo/core/redis"
+	"vgo/core/snow"
 	"vgo/route"
 )
 
@@ -35,9 +36,21 @@ func Start() {
 		}
 	}
 
-	log.InitLog()
+	// 初始化数据库
 	db.InitCon()
+
+	// 初始化redis
 	redis.InitCon()
+
+	// 初始化日志
+	go func() {
+		log.InitLog()
+	}()
+
+	// 初始化雪花算法
+	go func() {
+		snow.InitSnowflake()
+	}()
 
 	// 是否需要队列
 	queueConf := global.App.Config.QueueConf
@@ -63,6 +76,7 @@ func Start() {
 	if appConf.Env == "pro" {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
 	// 收集路由
 	route.CollectRoute(app)
 	err := app.Run(appConf.Host + ":" + appConf.Port)

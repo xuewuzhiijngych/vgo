@@ -25,6 +25,8 @@ jwtConf:
   apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz
   adminTimeout: 24
   apiTimeout: 24
+snowflakeConf:
+  node: 1
 app:
   host: 0.0.0.0
   env: dev #环境状态：dev=开发，pro=生产

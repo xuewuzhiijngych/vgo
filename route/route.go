@@ -33,6 +33,8 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	})
 
 	app.GET("/test", Test.Index)
+	app.GET("/test2", Test.Index2)
+	app.POST("/send_ws", Test.SendWs)
 
 	admin := app.Group("/admin")
 	admin.GET("/common/get_gender", Common.GetGender)
