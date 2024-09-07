@@ -20,6 +20,10 @@ queueConf:
   password:
   db: 12
   concurrency: 10
+apiConf:
+  apiOrigins: http://localhost:8080,
+  bapiOrigins: http://127.0.0.1:8848
+  wsOrigins: http://localhost:8080,http://localhost:63342
 jwtConf:
   adminKey: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
   apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz

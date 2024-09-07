@@ -21,7 +21,7 @@ Vgo 是一款基于 Gin 开发的开源服务端框架。
 
 - **下载：**
 
-```text
+```shell
 git clone -b https://github.com/xuewuzhiijngych/vgo.git
 ```
 
@@ -33,19 +33,19 @@ git clone -b https://github.com/xuewuzhiijngych/vgo.git
 - 根目录的asynq.yml文件是配置asynq命令工具的，不使用，忽略即可。
 - 执行以下命令安装依赖包：
 
-```text
+```shell
 go mod tidy
 ```
 
 - **运行：**
 
-```text
+```shell
 go run main.go
 ```
 
 ### 项目目录 📚
 
-```text
+```shell
 Vgo
 ├─ app                        # Vite 配置项
 ├─ AdminUser                  # 模块
@@ -71,8 +71,8 @@ Vgo
 
 ### 代码生成 🏢
 - 生成基本增删改查的golang代码，可使用命令：
-```text
-go run vTools.go --module=Product --note=产品
+```shell
+go run vTools/vTools.go --module=Product --note=产品
 ```
 - 执行代码后，会在app目录下生成一个Product模块，里面包含了增删改查的相关代码。
 - 随后需要自己在根目录route/router.go文件中注册路由。【后期实现自动注册】

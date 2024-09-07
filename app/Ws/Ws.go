@@ -5,8 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
+	"vgo/core/global"
 	"vgo/core/response"
 	"vgo/core/snow"
 
@@ -19,11 +21,10 @@ var (
 		ReadBufferSize:   1024,
 		WriteBufferSize:  1024,
 		CheckOrigin: func(r *http.Request) bool {
+			origins := global.App.Config.ApiConf.WsOrigins
+			allowedOrigins := strings.Split(origins, ",")
+			// 逗号分隔的字符串
 			origin := r.Header.Get("Origin")
-			allowedOrigins := []string{
-				"http://localhost:8080",
-				"http://127.0.0.1:5500",
-			}
 			for _, allowedOrigin := range allowedOrigins {
 				if origin == allowedOrigin {
 					return true
