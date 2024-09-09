@@ -4,12 +4,16 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"sync"
 	"time"
 	"vgo/core/global"
 )
 
 // db 数据库连接
-var db *gorm.DB
+var (
+	db     *gorm.DB
+	dbLock sync.RWMutex
+)
 
 // InitCon 初始化数据库连接
 func InitCon() {
@@ -36,5 +40,7 @@ func InitCon() {
 
 // Con 获取数据连接
 func Con() *gorm.DB {
+	dbLock.RLock()
+	defer dbLock.RUnlock()
 	return db
 }

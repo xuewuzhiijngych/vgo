@@ -19,9 +19,10 @@ import (
 
 func Start() {
 	global.App.Config.InitConfig()
+	appConfig := global.App.Config
 
-	appConf := global.App.Config.App
-	cpuNum, _ := strconv.Atoi(global.App.Config.App.CpuNum)
+	appConf := appConfig.App
+	cpuNum, _ := strconv.Atoi(appConfig.App.CpuNum)
 	realCpuNum := runtime.NumCPU()
 	if cpuNum > realCpuNum {
 		cpuNum = realCpuNum
@@ -53,7 +54,7 @@ func Start() {
 	}()
 
 	// 是否需要队列
-	queueConf := global.App.Config.QueueConf
+	queueConf := appConfig.QueueConf
 	if queueConf.Enable == 1 {
 		// 运行 Asynq 任务队列
 		go func() {
@@ -62,7 +63,7 @@ func Start() {
 	}
 
 	// jwt相关配置
-	jwtConf := global.App.Config.JwtConf
+	jwtConf := appConfig.JwtConf
 	auth.AdminTokenExpireDuration = time.Duration(jwtConf.AdminTimeout) * time.Hour
 	auth.ApiTokenExpireDuration = time.Duration(jwtConf.ApiTimeout) * time.Hour
 	auth.AdminSecret = []byte(jwtConf.AdminKey)

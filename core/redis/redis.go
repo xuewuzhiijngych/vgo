@@ -3,11 +3,15 @@ package redis
 import (
 	"fmt"
 	goRedis "github.com/redis/go-redis/v9"
+	"sync"
 	"vgo/core/global"
 )
 
 // redis redis连接
-var redis *goRedis.Client
+var (
+	redis     *goRedis.Client
+	redisLock sync.RWMutex
+)
 
 // InitCon 初始化redis连接
 func InitCon() {
@@ -24,5 +28,7 @@ func InitCon() {
 
 // Con 获取redis连接
 func Con() *goRedis.Client {
+	redisLock.RLock()
+	defer redisLock.RUnlock()
 	return redis
 }

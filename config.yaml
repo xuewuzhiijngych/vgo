@@ -1,3 +1,12 @@
+#App配置
+app:
+  host: 0.0.0.0
+  env: dev #环境状态：dev=开发，pro=生产
+  port: 8080
+  version: 1.0.0
+  requestLog: 0
+  cpuNum: 12
+#Mysql数据库配置
 dbConf:
   driver: mysql
   hostname: 127.0.0.1
@@ -5,13 +14,14 @@ dbConf:
   database: go_study
   username: root
   password: 110112...
-  prefix:
+#Redis数据库配置
 redisConf:
   hostname: 127.0.0.1
   hostPort: 6379
   username:
   password: 
   db: 11
+#队列配置
 queueConf:
   enable: 0
   hostname: 127.0.0.1
@@ -20,21 +30,17 @@ queueConf:
   password:
   db: 12
   concurrency: 10
+#API配置
 apiConf:
   apiOrigins: http://localhost:8080,
   bapiOrigins: http://127.0.0.1:8848
   wsOrigins: http://localhost:8080,http://localhost:63342
+#JWT配置
 jwtConf:
   adminKey: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
   apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz
   adminTimeout: 24
   apiTimeout: 24
+#Snowflake配置
 snowflakeConf:
   node: 1
-app:
-  host: 0.0.0.0
-  env: dev #环境状态：dev=开发，pro=生产
-  port: 8080
-  version: 1.0.0
-  requestLog: 0
-  cpuNum: 12
