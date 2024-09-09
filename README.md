@@ -57,9 +57,11 @@ Vgo
 ├─ core                       # 框架核心文件
 │  ├─ ...                     # 后续出详细介绍（亦可以自己通过源码了解）
 ├─ job                        # 队列
+├─ lang                       # 翻译字典
 ├─ route                      # 路由
 ├─ storage                    # 日志或静态资源
 │  ├─ logs                    # 日志
+├─ vTools                     # 命令行工具
 ├─ asynq.yml                  # asynq配置文件
 ├─ config.yaml                # 框架配置文件
 ```
