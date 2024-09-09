@@ -16,11 +16,9 @@ var (
 )
 
 // Trans 翻译
-func Trans(key string, lang string) string {
+func Trans(key string, values ...interface{}) string {
 	appConf := global.App.Config.App
-	if lang == "" {
-		lang = appConf.Lang
-	}
+	lang := appConf.Lang
 	// 使用读锁读取缓存
 	cacheMutex.RLock()
 	translations, exists := translationsCache[lang]
@@ -37,7 +35,7 @@ func Trans(key string, lang string) string {
 	}
 	// 查找key对应的值
 	if val, ok := translations[key]; ok {
-		return val
+		return fmt.Sprintf(val, values...)
 	}
 	fmt.Println("获取翻译出错！")
 	return ""

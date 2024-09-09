@@ -93,7 +93,7 @@ go run vTools/vTools.go --method=Curd --module=Product --note=产品
 - 翻译文字定义在根目录lang下
 - 使用：
 ```shell
-trans.Trans("手机号不能为空", ""),
+trans.Trans("手机号不能为空", "哈哈哈",666),
 ```
 - 具体见：app/User/Api/User.go 的  Register方法
 
