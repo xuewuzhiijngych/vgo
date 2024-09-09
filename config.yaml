@@ -5,6 +5,7 @@ app:
   port: 8080
   version: 1.0.0
   requestLog: 0
+  lang: zh-cn
   cpuNum: 12
 #Mysql数据库配置
 dbConf:

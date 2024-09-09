@@ -62,6 +62,7 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	}
 
 	api := app.Group("/api").Use(cors.ApiCors())
+	api.POST("/user/register", UserController.Register)
 	api.POST("/user/get_token", UserController.GetToken)
 	api.POST("/user/set_back", UserController.Setback)
 	apiRouters := router.CollectRoutesFromModules(

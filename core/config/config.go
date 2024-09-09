@@ -15,6 +15,7 @@ type App struct {
 	Version    string `yaml:"version"`
 	Env        string `yaml:"env"`
 	RequestLog int    `yaml:"requestLog"`
+	Lang       string `yaml:"lang"`
 	CpuNum     string `yaml:"cpuNum"`
 }
 

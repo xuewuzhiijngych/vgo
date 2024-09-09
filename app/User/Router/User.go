@@ -7,6 +7,6 @@ import (
 
 func CollectRoutes() []router.BaseRoute {
 	return []router.BaseRoute{
-		{"GET", "/user/info", User.UserInfo},
+		{"GET", "/user/personal", User.Personal},
 	}
 }

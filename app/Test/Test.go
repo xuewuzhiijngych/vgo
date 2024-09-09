@@ -2,19 +2,18 @@ package Test
 
 import (
 	"github.com/gin-gonic/gin"
-	Role "vgo/app/Role/Model"
-	"vgo/core/db"
 	"vgo/core/response"
 	"vgo/core/snow"
 )
 
 func Index(ctx *gin.Context) {
-	err := db.Con().AutoMigrate(&Role.RoleMenu{})
-	if err != nil {
-		return
-	}
-	response.Success(ctx, "666", nil)
-	return
+	//err := db.Con().AutoMigrate(&User.User{})
+	//if err != nil {
+	//	return
+	//}
+	//response.Success(ctx, "666", nil)
+	//return
+
 }
 
 func Index2(ctx *gin.Context) {

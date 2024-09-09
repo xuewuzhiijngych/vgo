@@ -3,7 +3,7 @@ package Tpl
 import (
 	"github.com/gin-gonic/gin"
 	"strconv"
-	TplModel "vgo/app/Tpl/Model"
+	TplModel "vgo/core/Tpl/Model"
 	"vgo/core/db"
 	"vgo/core/response"
 )

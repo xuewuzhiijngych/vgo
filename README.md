@@ -68,16 +68,32 @@ Vgo
 - 基于本框架的接口，实现了一个拥有简单Rbac的后台管理系统，具体使用方法请参考VgoAdmin项目。
 - 前端项目地址：https://github.com/xuewuzhiijngych/vgo-admin.git
 
-
+## 功能
 ### 代码生成 🏢
 - 开发时Go版本：go version go1.22.5 windows/amd64
 - 版本兼容未测试，预想问题不大。
 - 生成基本增删改查的golang代码，可使用命令：
+- Curd：
 ```shell
-go run vTools/vTools.go --module=Product --note=产品
+go run vTools/vTools.go --method=Curd --module=Product --note=产品
 ```
 - 执行代码后，会在app目录下生成一个Product模块，里面包含了增删改查的相关代码。
 - 随后需要自己在根目录route/router.go文件中注册路由。【后期实现自动注册】
+
+### 权限管理 🔐
+- 基于casbin实现的权限管理，可实现用户角色、角色权限、用户权限等多种权限控制。
+- 具体使用方法请参考VgoAdmin项目。
+
+### Map结合模型验证 🏭
+- 见app/User/Api/User.go 的  Register方法
+
+### 自定义翻译器 📝
+- 翻译文字定义在根目录lang下
+- 使用：
+```shell
+trans.Trans("手机号不能为空", ""),
+```
+- 具体见：app/User/Api/User.go 的  Register方法
 
 ### 后续计划 🔮
 - 后续将陆续增加更多功能，欢迎大家共同参与进来。

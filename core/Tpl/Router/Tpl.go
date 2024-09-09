@@ -1,7 +1,7 @@
 package Tpl
 
 import (
-	Tpl "vgo/app/Tpl/Bapi"
+	"vgo/core/Tpl/Bapi"
 	"vgo/core/router"
 )
 
