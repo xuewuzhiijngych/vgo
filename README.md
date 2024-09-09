@@ -70,6 +70,8 @@ Vgo
 
 
 ### 代码生成 🏢
+- 开发时Go版本：go version go1.22.5 windows/amd64
+- 版本兼容未测试，预想问题不大。
 - 生成基本增删改查的golang代码，可使用命令：
 ```shell
 go run vTools/vTools.go --module=Product --note=产品
