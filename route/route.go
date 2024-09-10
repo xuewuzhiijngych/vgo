@@ -10,6 +10,7 @@ import (
 	Role "vgo/app/Role/Router"
 	System "vgo/app/System/Bapi"
 	"vgo/app/Test"
+	Upload "vgo/app/Upload/Router"
 	UserController "vgo/app/User/Api"
 	User "vgo/app/User/Router"
 	"vgo/app/Ws"
@@ -49,6 +50,7 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 		Menu.CollectRoutes,
 		AdminUser.CollectRoutes,
 		Role.CollectRoutes,
+		Upload.CollectRoutes,
 	)
 
 	enforcer := casbin.SetupCasbin()

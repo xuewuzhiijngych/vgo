@@ -9,14 +9,16 @@ import (
 
 // App 应用配置
 type App struct {
-	Host       string `yaml:"host"`
-	Port       string `yaml:"port"`
-	CouNum     string `yaml:"cpu_num"`
-	Version    string `yaml:"version"`
-	Env        string `yaml:"env"`
-	RequestLog int    `yaml:"requestLog"`
-	Lang       string `yaml:"lang"`
-	CpuNum     string `yaml:"cpuNum"`
+	Host        string `yaml:"host"`
+	Port        string `yaml:"port"`
+	CouNum      string `yaml:"cpu_num"`
+	Version     string `yaml:"version"`
+	Env         string `yaml:"env"`
+	RequestLog  int    `yaml:"requestLog"`
+	Lang        string `yaml:"lang"`
+	CpuNum      string `yaml:"cpuNum"`
+	ImgDomain   string `yaml:"imgDomain"`
+	VideoDomain string `yaml:"videoDomain"`
 }
 
 // DbConf 数据数据库配置

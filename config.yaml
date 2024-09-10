@@ -7,6 +7,8 @@ app:
   requestLog: 0
   lang: zh-cn
   cpuNum: 12
+  imgDomain: http://localhost:8080
+  videoDomain: http://localhost:8080
 #Mysql数据库配置
 dbConf:
   driver: mysql

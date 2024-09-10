@@ -78,6 +78,9 @@ func Start() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	// 静态资源
+	app.Static("/storage", "storage")
+
 	// 收集路由
 	route.CollectRoute(app)
 	err := app.Run(appConf.Host + ":" + appConf.Port)
