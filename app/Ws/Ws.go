@@ -21,7 +21,7 @@ var (
 		ReadBufferSize:   1024,
 		WriteBufferSize:  1024,
 		CheckOrigin: func(r *http.Request) bool {
-			origins := global.App.Config.ApiConf.WsOrigins
+			origins := global.App.Config.App.ApiOrigins
 			allowedOrigins := strings.Split(origins, ",")
 			// 逗号分隔的字符串
 			origin := r.Header.Get("Origin")

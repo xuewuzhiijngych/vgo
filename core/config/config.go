@@ -19,6 +19,7 @@ type App struct {
 	CpuNum      string `yaml:"cpuNum"`
 	ImgDomain   string `yaml:"imgDomain"`
 	VideoDomain string `yaml:"videoDomain"`
+	ApiOrigins  string `yaml:"apiOrigins"`
 }
 
 // DbConf 数据数据库配置
@@ -51,13 +52,6 @@ type QueueConf struct {
 	Concurrency int    `yaml:"concurrency"`
 }
 
-// ApiConf Api配置
-type ApiConf struct {
-	ApiOrigins  string `yaml:"apiOrigins"`
-	BapiOrigins string `yaml:"bapiOrigins"`
-	WsOrigins   string `yaml:"wsOrigins"`
-}
-
 // JwtConf Jwt配置
 type JwtConf struct {
 	AdminKey     string `yaml:"adminKey"`
@@ -75,7 +69,6 @@ type Config struct {
 	DbConf        DbConf        `yaml:"dbConf"`
 	RedisConf     RedisConf     `yaml:"redisConf"`
 	QueueConf     QueueConf     `yaml:"queueConf"`
-	ApiConf       ApiConf       `yaml:"apiConf"`
 	JwtConf       JwtConf       `yaml:"jwtConf"`
 	SnowflakeConf SnowflakeConf `yaml:"snowflakeConf"`
 	App           App           `yaml:"app"`

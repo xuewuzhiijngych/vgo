@@ -16,7 +16,6 @@ import (
 	"vgo/app/Ws"
 	"vgo/core/middle/auth"
 	"vgo/core/middle/casbin"
-	"vgo/core/middle/cors"
 	"vgo/core/response"
 	"vgo/core/router"
 )
@@ -36,15 +35,17 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	})
 
 	app.GET("/test", Test.Index)
-	app.GET("/test2", Test.Index2)
 
 	app.GET("/ws/link", Ws.Link)
 	app.POST("/ws/send", Ws.Send)
 
-	admin := app.Group("/admin").Use(cors.BapiCors())
+	admin := app.Group("/admin")
+
 	admin.GET("/common/get_gender", Common.GetGender)
 	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
 	admin.POST("/admin_user/login", AdminUserController.Login)
+	admin.POST("/test2", Test.Index2)
+
 	bapiRouters := router.CollectRoutesFromModules(
 		Notice.CollectRoutes,
 		Menu.CollectRoutes,
@@ -63,7 +64,7 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 		//admin.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
 	}
 
-	api := app.Group("/api").Use(cors.ApiCors())
+	api := app.Group("/api")
 	api.POST("/user/register", UserController.Register)
 	api.POST("/user/get_token", UserController.GetToken)
 	api.POST("/user/set_back", UserController.Setback)
