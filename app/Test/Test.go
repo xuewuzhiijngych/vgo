@@ -13,7 +13,7 @@ func Index(ctx *gin.Context) {
 	//}
 	//response.Success(ctx, "666", nil)
 	//return
-
+	response.Success(ctx, "666", nil)
 }
 
 func Index2(ctx *gin.Context) {

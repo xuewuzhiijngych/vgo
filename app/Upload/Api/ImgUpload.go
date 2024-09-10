@@ -85,7 +85,7 @@ func ImgUpload(ctx *gin.Context) {
 	dst := filepath.Join(dstDir, newFileName)
 	respUrl := "/storage/uploads/img/" + timeStr + "/" + newFileName
 
-	// 打开上传的文件
+	// 打开上传的文件【上一次的读取操作会将文件的读写指针移到文件末尾】
 	src, err = file.Open()
 	if err != nil {
 		response.Fail(ctx, "打开文件失败", err.Error())
