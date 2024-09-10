@@ -11,7 +11,7 @@
  Target Server Version : 80031 (8.0.31)
  File Encoding         : 65001
 
- Date: 04/09/2024 10:16:57
+ Date: 10/09/2024 13:43:26
 */
 
 SET NAMES utf8mb4;
@@ -70,38 +70,41 @@ CREATE TABLE `casbin_rule`  (
   `v5` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_casbin_rule`(`ptype` ASC, `v0` ASC, `v1` ASC, `v2` ASC, `v3` ASC, `v4` ASC, `v5` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 219 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 286 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of casbin_rule
 -- ----------------------------
 INSERT INTO `casbin_rule` VALUES (56, 'g', '5', 'admin', '', '', '', '');
 INSERT INTO `casbin_rule` VALUES (45, 'g', '6', 'test2', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (206, 'p', 'admin', '/admin/admin/notice/view', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (207, 'p', 'admin', '/admin/admin_user', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (208, 'p', 'admin', '/admin/admin_user/create', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (210, 'p', 'admin', '/admin/admin_user/delete', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (211, 'p', 'admin', '/admin/admin_user/get/role', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (212, 'p', 'admin', '/admin/admin_user/set/role', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (209, 'p', 'admin', '/admin/admin_user/update', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (195, 'p', 'admin', '/admin/button/list', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (203, 'p', 'admin', '/admin/menu/create', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (205, 'p', 'admin', '/admin/menu/delete', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (194, 'p', 'admin', '/admin/menu/list', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (204, 'p', 'admin', '/admin/menu/update', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (196, 'p', 'admin', '/admin/notice', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (201, 'p', 'admin', '/admin/notice/change', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (197, 'p', 'admin', '/admin/notice/create', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (199, 'p', 'admin', '/admin/notice/delete', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (200, 'p', 'admin', '/admin/notice/export', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (198, 'p', 'admin', '/admin/notice/update', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (202, 'p', 'admin', '/admin/notice/view', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (213, 'p', 'admin', '/admin/role', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (214, 'p', 'admin', '/admin/role/create', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (216, 'p', 'admin', '/admin/role/delete', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (218, 'p', 'admin', '/admin/role/get/menu', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (217, 'p', 'admin', '/admin/role/set/menu', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES (215, 'p', 'admin', '/admin/role/update', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (273, 'p', 'admin', '/admin/admin/notice/view', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (274, 'p', 'admin', '/admin/admin_user', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (275, 'p', 'admin', '/admin/admin_user/create', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (277, 'p', 'admin', '/admin/admin_user/delete', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (278, 'p', 'admin', '/admin/admin_user/get/role', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (279, 'p', 'admin', '/admin/admin_user/set/role', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (276, 'p', 'admin', '/admin/admin_user/update', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (259, 'p', 'admin', '/admin/button/list', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (270, 'p', 'admin', '/admin/menu/create', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (272, 'p', 'admin', '/admin/menu/delete', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (258, 'p', 'admin', '/admin/menu/list', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (271, 'p', 'admin', '/admin/menu/update', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (260, 'p', 'admin', '/admin/notice', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (265, 'p', 'admin', '/admin/notice/change', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (261, 'p', 'admin', '/admin/notice/create', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (263, 'p', 'admin', '/admin/notice/delete', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (264, 'p', 'admin', '/admin/notice/export', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (262, 'p', 'admin', '/admin/notice/update', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (266, 'p', 'admin', '/admin/notice/view', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (280, 'p', 'admin', '/admin/role', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (281, 'p', 'admin', '/admin/role/create', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (283, 'p', 'admin', '/admin/role/delete', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (285, 'p', 'admin', '/admin/role/get/menu', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (284, 'p', 'admin', '/admin/role/set/menu', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (282, 'p', 'admin', '/admin/role/update', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (267, 'p', 'admin', '/admin/upload', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (268, 'p', 'admin', '/admin/upload/img', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (269, 'p', 'admin', '/admin/upload/video', '', '', '', '');
 
 -- ----------------------------
 -- Table structure for menus
@@ -131,7 +134,7 @@ CREATE TABLE `menus`  (
   `sort` bigint NOT NULL DEFAULT 0 COMMENT '排序',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_menus_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menus
@@ -167,6 +170,9 @@ INSERT INTO `menus` VALUES (48, NULL, NULL, NULL, 31, '', 'update', '', '/admin/
 INSERT INTO `menus` VALUES (49, NULL, NULL, NULL, 31, '', 'delete', '', '/admin/role/delete', '', '', '删除', '', '', 1, 2, 2, 2, 1, 2, 0);
 INSERT INTO `menus` VALUES (50, NULL, NULL, NULL, 31, '', 'authority', '', '/admin/role/set/menu', '', '', '查看角色', '', '', 1, 2, 2, 2, 1, 2, 0);
 INSERT INTO `menus` VALUES (51, NULL, NULL, NULL, 31, '', 'authority', '', '/admin/role/get/menu', '', '', '设置角色', '', '', 1, 2, 2, 2, 1, 2, 0);
+INSERT INTO `menus` VALUES (52, NULL, '2024-09-10 09:24:24.375', NULL, 3, '/cms/upload', 'upload', '', '/admin/upload', '/cms/upload/index', 'Upload', '文件上传', '', '', 2, 2, 2, 2, 1, 1, 0);
+INSERT INTO `menus` VALUES (53, NULL, '2024-09-03 10:24:58.883', NULL, 52, '', 'upload-img', '', '/admin/upload/img', '', '', '图片上传', '', '', 1, 2, 2, 2, 1, 2, 0);
+INSERT INTO `menus` VALUES (54, NULL, '2024-09-03 10:24:58.883', NULL, 52, '', 'upload-video', '', '/admin/upload/video', '', '', '视频上传', '', '', 1, 2, 2, 2, 1, 2, 0);
 
 -- ----------------------------
 -- Table structure for notices
@@ -197,7 +203,7 @@ INSERT INTO `notices` VALUES (5, '2024-09-02 16:48:58.452', '2024-09-02 16:48:58
 INSERT INTO `notices` VALUES (6, '2024-09-02 16:52:58.634', '2024-09-02 16:52:58.634', '2024-09-02 17:09:44.025', '大啊大大', 0, 1, '<p>颠三倒四多</p>', '');
 INSERT INTO `notices` VALUES (7, '2024-09-02 17:09:41.514', '2024-09-02 17:09:41.514', '2024-09-02 17:10:50.537', '防守打法收到', 0, 1, '<p>防守打法收到防守打法收到防守打法收到防守打法收到防守打法收到</p>', '');
 INSERT INTO `notices` VALUES (8, '2024-09-02 17:10:48.682', '2024-09-02 17:10:48.682', '2024-09-02 17:16:03.498', '4443434', 0, 1, '<p>都是</p>', '');
-INSERT INTO `notices` VALUES (9, '2024-09-02 17:16:01.679', '2024-09-04 10:14:47.943', NULL, '是的是的', 0, 1, '<p>颠三倒四</p>', '');
+INSERT INTO `notices` VALUES (9, '2024-09-02 17:16:01.679', '2024-09-09 08:53:50.063', NULL, '是的是的', 0, 1, '<p>颠三倒四</p>', '');
 INSERT INTO `notices` VALUES (10, '2024-09-02 17:17:11.721', '2024-09-02 17:17:11.721', '2024-09-02 17:17:13.786', '撒旦法水电费', 0, 1, '<p> &nbsp;发的范德萨发的</p>', '');
 INSERT INTO `notices` VALUES (11, '2024-09-03 11:45:46.071', '2024-09-03 11:45:46.071', '2024-09-03 11:45:48.224', '是多少颠三倒四', 0, 1, '<p>但是时代大厦</p>', '');
 
@@ -214,7 +220,7 @@ CREATE TABLE `role_menus`  (
   `menu_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '菜单ID',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_role_menus_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 401 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 481 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role_menus
@@ -589,36 +595,116 @@ INSERT INTO `role_menus` VALUES (367, '2024-09-04 10:13:30.356', '2024-09-04 10:
 INSERT INTO `role_menus` VALUES (368, '2024-09-04 10:13:30.360', '2024-09-04 10:13:30.360', '2024-09-04 10:14:15.988', 1, 49);
 INSERT INTO `role_menus` VALUES (369, '2024-09-04 10:13:30.367', '2024-09-04 10:13:30.367', '2024-09-04 10:14:15.988', 1, 50);
 INSERT INTO `role_menus` VALUES (370, '2024-09-04 10:13:30.372', '2024-09-04 10:13:30.372', '2024-09-04 10:14:15.988', 1, 51);
-INSERT INTO `role_menus` VALUES (371, '2024-09-04 10:14:16.003', '2024-09-04 10:14:16.003', NULL, 1, 1);
-INSERT INTO `role_menus` VALUES (372, '2024-09-04 10:14:16.006', '2024-09-04 10:14:16.006', NULL, 1, 34);
-INSERT INTO `role_menus` VALUES (373, '2024-09-04 10:14:16.010', '2024-09-04 10:14:16.010', NULL, 1, 35);
-INSERT INTO `role_menus` VALUES (374, '2024-09-04 10:14:16.012', '2024-09-04 10:14:16.012', NULL, 1, 3);
-INSERT INTO `role_menus` VALUES (375, '2024-09-04 10:14:16.015', '2024-09-04 10:14:16.015', NULL, 1, 4);
-INSERT INTO `role_menus` VALUES (376, '2024-09-04 10:14:16.017', '2024-09-04 10:14:16.017', NULL, 1, 5);
-INSERT INTO `role_menus` VALUES (377, '2024-09-04 10:14:16.020', '2024-09-04 10:14:16.020', NULL, 1, 6);
-INSERT INTO `role_menus` VALUES (378, '2024-09-04 10:14:16.023', '2024-09-04 10:14:16.023', NULL, 1, 7);
-INSERT INTO `role_menus` VALUES (379, '2024-09-04 10:14:16.027', '2024-09-04 10:14:16.027', NULL, 1, 8);
-INSERT INTO `role_menus` VALUES (380, '2024-09-04 10:14:16.031', '2024-09-04 10:14:16.031', NULL, 1, 9);
-INSERT INTO `role_menus` VALUES (381, '2024-09-04 10:14:16.036', '2024-09-04 10:14:16.036', NULL, 1, 10);
-INSERT INTO `role_menus` VALUES (382, '2024-09-04 10:14:16.040', '2024-09-04 10:14:16.040', NULL, 1, 11);
-INSERT INTO `role_menus` VALUES (383, '2024-09-04 10:14:16.042', '2024-09-04 10:14:16.042', NULL, 1, 12);
-INSERT INTO `role_menus` VALUES (384, '2024-09-04 10:14:16.044', '2024-09-04 10:14:16.044', NULL, 1, 13);
-INSERT INTO `role_menus` VALUES (385, '2024-09-04 10:14:16.046', '2024-09-04 10:14:16.046', NULL, 1, 36);
-INSERT INTO `role_menus` VALUES (386, '2024-09-04 10:14:16.051', '2024-09-04 10:14:16.051', NULL, 1, 37);
-INSERT INTO `role_menus` VALUES (387, '2024-09-04 10:14:16.055', '2024-09-04 10:14:16.055', NULL, 1, 38);
-INSERT INTO `role_menus` VALUES (388, '2024-09-04 10:14:16.058', '2024-09-04 10:14:16.058', NULL, 1, 41);
-INSERT INTO `role_menus` VALUES (389, '2024-09-04 10:14:16.062', '2024-09-04 10:14:16.062', NULL, 1, 30);
-INSERT INTO `role_menus` VALUES (390, '2024-09-04 10:14:16.067', '2024-09-04 10:14:16.067', NULL, 1, 42);
-INSERT INTO `role_menus` VALUES (391, '2024-09-04 10:14:16.071', '2024-09-04 10:14:16.071', NULL, 1, 43);
-INSERT INTO `role_menus` VALUES (392, '2024-09-04 10:14:16.075', '2024-09-04 10:14:16.075', NULL, 1, 44);
-INSERT INTO `role_menus` VALUES (393, '2024-09-04 10:14:16.080', '2024-09-04 10:14:16.080', NULL, 1, 45);
-INSERT INTO `role_menus` VALUES (394, '2024-09-04 10:14:16.085', '2024-09-04 10:14:16.085', NULL, 1, 46);
-INSERT INTO `role_menus` VALUES (395, '2024-09-04 10:14:16.091', '2024-09-04 10:14:16.091', NULL, 1, 31);
-INSERT INTO `role_menus` VALUES (396, '2024-09-04 10:14:16.096', '2024-09-04 10:14:16.096', NULL, 1, 47);
-INSERT INTO `role_menus` VALUES (397, '2024-09-04 10:14:16.101', '2024-09-04 10:14:16.101', NULL, 1, 48);
-INSERT INTO `role_menus` VALUES (398, '2024-09-04 10:14:16.106', '2024-09-04 10:14:16.106', NULL, 1, 49);
-INSERT INTO `role_menus` VALUES (399, '2024-09-04 10:14:16.110', '2024-09-04 10:14:16.110', NULL, 1, 50);
-INSERT INTO `role_menus` VALUES (400, '2024-09-04 10:14:16.117', '2024-09-04 10:14:16.117', NULL, 1, 51);
+INSERT INTO `role_menus` VALUES (371, '2024-09-04 10:14:16.003', '2024-09-04 10:14:16.003', '2024-09-07 17:01:31.705', 1, 1);
+INSERT INTO `role_menus` VALUES (372, '2024-09-04 10:14:16.006', '2024-09-04 10:14:16.006', '2024-09-07 17:01:31.705', 1, 34);
+INSERT INTO `role_menus` VALUES (373, '2024-09-04 10:14:16.010', '2024-09-04 10:14:16.010', '2024-09-07 17:01:31.705', 1, 35);
+INSERT INTO `role_menus` VALUES (374, '2024-09-04 10:14:16.012', '2024-09-04 10:14:16.012', '2024-09-07 17:01:31.705', 1, 3);
+INSERT INTO `role_menus` VALUES (375, '2024-09-04 10:14:16.015', '2024-09-04 10:14:16.015', '2024-09-07 17:01:31.705', 1, 4);
+INSERT INTO `role_menus` VALUES (376, '2024-09-04 10:14:16.017', '2024-09-04 10:14:16.017', '2024-09-07 17:01:31.705', 1, 5);
+INSERT INTO `role_menus` VALUES (377, '2024-09-04 10:14:16.020', '2024-09-04 10:14:16.020', '2024-09-07 17:01:31.705', 1, 6);
+INSERT INTO `role_menus` VALUES (378, '2024-09-04 10:14:16.023', '2024-09-04 10:14:16.023', '2024-09-07 17:01:31.705', 1, 7);
+INSERT INTO `role_menus` VALUES (379, '2024-09-04 10:14:16.027', '2024-09-04 10:14:16.027', '2024-09-07 17:01:31.705', 1, 8);
+INSERT INTO `role_menus` VALUES (380, '2024-09-04 10:14:16.031', '2024-09-04 10:14:16.031', '2024-09-07 17:01:31.705', 1, 9);
+INSERT INTO `role_menus` VALUES (381, '2024-09-04 10:14:16.036', '2024-09-04 10:14:16.036', '2024-09-07 17:01:31.705', 1, 10);
+INSERT INTO `role_menus` VALUES (382, '2024-09-04 10:14:16.040', '2024-09-04 10:14:16.040', '2024-09-07 17:01:31.705', 1, 11);
+INSERT INTO `role_menus` VALUES (383, '2024-09-04 10:14:16.042', '2024-09-04 10:14:16.042', '2024-09-07 17:01:31.705', 1, 12);
+INSERT INTO `role_menus` VALUES (384, '2024-09-04 10:14:16.044', '2024-09-04 10:14:16.044', '2024-09-07 17:01:31.705', 1, 13);
+INSERT INTO `role_menus` VALUES (385, '2024-09-04 10:14:16.046', '2024-09-04 10:14:16.046', '2024-09-07 17:01:31.705', 1, 36);
+INSERT INTO `role_menus` VALUES (386, '2024-09-04 10:14:16.051', '2024-09-04 10:14:16.051', '2024-09-07 17:01:31.705', 1, 37);
+INSERT INTO `role_menus` VALUES (387, '2024-09-04 10:14:16.055', '2024-09-04 10:14:16.055', '2024-09-07 17:01:31.705', 1, 38);
+INSERT INTO `role_menus` VALUES (388, '2024-09-04 10:14:16.058', '2024-09-04 10:14:16.058', '2024-09-07 17:01:31.705', 1, 41);
+INSERT INTO `role_menus` VALUES (389, '2024-09-04 10:14:16.062', '2024-09-04 10:14:16.062', '2024-09-07 17:01:31.705', 1, 30);
+INSERT INTO `role_menus` VALUES (390, '2024-09-04 10:14:16.067', '2024-09-04 10:14:16.067', '2024-09-07 17:01:31.705', 1, 42);
+INSERT INTO `role_menus` VALUES (391, '2024-09-04 10:14:16.071', '2024-09-04 10:14:16.071', '2024-09-07 17:01:31.705', 1, 43);
+INSERT INTO `role_menus` VALUES (392, '2024-09-04 10:14:16.075', '2024-09-04 10:14:16.075', '2024-09-07 17:01:31.705', 1, 44);
+INSERT INTO `role_menus` VALUES (393, '2024-09-04 10:14:16.080', '2024-09-04 10:14:16.080', '2024-09-07 17:01:31.705', 1, 45);
+INSERT INTO `role_menus` VALUES (394, '2024-09-04 10:14:16.085', '2024-09-04 10:14:16.085', '2024-09-07 17:01:31.705', 1, 46);
+INSERT INTO `role_menus` VALUES (395, '2024-09-04 10:14:16.091', '2024-09-04 10:14:16.091', '2024-09-07 17:01:31.705', 1, 31);
+INSERT INTO `role_menus` VALUES (396, '2024-09-04 10:14:16.096', '2024-09-04 10:14:16.096', '2024-09-07 17:01:31.705', 1, 47);
+INSERT INTO `role_menus` VALUES (397, '2024-09-04 10:14:16.101', '2024-09-04 10:14:16.101', '2024-09-07 17:01:31.705', 1, 48);
+INSERT INTO `role_menus` VALUES (398, '2024-09-04 10:14:16.106', '2024-09-04 10:14:16.106', '2024-09-07 17:01:31.705', 1, 49);
+INSERT INTO `role_menus` VALUES (399, '2024-09-04 10:14:16.110', '2024-09-04 10:14:16.110', '2024-09-07 17:01:31.705', 1, 50);
+INSERT INTO `role_menus` VALUES (400, '2024-09-04 10:14:16.117', '2024-09-04 10:14:16.117', '2024-09-07 17:01:31.705', 1, 51);
+INSERT INTO `role_menus` VALUES (401, '2024-09-07 17:01:31.735', '2024-09-07 17:01:31.735', '2024-09-07 17:02:16.649', 1, 1);
+INSERT INTO `role_menus` VALUES (402, '2024-09-07 17:01:31.738', '2024-09-07 17:01:31.738', '2024-09-07 17:02:16.649', 1, 34);
+INSERT INTO `role_menus` VALUES (403, '2024-09-07 17:01:31.741', '2024-09-07 17:01:31.741', '2024-09-07 17:02:16.649', 1, 35);
+INSERT INTO `role_menus` VALUES (404, '2024-09-07 17:01:31.742', '2024-09-07 17:01:31.742', '2024-09-07 17:02:16.649', 1, 12);
+INSERT INTO `role_menus` VALUES (405, '2024-09-07 17:01:31.744', '2024-09-07 17:01:31.744', '2024-09-07 17:02:16.649', 1, 13);
+INSERT INTO `role_menus` VALUES (406, '2024-09-07 17:01:31.746', '2024-09-07 17:01:31.746', '2024-09-07 17:02:16.649', 1, 36);
+INSERT INTO `role_menus` VALUES (407, '2024-09-07 17:01:31.748', '2024-09-07 17:01:31.748', '2024-09-07 17:02:16.649', 1, 37);
+INSERT INTO `role_menus` VALUES (408, '2024-09-07 17:01:31.751', '2024-09-07 17:01:31.751', '2024-09-07 17:02:16.649', 1, 38);
+INSERT INTO `role_menus` VALUES (409, '2024-09-07 17:01:31.753', '2024-09-07 17:01:31.753', '2024-09-07 17:02:16.649', 1, 41);
+INSERT INTO `role_menus` VALUES (410, '2024-09-07 17:01:31.756', '2024-09-07 17:01:31.756', '2024-09-07 17:02:16.649', 1, 30);
+INSERT INTO `role_menus` VALUES (411, '2024-09-07 17:01:31.758', '2024-09-07 17:01:31.758', '2024-09-07 17:02:16.649', 1, 42);
+INSERT INTO `role_menus` VALUES (412, '2024-09-07 17:01:31.761', '2024-09-07 17:01:31.761', '2024-09-07 17:02:16.649', 1, 43);
+INSERT INTO `role_menus` VALUES (413, '2024-09-07 17:01:31.763', '2024-09-07 17:01:31.763', '2024-09-07 17:02:16.649', 1, 44);
+INSERT INTO `role_menus` VALUES (414, '2024-09-07 17:01:31.766', '2024-09-07 17:01:31.766', '2024-09-07 17:02:16.649', 1, 45);
+INSERT INTO `role_menus` VALUES (415, '2024-09-07 17:01:31.768', '2024-09-07 17:01:31.768', '2024-09-07 17:02:16.649', 1, 46);
+INSERT INTO `role_menus` VALUES (416, '2024-09-07 17:01:31.770', '2024-09-07 17:01:31.770', '2024-09-07 17:02:16.649', 1, 31);
+INSERT INTO `role_menus` VALUES (417, '2024-09-07 17:01:31.773', '2024-09-07 17:01:31.773', '2024-09-07 17:02:16.649', 1, 47);
+INSERT INTO `role_menus` VALUES (418, '2024-09-07 17:01:31.775', '2024-09-07 17:01:31.775', '2024-09-07 17:02:16.649', 1, 48);
+INSERT INTO `role_menus` VALUES (419, '2024-09-07 17:01:31.778', '2024-09-07 17:01:31.778', '2024-09-07 17:02:16.649', 1, 49);
+INSERT INTO `role_menus` VALUES (420, '2024-09-07 17:01:31.781', '2024-09-07 17:01:31.781', '2024-09-07 17:02:16.649', 1, 50);
+INSERT INTO `role_menus` VALUES (421, '2024-09-07 17:01:31.783', '2024-09-07 17:01:31.783', '2024-09-07 17:02:16.649', 1, 51);
+INSERT INTO `role_menus` VALUES (422, '2024-09-07 17:02:16.666', '2024-09-07 17:02:16.666', '2024-09-10 11:18:28.128', 1, 1);
+INSERT INTO `role_menus` VALUES (423, '2024-09-07 17:02:16.668', '2024-09-07 17:02:16.668', '2024-09-10 11:18:28.128', 1, 34);
+INSERT INTO `role_menus` VALUES (424, '2024-09-07 17:02:16.671', '2024-09-07 17:02:16.671', '2024-09-10 11:18:28.128', 1, 35);
+INSERT INTO `role_menus` VALUES (425, '2024-09-07 17:02:16.672', '2024-09-07 17:02:16.672', '2024-09-10 11:18:28.128', 1, 3);
+INSERT INTO `role_menus` VALUES (426, '2024-09-07 17:02:16.675', '2024-09-07 17:02:16.675', '2024-09-10 11:18:28.128', 1, 4);
+INSERT INTO `role_menus` VALUES (427, '2024-09-07 17:02:16.677', '2024-09-07 17:02:16.677', '2024-09-10 11:18:28.128', 1, 5);
+INSERT INTO `role_menus` VALUES (428, '2024-09-07 17:02:16.681', '2024-09-07 17:02:16.681', '2024-09-10 11:18:28.128', 1, 10);
+INSERT INTO `role_menus` VALUES (429, '2024-09-07 17:02:16.683', '2024-09-07 17:02:16.683', '2024-09-10 11:18:28.128', 1, 11);
+INSERT INTO `role_menus` VALUES (430, '2024-09-07 17:02:16.684', '2024-09-07 17:02:16.684', '2024-09-10 11:18:28.128', 1, 12);
+INSERT INTO `role_menus` VALUES (431, '2024-09-07 17:02:16.685', '2024-09-07 17:02:16.685', '2024-09-10 11:18:28.128', 1, 13);
+INSERT INTO `role_menus` VALUES (432, '2024-09-07 17:02:16.688', '2024-09-07 17:02:16.688', '2024-09-10 11:18:28.128', 1, 36);
+INSERT INTO `role_menus` VALUES (433, '2024-09-07 17:02:16.691', '2024-09-07 17:02:16.691', '2024-09-10 11:18:28.128', 1, 37);
+INSERT INTO `role_menus` VALUES (434, '2024-09-07 17:02:16.693', '2024-09-07 17:02:16.693', '2024-09-10 11:18:28.128', 1, 38);
+INSERT INTO `role_menus` VALUES (435, '2024-09-07 17:02:16.696', '2024-09-07 17:02:16.696', '2024-09-10 11:18:28.128', 1, 41);
+INSERT INTO `role_menus` VALUES (436, '2024-09-07 17:02:16.698', '2024-09-07 17:02:16.698', '2024-09-10 11:18:28.128', 1, 30);
+INSERT INTO `role_menus` VALUES (437, '2024-09-07 17:02:16.701', '2024-09-07 17:02:16.701', '2024-09-10 11:18:28.128', 1, 42);
+INSERT INTO `role_menus` VALUES (438, '2024-09-07 17:02:16.707', '2024-09-07 17:02:16.707', '2024-09-10 11:18:28.128', 1, 43);
+INSERT INTO `role_menus` VALUES (439, '2024-09-07 17:02:16.711', '2024-09-07 17:02:16.711', '2024-09-10 11:18:28.128', 1, 44);
+INSERT INTO `role_menus` VALUES (440, '2024-09-07 17:02:16.715', '2024-09-07 17:02:16.715', '2024-09-10 11:18:28.128', 1, 45);
+INSERT INTO `role_menus` VALUES (441, '2024-09-07 17:02:16.718', '2024-09-07 17:02:16.718', '2024-09-10 11:18:28.128', 1, 46);
+INSERT INTO `role_menus` VALUES (442, '2024-09-07 17:02:16.721', '2024-09-07 17:02:16.721', '2024-09-10 11:18:28.128', 1, 31);
+INSERT INTO `role_menus` VALUES (443, '2024-09-07 17:02:16.724', '2024-09-07 17:02:16.724', '2024-09-10 11:18:28.128', 1, 47);
+INSERT INTO `role_menus` VALUES (444, '2024-09-07 17:02:16.727', '2024-09-07 17:02:16.727', '2024-09-10 11:18:28.128', 1, 48);
+INSERT INTO `role_menus` VALUES (445, '2024-09-07 17:02:16.729', '2024-09-07 17:02:16.729', '2024-09-10 11:18:28.128', 1, 49);
+INSERT INTO `role_menus` VALUES (446, '2024-09-07 17:02:16.732', '2024-09-07 17:02:16.732', '2024-09-10 11:18:28.128', 1, 50);
+INSERT INTO `role_menus` VALUES (447, '2024-09-07 17:02:16.735', '2024-09-07 17:02:16.735', '2024-09-10 11:18:28.128', 1, 51);
+INSERT INTO `role_menus` VALUES (448, '2024-09-10 11:18:28.150', '2024-09-10 11:18:28.150', NULL, 1, 1);
+INSERT INTO `role_menus` VALUES (449, '2024-09-10 11:18:28.154', '2024-09-10 11:18:28.154', NULL, 1, 34);
+INSERT INTO `role_menus` VALUES (450, '2024-09-10 11:18:28.157', '2024-09-10 11:18:28.157', NULL, 1, 35);
+INSERT INTO `role_menus` VALUES (451, '2024-09-10 11:18:28.158', '2024-09-10 11:18:28.158', NULL, 1, 3);
+INSERT INTO `role_menus` VALUES (452, '2024-09-10 11:18:28.160', '2024-09-10 11:18:28.160', NULL, 1, 4);
+INSERT INTO `role_menus` VALUES (453, '2024-09-10 11:18:28.161', '2024-09-10 11:18:28.161', NULL, 1, 5);
+INSERT INTO `role_menus` VALUES (454, '2024-09-10 11:18:28.164', '2024-09-10 11:18:28.164', NULL, 1, 6);
+INSERT INTO `role_menus` VALUES (455, '2024-09-10 11:18:28.166', '2024-09-10 11:18:28.166', NULL, 1, 7);
+INSERT INTO `role_menus` VALUES (456, '2024-09-10 11:18:28.168', '2024-09-10 11:18:28.168', NULL, 1, 8);
+INSERT INTO `role_menus` VALUES (457, '2024-09-10 11:18:28.171', '2024-09-10 11:18:28.171', NULL, 1, 9);
+INSERT INTO `role_menus` VALUES (458, '2024-09-10 11:18:28.173', '2024-09-10 11:18:28.173', NULL, 1, 10);
+INSERT INTO `role_menus` VALUES (459, '2024-09-10 11:18:28.176', '2024-09-10 11:18:28.176', NULL, 1, 11);
+INSERT INTO `role_menus` VALUES (460, '2024-09-10 11:18:28.178', '2024-09-10 11:18:28.178', NULL, 1, 52);
+INSERT INTO `role_menus` VALUES (461, '2024-09-10 11:18:28.181', '2024-09-10 11:18:28.181', NULL, 1, 53);
+INSERT INTO `role_menus` VALUES (462, '2024-09-10 11:18:28.183', '2024-09-10 11:18:28.183', NULL, 1, 54);
+INSERT INTO `role_menus` VALUES (463, '2024-09-10 11:18:28.184', '2024-09-10 11:18:28.184', NULL, 1, 12);
+INSERT INTO `role_menus` VALUES (464, '2024-09-10 11:18:28.185', '2024-09-10 11:18:28.185', NULL, 1, 13);
+INSERT INTO `role_menus` VALUES (465, '2024-09-10 11:18:28.187', '2024-09-10 11:18:28.187', NULL, 1, 36);
+INSERT INTO `role_menus` VALUES (466, '2024-09-10 11:18:28.190', '2024-09-10 11:18:28.190', NULL, 1, 37);
+INSERT INTO `role_menus` VALUES (467, '2024-09-10 11:18:28.193', '2024-09-10 11:18:28.193', NULL, 1, 38);
+INSERT INTO `role_menus` VALUES (468, '2024-09-10 11:18:28.196', '2024-09-10 11:18:28.196', NULL, 1, 41);
+INSERT INTO `role_menus` VALUES (469, '2024-09-10 11:18:28.198', '2024-09-10 11:18:28.198', NULL, 1, 30);
+INSERT INTO `role_menus` VALUES (470, '2024-09-10 11:18:28.200', '2024-09-10 11:18:28.200', NULL, 1, 42);
+INSERT INTO `role_menus` VALUES (471, '2024-09-10 11:18:28.203', '2024-09-10 11:18:28.203', NULL, 1, 43);
+INSERT INTO `role_menus` VALUES (472, '2024-09-10 11:18:28.206', '2024-09-10 11:18:28.206', NULL, 1, 44);
+INSERT INTO `role_menus` VALUES (473, '2024-09-10 11:18:28.209', '2024-09-10 11:18:28.209', NULL, 1, 45);
+INSERT INTO `role_menus` VALUES (474, '2024-09-10 11:18:28.211', '2024-09-10 11:18:28.211', NULL, 1, 46);
+INSERT INTO `role_menus` VALUES (475, '2024-09-10 11:18:28.214', '2024-09-10 11:18:28.214', NULL, 1, 31);
+INSERT INTO `role_menus` VALUES (476, '2024-09-10 11:18:28.216', '2024-09-10 11:18:28.216', NULL, 1, 47);
+INSERT INTO `role_menus` VALUES (477, '2024-09-10 11:18:28.219', '2024-09-10 11:18:28.219', NULL, 1, 48);
+INSERT INTO `role_menus` VALUES (478, '2024-09-10 11:18:28.221', '2024-09-10 11:18:28.221', NULL, 1, 49);
+INSERT INTO `role_menus` VALUES (479, '2024-09-10 11:18:28.224', '2024-09-10 11:18:28.224', NULL, 1, 50);
+INSERT INTO `role_menus` VALUES (480, '2024-09-10 11:18:28.227', '2024-09-10 11:18:28.227', NULL, 1, 51);
 
 -- ----------------------------
 -- Table structure for roles
@@ -642,5 +728,27 @@ CREATE TABLE `roles`  (
 INSERT INTO `roles` VALUES (1, '2024-09-03 10:32:38.239', '2024-09-03 10:32:38.239', NULL, '管理员', 'admin');
 INSERT INTO `roles` VALUES (2, '2024-09-03 11:22:58.693', '2024-09-03 11:22:58.693', NULL, '测试', 'test');
 INSERT INTO `roles` VALUES (4, '2024-09-03 11:23:11.209', '2024-09-03 11:23:11.209', NULL, '测试2', 'test2');
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '手机',
+  `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
+  `pid` bigint NOT NULL DEFAULT 0 COMMENT '父ID',
+  `real_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '真实姓名',
+  `id_card` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '身份证号码',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_users_deleted_at`(`deleted_at` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
