@@ -2,11 +2,9 @@ package bootstrap
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"runtime"
 	"strconv"
-	"strings"
 	"time"
 	"vgo/core/db"
 	"vgo/core/global"
@@ -79,18 +77,6 @@ func Start() {
 	if appConf.Env == "pro" {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
-	// 跨域处理
-	origins := global.App.Config.App.ApiOrigins
-	allowedOrigins := strings.Split(origins, ",")
-	app.Use(cors.New(cors.Config{
-		AllowOrigins:     allowedOrigins,
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
 
 	// 静态资源
 	app.Static("/storage", "storage")

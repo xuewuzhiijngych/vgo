@@ -1,7 +1,10 @@
 package route
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"strings"
+	"time"
 	AdminUserController "vgo/app/AdminUser/Bapi"
 	AdminUser "vgo/app/AdminUser/Router"
 	Common "vgo/app/Common/Bapi"
@@ -14,6 +17,7 @@ import (
 	UserController "vgo/app/User/Api"
 	User "vgo/app/User/Router"
 	"vgo/app/Ws"
+	"vgo/core/global"
 	"vgo/core/middle/auth"
 	"vgo/core/middle/casbin"
 	"vgo/core/response"
@@ -24,6 +28,18 @@ import (
 func CollectRoute(app *gin.Engine) *gin.Engine {
 	// 全局限流
 	//app.Use(middle.RateLimiter(60, time.Second*60))
+
+	// 跨域处理
+	origins := global.App.Config.App.ApiOrigins
+	allowedOrigins := strings.Split(origins, ",")
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     allowedOrigins,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// 找不到路由
 	app.NoRoute(func(c *gin.Context) {
@@ -40,7 +56,6 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	app.POST("/ws/send", Ws.Send)
 
 	admin := app.Group("/admin")
-
 	admin.GET("/common/get_gender", Common.GetGender)
 	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
 	admin.POST("/admin_user/login", AdminUserController.Login)
@@ -60,7 +75,6 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 		for _, route := range bapiRouters {
 			admin.Handle(route.Method, route.Path, route.Handler)
 		}
-
 		//admin.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
 	}
 
