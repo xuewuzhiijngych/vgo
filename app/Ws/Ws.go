@@ -27,15 +27,12 @@ var (
 			allowedOrigins := strings.Split(origins, ",")
 			// 逗号分隔的字符串
 			origin := r.Header.Get("Origin")
-			if origin != "" {
-				for _, allowedOrigin := range allowedOrigins {
-					if origin == allowedOrigin {
-						return true
-					}
+			for _, allowedOrigin := range allowedOrigins {
+				if origin == allowedOrigin {
+					return true
 				}
-				return false
 			}
-			return true
+			return false
 		},
 	}
 	Connections = make(map[int64]*websocket.Conn)
@@ -160,19 +157,19 @@ func SendToAll(ctx *gin.Context) {
 		return
 	}
 
-	nparams, err := json.Marshal(params)
+	byteParams, err := json.Marshal(params)
 	if err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
 
-	// 循环所有链接
-	for _, conn := range Connections {
-
-		err := conn.WriteMessage(websocket.TextMessage, nparams)
-		if err != nil {
-			continue
+	mu.Lock()
+	defer mu.Unlock()
+	for id, conn := range Connections {
+		if err := conn.WriteMessage(websocket.TextMessage, byteParams); err != nil {
+			fmt.Printf("发送消息到客户端 %d 失败: %v\n", id, err)
 		}
 	}
+
 	response.Success(ctx, "发送成功", nil)
 }
