@@ -54,6 +54,7 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 
 	app.GET("/ws/link", Ws.Link)
 	app.POST("/ws/send", Ws.Send)
+	app.POST("/ws/send_to_all", Ws.SendToAll)
 
 	admin := app.Group("/admin")
 	admin.GET("/common/get_gender", Common.GetGender)

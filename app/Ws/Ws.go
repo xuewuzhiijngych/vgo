@@ -1,6 +1,7 @@
 package Ws
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -26,15 +27,18 @@ var (
 			allowedOrigins := strings.Split(origins, ",")
 			// 逗号分隔的字符串
 			origin := r.Header.Get("Origin")
-			for _, allowedOrigin := range allowedOrigins {
-				if origin == allowedOrigin {
-					return true
+			if origin != "" {
+				for _, allowedOrigin := range allowedOrigins {
+					if origin == allowedOrigin {
+						return true
+					}
 				}
+				return false
 			}
-			return false
+			return true
 		},
 	}
-	connections = make(map[int64]*websocket.Conn)
+	Connections = make(map[int64]*websocket.Conn)
 	mu          sync.Mutex
 )
 
@@ -57,7 +61,7 @@ func Link(ctx *gin.Context) {
 
 	// 存储连接
 	mu.Lock()
-	connections[int64(id)] = ws
+	Connections[int64(id)] = ws
 	mu.Unlock()
 
 	// 通知客户端其ID
@@ -73,7 +77,7 @@ func Link(ctx *gin.Context) {
 		if err != nil {
 			fmt.Println(err)
 			mu.Lock()
-			delete(connections, int64(id))
+			delete(Connections, int64(id))
 			mu.Unlock()
 			return
 		}
@@ -90,7 +94,7 @@ func Link(ctx *gin.Context) {
 		case websocket.CloseMessage:
 			fmt.Println("关闭websocket连接")
 			mu.Lock()
-			delete(connections, int64(id))
+			delete(Connections, int64(id))
 			mu.Unlock()
 			return
 		case websocket.PingMessage:
@@ -118,7 +122,7 @@ func Link(ctx *gin.Context) {
 func sendMessageToClient(id int64, message []byte) error {
 	mu.Lock()
 	defer mu.Unlock()
-	if conn, ok := connections[id]; ok {
+	if conn, ok := Connections[id]; ok {
 		return conn.WriteMessage(websocket.TextMessage, message)
 	}
 	return fmt.Errorf("连接ID %v 不存在", id)
@@ -142,4 +146,33 @@ func Send(ctx *gin.Context) {
 		response.Success(ctx, "发送成功", nil)
 		return
 	}
+}
+
+// SendToAll 发送所有消息
+func SendToAll(ctx *gin.Context) {
+	var params struct {
+		Type     string `json:"type"`
+		KeyWords string `json:"key_words"`
+		TimeOut  uint64 `json:"time_out"`
+	}
+	if err := helper.VgoShouldBindJSON(ctx, &params); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+
+	nparams, err := json.Marshal(params)
+	if err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+
+	// 循环所有链接
+	for _, conn := range Connections {
+
+		err := conn.WriteMessage(websocket.TextMessage, nparams)
+		if err != nil {
+			continue
+		}
+	}
+	response.Success(ctx, "发送成功", nil)
 }

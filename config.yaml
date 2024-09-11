@@ -9,7 +9,7 @@ app:
   cpuNum: 12
   imgDomain: http://localhost:8080
   videoDomain: http://localhost:8080
-  apiOrigins: http://localhost:8080
+  apiOrigins: http://localhost:8080,http://127.0.0.1:5500
 #Mysql数据库配置
 dbConf:
   driver: mysql
