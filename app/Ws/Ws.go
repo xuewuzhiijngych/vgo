@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 	"vgo/core/global"
+	"vgo/core/helper"
 	"vgo/core/response"
 	"vgo/core/snow"
 
@@ -129,7 +130,7 @@ func Send(ctx *gin.Context) {
 		ID      int64  `json:"id"`
 		Message string `json:"message"`
 	}
-	if err := ctx.ShouldBindJSON(&params); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &params); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}

@@ -5,6 +5,7 @@ import (
 	"strconv"
 	User "vgo/app/User/Model"
 	"vgo/core/db"
+	"vgo/core/helper"
 	"vgo/core/middle/auth"
 	"vgo/core/response"
 	"vgo/core/trans"
@@ -14,7 +15,7 @@ import (
 // Register 注册
 func Register(ctx *gin.Context) {
 	var user User.User
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &user); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}

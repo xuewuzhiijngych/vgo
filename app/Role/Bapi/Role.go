@@ -8,6 +8,7 @@ import (
 	Menu "vgo/app/Menu/Model"
 	RoleModel "vgo/app/Role/Model"
 	"vgo/core/db"
+	"vgo/core/helper"
 	"vgo/core/middle/casbin"
 	"vgo/core/response"
 )
@@ -59,7 +60,7 @@ func GetAll(ctx *gin.Context) {
 // Create 创建
 func Create(ctx *gin.Context) {
 	var role RoleModel.Role
-	if err := ctx.ShouldBindJSON(&role); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &role); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -81,7 +82,7 @@ func SetMenu(ctx *gin.Context) {
 		ID    uint64   `json:"id"`
 		Menus []uint64 `json:"menus"`
 	}
-	if err := ctx.ShouldBindJSON(&codes); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &codes); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -137,7 +138,7 @@ func GetMenu(ctx *gin.Context) {
 	var codes struct {
 		ID uint64 `json:"id"`
 	}
-	if err := ctx.ShouldBindJSON(&codes); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &codes); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -152,7 +153,7 @@ func GetMenu(ctx *gin.Context) {
 // Update 更新
 func Update(ctx *gin.Context) {
 	var notice RoleModel.Role
-	if err := ctx.ShouldBindJSON(&notice); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &notice); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -168,7 +169,7 @@ func Delete(ctx *gin.Context) {
 	var ids struct {
 		ID []int64 `json:"id"`
 	}
-	if err := ctx.ShouldBindJSON(&ids); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -182,7 +183,7 @@ func Delete(ctx *gin.Context) {
 // Change 改变状态
 func Change(ctx *gin.Context) {
 	var notice RoleModel.Role
-	if err := ctx.ShouldBindJSON(&notice); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &notice); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}

@@ -5,6 +5,7 @@ import (
 	"strconv"
 	NoticeModel "vgo/app/Notice/Model"
 	"vgo/core/db"
+	"vgo/core/helper"
 	"vgo/core/response"
 )
 
@@ -45,7 +46,7 @@ func Index(ctx *gin.Context) {
 // Create 创建
 func Create(ctx *gin.Context) {
 	var product NoticeModel.Notice
-	if err := ctx.ShouldBindJSON(&product); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &product); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -56,7 +57,7 @@ func Create(ctx *gin.Context) {
 // Update 更新
 func Update(ctx *gin.Context) {
 	var notice NoticeModel.Notice
-	if err := ctx.ShouldBindJSON(&notice); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &notice); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -72,7 +73,7 @@ func Delete(ctx *gin.Context) {
 	var ids struct {
 		ID []int64 `json:"id"`
 	}
-	if err := ctx.ShouldBindJSON(&ids); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -86,7 +87,7 @@ func Delete(ctx *gin.Context) {
 // Change 改变状态
 func Change(ctx *gin.Context) {
 	var notice NoticeModel.Notice
-	if err := ctx.ShouldBindJSON(&notice); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &notice); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}

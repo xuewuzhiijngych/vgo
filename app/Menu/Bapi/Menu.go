@@ -6,6 +6,7 @@ import (
 	MenuModel "vgo/app/Menu/Model"
 	Role "vgo/app/Role/Model"
 	"vgo/core/db"
+	"vgo/core/helper"
 	"vgo/core/middle/casbin"
 	"vgo/core/response"
 )
@@ -139,7 +140,7 @@ func GetSelectTree(ctx *gin.Context) {
 // Create 创建
 func Create(ctx *gin.Context) {
 	var product MenuModel.Menu
-	if err := ctx.ShouldBindJSON(&product); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &product); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -150,7 +151,7 @@ func Create(ctx *gin.Context) {
 // Update 更新
 func Update(ctx *gin.Context) {
 	var notice MenuModel.Menu
-	if err := ctx.ShouldBindJSON(&notice); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &notice); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -166,7 +167,7 @@ func Delete(ctx *gin.Context) {
 	var ids struct {
 		ID []int64 `json:"id"`
 	}
-	if err := ctx.ShouldBindJSON(&ids); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}

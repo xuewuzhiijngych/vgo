@@ -45,7 +45,7 @@ func Index(ctx *gin.Context) {
 // Create 创建
 func Create(ctx *gin.Context) {
 	var product TplModel.Tpl
-	if err := ctx.ShouldBindJSON(&product); err != nil {
+	if err := helper.VgoShouldBindJSON(&product); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -56,7 +56,7 @@ func Create(ctx *gin.Context) {
 // Update 更新
 func Update(ctx *gin.Context) {
 	var tpl TplModel.Tpl
-	if err := ctx.ShouldBindJSON(&tpl); err != nil {
+	if err := helper.VgoShouldBindJSON(&tpl); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -72,7 +72,7 @@ func Delete(ctx *gin.Context) {
 	var ids struct {
 		ID []int64 `json:"id"`
 	}
-	if err := ctx.ShouldBindJSON(&ids); err != nil {
+	if err := helper.VgoShouldBindJSON(&ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}

@@ -5,9 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 	"strconv"
 	AdminUserModel "vgo/app/AdminUser/Model"
 	"vgo/core/db"
+	"vgo/core/helper"
 	"vgo/core/middle/auth"
 	"vgo/core/middle/casbin"
 	"vgo/core/response"
@@ -53,7 +55,7 @@ func SetRole(ctx *gin.Context) {
 		ID    uint64   `json:"id"`
 		Roles []string `json:"roles"`
 	}
-	if err := ctx.ShouldBindJSON(&codes); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &codes); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -79,7 +81,7 @@ func GetRole(ctx *gin.Context) {
 	var codes struct {
 		ID uint64 `json:"id"`
 	}
-	if err := ctx.ShouldBindJSON(&codes); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &codes); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -96,8 +98,19 @@ func GetRole(ctx *gin.Context) {
 // Create 创建用户
 func Create(ctx *gin.Context) {
 	var user AdminUserModel.AdminUser
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &user); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+	// 查询已存在的用户
+	var existingUser AdminUserModel.AdminUser
+	if err := db.Con().Where("username = ?", user.UserName).First(&existingUser).Error; err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			response.Fail(ctx, "查询用户失败", err.Error(), nil)
+			return
+		}
+	} else {
+		response.Fail(ctx, "用户名已存在", nil, nil)
 		return
 	}
 	// 对密码进行哈希处理
@@ -122,7 +135,7 @@ func Create(ctx *gin.Context) {
 // Login 登录
 func Login(ctx *gin.Context) {
 	var user AdminUserModel.AdminUser
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &user); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -166,7 +179,7 @@ func LogOut(ctx *gin.Context) {
 // Update 更新
 func Update(ctx *gin.Context) {
 	var notice AdminUserModel.AdminUser
-	if err := ctx.ShouldBindJSON(&notice); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &notice); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -182,7 +195,7 @@ func Delete(ctx *gin.Context) {
 	var ids struct {
 		ID []uint64 `json:"id"`
 	}
-	if err := ctx.ShouldBindJSON(&ids); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}

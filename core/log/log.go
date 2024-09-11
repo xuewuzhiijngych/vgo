@@ -18,7 +18,7 @@ func InitLog() {
 	defaultLogLevel := zapcore.DebugLevel
 	path, err := os.Getwd()
 	if err != nil {
-		panic(err)
+		panic("日志目录获取失败" + err.Error())
 	}
 	logFile, _ := os.OpenFile(path+"/storage/logs/vgo.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 06666)
 	writer := zapcore.AddSync(logFile)
