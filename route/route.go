@@ -43,14 +43,15 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 
 	// 找不到路由
 	app.NoRoute(func(c *gin.Context) {
-		path := c.Request.URL.Path
-		method := c.Request.Method
-		response.Fail(c, "请求方式："+method+" 请求地址："+path+"不存在！！！", map[string]interface{}{
-			"HttpCode": 404,
-		}, nil)
+		response.Fail(c, "请求地址不存在！", nil)
+	})
+	// 找不到方法
+	app.NoMethod(func(c *gin.Context) {
+		response.Fail(c, "请求方法不存在！", nil)
 	})
 
 	app.GET("/test", Test.Index)
+	app.POST("/test2", Test.Index2)
 
 	app.GET("/ws/link", Ws.Link)
 	app.POST("/ws/send", Ws.Send)
@@ -60,7 +61,6 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	admin.GET("/common/get_gender", Common.GetGender)
 	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
 	admin.POST("/admin_user/login", AdminUserController.Login)
-	admin.POST("/test2", Test.Index2)
 
 	bapiRouters := router.CollectRoutesFromModules(
 		Notice.CollectRoutes,
@@ -72,11 +72,9 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 
 	enforcer := casbin.SetupCasbin()
 	admin.Use(auth.AdminAuthMiddleware(), casbin.CheckMiddleware(enforcer))
-	{
-		for _, route := range bapiRouters {
-			admin.Handle(route.Method, route.Path, route.Handler)
-		}
-		//admin.GET("/product_order/detail", middle.RateLimiter(1, time.Second), ProductOrder.Detail)
+
+	for _, route := range bapiRouters {
+		admin.Handle(route.Method, route.Path, route.Handler)
 	}
 
 	api := app.Group("/api")
