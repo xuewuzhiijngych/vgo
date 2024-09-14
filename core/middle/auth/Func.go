@@ -5,6 +5,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"strconv"
 	"time"
+	"vgo/core/global"
 	"vgo/core/redis"
 )
 
@@ -30,23 +31,24 @@ func GenAdminToken(ctx *gin.Context, userID uint64, role []string, super int) (m
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString(AdminSecret)
-	//// token放入redis----单个token有效时使用
-	//err := redis.Con().Set(ctx,"admin_token"+userID, tokenString, AdminTokenExpireDuration).Err()
-	//if err != nil {
-	//	return nil, err
-	//}
 
-	// token放入redis----多个token有效时使用
-	err := redis.Con().LPush(ctx, "admin_token"+strconv.Itoa(int(userID)), tokenString).Err()
-	if err != nil {
-		return nil, err
+	JwtConf := global.App.Config.JwtConf
+	// 是否单设备登录
+	if JwtConf.AdminSingleLogin == 1 {
+		err := redis.Con().Set(ctx, "admin_token"+strconv.Itoa(int(userID)), tokenString, AdminTokenExpireDuration).Err()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		err := redis.Con().LPush(ctx, "admin_token_list"+strconv.Itoa(int(userID)), tokenString).Err()
+		if err != nil {
+			return nil, err
+		}
+		err = redis.Con().Expire(ctx, "admin_token_list"+strconv.Itoa(int(userID)), AdminTokenExpireDuration).Err()
+		if err != nil {
+			return nil, err
+		}
 	}
-	// 设置过期时间----多个token有效时使用
-	err = redis.Con().Expire(ctx, "admin_token"+strconv.Itoa(int(userID)), AdminTokenExpireDuration).Err()
-	if err != nil {
-		return nil, err
-	}
-
 	// 格式化时间为目标格式
 	formattedTime := claims.RegisteredClaims.ExpiresAt.Time.Format("2006-01-02 15:04:05")
 	return map[string]string{
@@ -57,6 +59,7 @@ func GenAdminToken(ctx *gin.Context, userID uint64, role []string, super int) (m
 
 // DelAdminToken 删除后台管理用户的JWT Token
 func DelAdminToken(ctx *gin.Context, userID uint64) error {
+	// 处理多设备登录
 	err := redis.Con().Del(ctx, "admin_token"+strconv.Itoa(int(userID))).Err()
 	if err != nil {
 		return nil
@@ -92,7 +95,7 @@ func AssertIsTokenInvalid(ctx *gin.Context, tokenString string) bool {
 }
 
 // GenUserToken 生成前台用户的JWT Token
-func GenUserToken(ctx *gin.Context, userID string) (map[string]string, error) {
+func GenUserToken(ctx *gin.Context, userID uint64) (map[string]string, error) {
 	claims := UserClaims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -102,21 +105,23 @@ func GenUserToken(ctx *gin.Context, userID string) (map[string]string, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString(ApiSecret)
-	// token放入redis
-	err := redis.Con().Set(ctx, "api_token"+userID, tokenString, ApiTokenExpireDuration).Err()
-	if err != nil {
-		return nil, err
+	JwtConf := global.App.Config.JwtConf
+	// 是否单设备登录
+	if JwtConf.ApiSingleLogin == 1 {
+		err := redis.Con().Set(ctx, "api_token"+strconv.Itoa(int(userID)), tokenString, ApiTokenExpireDuration).Err()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		err := redis.Con().LPush(ctx, "api_token_list"+strconv.Itoa(int(userID)), tokenString).Err()
+		if err != nil {
+			return nil, err
+		}
+		err = redis.Con().Expire(ctx, "api_token_list"+strconv.Itoa(int(userID)), AdminTokenExpireDuration).Err()
+		if err != nil {
+			return nil, err
+		}
 	}
-	//// token放入redis----多个token有效时使用
-	//err := redis.Con().LPush("api_token"+userID, tokenString).Err()
-	//if err != nil {
-	//	return nil, err
-	//}
-	//// 设置过期时间----多个token有效时使用
-	//err = redis.Con().Expire("api_token"+userID, ApiTokenExpireDuration).Err()
-	//if err != nil {
-	//	return nil, err
-	//}
 	// 格式化时间为目标格式
 	formattedTime := claims.RegisteredClaims.ExpiresAt.Time.Format("2006-01-02 15:04:05")
 	return map[string]string{

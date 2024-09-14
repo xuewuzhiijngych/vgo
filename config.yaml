@@ -37,7 +37,9 @@ queueConf:
 #JWT配置
 jwtConf:
   adminKey: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
+  adminSingleLogin: 0
   apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz
+  apiSingleLogin: 1
   adminTimeout: 24
   apiTimeout: 24
 #Snowflake配置

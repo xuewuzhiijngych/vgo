@@ -14,6 +14,6 @@ type AdminClaims struct {
 
 // UserClaims 前台用户的Claims
 type UserClaims struct {
-	UserID string `json:"user_id"`
+	UserID uint64 `json:"user_id"`
 	jwt.RegisteredClaims
 }

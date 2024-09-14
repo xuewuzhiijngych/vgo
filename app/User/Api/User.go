@@ -2,7 +2,6 @@ package User
 
 import (
 	"github.com/gin-gonic/gin"
-	"strconv"
 	User "vgo/app/User/Model"
 	"vgo/core/db"
 	"vgo/core/helper"
@@ -45,7 +44,7 @@ func Register(ctx *gin.Context) {
 
 // GetToken 获取token
 func GetToken(ctx *gin.Context) {
-	res, err := auth.GenUserToken(ctx, strconv.Itoa(12))
+	res, err := auth.GenUserToken(ctx, 12)
 	if err != nil {
 		response.Fail(ctx, "获取失败", nil)
 	}
