@@ -59,7 +59,9 @@ func GenAdminToken(ctx *gin.Context, userID uint64, role []string, super int) (m
 
 // DelAdminToken 删除后台管理用户的JWT Token
 func DelAdminToken(ctx *gin.Context, userID uint64) error {
-	// 处理多设备登录
+	// 处理多设备登录 // todo：：
+	//authHeader := ctx.GetHeader("Authorization")
+	//parts := strings.SplitN(authHeader, " ", 2)
 	err := redis.Con().Del(ctx, "admin_token"+strconv.Itoa(int(userID))).Err()
 	if err != nil {
 		return nil
