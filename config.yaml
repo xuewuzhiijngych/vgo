@@ -37,7 +37,7 @@ queueConf:
 #JWT配置
 jwtConf:
   adminKey: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
-  adminSingleLogin: 0
+  adminSingleLogin: 1
   apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz
   apiSingleLogin: 1
   adminTimeout: 24

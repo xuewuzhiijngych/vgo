@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"strconv"
+	"strings"
 	"time"
 	"vgo/core/global"
 	"vgo/core/redis"
@@ -59,12 +60,26 @@ func GenAdminToken(ctx *gin.Context, userID uint64, role []string, super int) (m
 
 // DelAdminToken 删除后台管理用户的JWT Token
 func DelAdminToken(ctx *gin.Context, userID uint64) error {
-	// 处理多设备登录 // todo：：
-	//authHeader := ctx.GetHeader("Authorization")
-	//parts := strings.SplitN(authHeader, " ", 2)
-	err := redis.Con().Del(ctx, "admin_token"+strconv.Itoa(int(userID))).Err()
-	if err != nil {
-		return nil
+	JwtConf := global.App.Config.JwtConf
+	// 是否单设备登录
+	if JwtConf.AdminSingleLogin == 1 {
+		err := redis.Con().Del(ctx, "admin_token"+strconv.Itoa(int(userID))).Err()
+		if err != nil {
+			return nil
+		}
+		// 同时删除其他token
+		redis.Con().Del(ctx, "admin_token_list"+strconv.Itoa(int(userID)))
+	} else {
+		authHeader := ctx.GetHeader("Authorization")
+		parts := strings.SplitN(authHeader, " ", 2)
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			return nil
+		}
+		tokenString := parts[1]
+		err := redis.Con().LRem(ctx, "admin_token_list"+strconv.Itoa(int(userID)), 0, tokenString).Err()
+		if err != nil {
+			return nil
+		}
 	}
 	return nil
 }
