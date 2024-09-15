@@ -63,11 +63,11 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	admin.POST("/admin_user/login", AdminUserController.Login)
 
 	bapiRouters := router.CollectRoutesFromModules(
-		Notice.CollectRoutes,
-		Menu.CollectRoutes,
-		AdminUser.CollectRoutes,
-		Role.CollectRoutes,
-		Upload.CollectRoutes,
+		Notice.BapiRoutes,
+		Menu.BapiRoutes,
+		AdminUser.BapiRoutes,
+		Role.BapiRoutes,
+		Upload.BapiRoutes,
 	)
 
 	enforcer := casbin.SetupCasbin()
@@ -82,7 +82,7 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	api.POST("/user/get_token", UserController.GetToken)
 	api.POST("/user/set_back", UserController.Setback)
 	apiRouters := router.CollectRoutesFromModules(
-		User.CollectRoutes,
+		User.BapiRoutes,
 	)
 	api.Use(auth.UserAuthMiddleware())
 	{

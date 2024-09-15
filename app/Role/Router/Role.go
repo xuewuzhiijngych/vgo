@@ -5,7 +5,7 @@ import (
 	"vgo/core/router"
 )
 
-func CollectRoutes() []router.BaseRoute {
+func BapiRoutes() []router.BaseRoute {
 	return []router.BaseRoute{
 		{"GET", "/role", Role.Index},
 		{"POST", "/role/create", Role.Create},
