@@ -3,6 +3,7 @@ package trans
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"io"
 	"os"
 	"strings"
@@ -16,9 +17,12 @@ var (
 )
 
 // Trans 翻译
-func Trans(key string, values ...interface{}) string {
+func Trans(ctx *gin.Context, key string, values ...interface{}) string {
 	appConf := global.App.Config.App
-	lang := appConf.Lang
+	lang := ctx.GetHeader("lang")
+	if lang == "" {
+		lang = appConf.Lang
+	}
 	// 使用读锁读取缓存
 	cacheMutex.RLock()
 	translations, exists := translationsCache[lang]
@@ -38,13 +42,13 @@ func Trans(key string, values ...interface{}) string {
 		return fmt.Sprintf(val, values...)
 	}
 	fmt.Println("获取翻译出错！")
-	return ""
+	return "not found translation"
 }
 
 // buildFilePath 构建文件路径
 func buildFilePath(lang string) string {
 	var builder strings.Builder
-	builder.WriteString("lang\\")
+	builder.WriteString("i18n\\")
 	builder.WriteString(lang)
 	builder.WriteString("\\")
 	builder.WriteString(lang)
@@ -60,20 +64,17 @@ func loadTranslations(path string) map[string]string {
 		return nil
 	}
 	defer file.Close()
-
 	// 读取文件内容
 	bytes, err := io.ReadAll(file)
 	if err != nil {
 		fmt.Println("读取文件内容失败:", err.Error())
 		return nil
 	}
-
 	// 解析JSON
 	var translations map[string]string
 	if err := json.Unmarshal(bytes, &translations); err != nil {
 		fmt.Println("解析JSON失败:", err.Error())
 		return nil
 	}
-
 	return translations
 }

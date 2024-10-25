@@ -53,11 +53,11 @@ Vgo
 │  ├─ Api                     # Api 前台接口
 │  ├─ Model                   # Model 模型
 │  ├─ Router                  # Router 路由
-├─ inits                  # 框架启动文件
+├─ router                  # 框架启动文件
 ├─ internal                       # 框架核心文件
 │  ├─ ...                     # 后续出详细介绍（亦可以自己通过源码了解）
 ├─ job                        # 队列
-├─ lang                       # 翻译字典
+├─ i18n                       # 翻译字典
 ├─ route                      # 路由
 ├─ storage                    # 日志或静态资源
 │  ├─ logs                    # 日志

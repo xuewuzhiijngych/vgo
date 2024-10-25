@@ -22,7 +22,7 @@ func Register(ctx *gin.Context) {
 	// 验证规则
 	rules := map[string]map[string]string{
 		"Phone": {
-			"required": trans.Trans("手机号不能为空", "哈哈哈", 666),
+			"required": trans.Trans(ctx, "手机号不能为空", "哈哈哈", 666),
 		},
 		"Password": {
 			"required": "密码不能为空66666",

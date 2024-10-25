@@ -1,4 +1,4 @@
-package inits
+package bootstrap
 
 import (
 	"fmt"
@@ -14,6 +14,7 @@ import (
 	"vgo/internal/queue"
 	"vgo/internal/redis"
 	"vgo/internal/snow"
+	"vgo/router"
 )
 
 func Start() {
@@ -81,7 +82,7 @@ func Start() {
 	app.Static("/storage", "storage")
 
 	// 收集路由
-	CollectRoute(app)
+	router.CollectRoute(app)
 	err := app.Run(appConf.Host + ":" + appConf.Port)
 	if err != nil {
 		fmt.Println(err)
