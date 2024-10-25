@@ -61,6 +61,7 @@ func CollectRoute(app *gin.Engine) *gin.Engine {
 	admin.GET("/common/get_gender", Common.GetGender)
 	admin.GET("/system/getBingBackgroundImage", System.GetBingBackgroundImage)
 	admin.POST("/admin_user/login", AdminUserController.Login)
+	admin.POST("/admin_user/logout", AdminUserController.LogOut)
 
 	bapiRouters := router.CollectRoutesFromModules(
 		Notice.CollectRoutes,

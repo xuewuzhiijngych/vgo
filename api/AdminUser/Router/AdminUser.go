@@ -12,6 +12,5 @@ func CollectRoutes() []router.BaseRoute {
 		{"POST", "/admin_user/set/role", AdminUser.SetRole},
 		{"POST", "/admin_user/get/role", AdminUser.GetRole},
 		{"POST", "/admin_user/delete", AdminUser.Delete},
-		{"POST", "/admin_user/logout", AdminUser.LogOut},
 	}
 }
