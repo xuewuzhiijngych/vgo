@@ -5,6 +5,7 @@ import (
 	"strconv"
 	TplModel "vgo/internal/Tpl/Model"
 	"vgo/internal/db"
+	"vgo/internal/helper"
 	"vgo/internal/response"
 )
 
@@ -44,19 +45,19 @@ func Index(ctx *gin.Context) {
 
 // Create 创建
 func Create(ctx *gin.Context) {
-	var product TplModel.Tpl
-	if err := helper.VgoShouldBindJSON(&product); err != nil {
+	var tpl TplModel.Tpl
+	if err := helper.VgoShouldBindJSON(ctx, &tpl); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-	db.Con().Create(&product)
-	response.Success(ctx, "成功", product, nil)
+	db.Con().Create(&tpl)
+	response.Success(ctx, "成功", tpl, nil)
 }
 
 // Update 更新
 func Update(ctx *gin.Context) {
 	var tpl TplModel.Tpl
-	if err := helper.VgoShouldBindJSON(&tpl); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &tpl); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
@@ -72,7 +73,7 @@ func Delete(ctx *gin.Context) {
 	var ids struct {
 		ID []int64 `json:"id"`
 	}
-	if err := helper.VgoShouldBindJSON(&ids); err != nil {
+	if err := helper.VgoShouldBindJSON(ctx, &ids); err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
