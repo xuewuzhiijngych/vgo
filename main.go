@@ -1,9 +1,9 @@
 package main
 
 import (
-	"vgo/bootstrap"
+	"vgo/inits"
 )
 
 func main() {
-	bootstrap.Start()
+	inits.Start()
 }
