@@ -1,7 +1,8 @@
 #App配置
 app:
-  host: 0.0.0.0  # 监听地址
-  port: 8081  # 监听端口
+  host: 0.0.0.0
+  port: 8080
+  lang: zh-cn
 #Mysql数据库配置
 dbConf:
   driver: mysql
