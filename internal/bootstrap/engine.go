@@ -10,16 +10,18 @@ import (
 
 // Run 启动
 func Run() {
-	if global.Config.App.Env == "release" {
+	appConfig := global.Config.App
+	if appConfig.Env == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	global.Engine = gin.Default()
 
-	global.Engine.Use(requestLogger.GetLogger())
+	if appConfig.RequestLog == 1 {
+		global.Engine.Use(requestLogger.GetLogger())
+	}
 
 	global.Engine.Any("/test", app.Test)
 
-	appConfig := global.Config.App
 	err := global.Engine.Run(appConfig.Host + ":" + appConfig.Port)
 	if err != nil {
 		log.Fatal(err)
