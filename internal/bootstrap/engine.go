@@ -5,7 +5,7 @@ import (
 	"log"
 	"ych/vgo/app"
 	"ych/vgo/internal/global"
-	"ych/vgo/internal/middleware/requestLogger"
+	"ych/vgo/internal/pkg/middleware/requestLogger"
 )
 
 // Run 启动

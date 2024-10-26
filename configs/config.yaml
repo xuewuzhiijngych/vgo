@@ -1,6 +1,6 @@
 #App配置
 app:
-  env: release #环境状态：debug=开发，release=生产
+  env: debug #环境状态：debug=开发，release=生产
   host: 0.0.0.0
   port: 8080
   lang: zh-cn

@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
+	"ych/vgo/internal/pkg/middleware/auth"
 	"ych/vgo/pkg/response"
 )
 
@@ -12,8 +13,15 @@ func Test(ctx *gin.Context) {
 	//})
 	//global.Logger.Info("Request handled", zap.Any("data", "test"))
 	//global.RedisCon.Set(ctx, "test", "test", 0)
+	//response.Success(ctx, "哈哈哈", gin.H{
+	//	"test": "ok",
+	//})
 
-	response.Success(ctx, "哈哈哈", gin.H{
-		"test": "ok",
-	})
+	// 生成token
+	res, err := auth.GenAdminToken(ctx, 1, []string{"哈哈"}, 1)
+	if err != nil {
+		response.Fail(ctx, "失败", nil)
+		return
+	}
+	response.Success(ctx, "登录成功", res)
 }

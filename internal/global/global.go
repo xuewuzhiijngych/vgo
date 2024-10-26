@@ -13,6 +13,7 @@ type Configs struct {
 	App       config.App       `yaml:"app"`
 	DbConf    config.DbConf    `yaml:"dbConf"`
 	RedisConf config.RedisConf `yaml:"redisConf"`
+	JwtConf   config.JwtConf   `yaml:"jwtConf"`
 }
 
 // Config 全局配置
