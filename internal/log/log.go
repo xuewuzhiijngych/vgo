@@ -7,18 +7,16 @@ import (
 	"os"
 )
 
-// logger 日志类
-var logger *zap.Logger
-
-// InitLog 初始化日志
-func InitLog() {
+// LogDriver 初始化日志驱动
+func LogDriver() *zap.Logger {
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder
 	fileEncoder := zapcore.NewJSONEncoder(config)
 	defaultLogLevel := zapcore.DebugLevel
 	path, err := os.Getwd()
 	if err != nil {
-		panic("日志目录获取失败" + err.Error())
+		fmt.Printf("日志目录获取失败: %v\n", err)
+		return nil
 	}
 	logFile, _ := os.OpenFile(path+"/storage/logs/vgo.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 06666)
 	writer := zapcore.AddSync(logFile)
@@ -33,10 +31,5 @@ func InitLog() {
 			fmt.Println("日志初始化错误", err)
 		}
 	}(lg)
-	logger = lg
-}
-
-// GetLogger 获取日志类
-func GetLogger() *zap.Logger {
-	return logger
+	return lg
 }

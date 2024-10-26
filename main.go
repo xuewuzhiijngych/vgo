@@ -1,9 +1,9 @@
 package main
 
 import (
-	"vgo/internal/bootstrap"
+	"ych/vgo/internal"
 )
 
 func main() {
-	bootstrap.Start()
+	internal.Run()
 }

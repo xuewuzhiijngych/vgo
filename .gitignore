@@ -1,7 +1,0 @@
-/.idea
-/.vscode
-/storage/logs/*
-/*.exe
-/*.exe~
-/*.log
-vgo

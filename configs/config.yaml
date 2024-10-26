@@ -1,15 +1,7 @@
 #App配置
 app:
-  host: 0.0.0.0
-  env: dev #环境状态：dev=开发，pro=生产
-  port: 8080
-  version: 1.0.0
-  requestLog: 0
-  lang: zh-cn
-  cpuNum: 12
-  imgDomain: http://localhost:8080
-  videoDomain: http://localhost:8080
-  apiOrigins: http://localhost:8080,http://127.0.0.1:5500
+  host: 0.0.0.0  # 监听地址
+  port: 8081  # 监听端口
 #Mysql数据库配置
 dbConf:
   driver: mysql
@@ -23,25 +15,5 @@ redisConf:
   hostname: 127.0.0.1
   hostPort: 6379
   username:
-  password: 
-  db: 11
-#队列配置
-queueConf:
-  enable: 0
-  hostname: 127.0.0.1
-  hostPort: 6379
-  username:
   password:
-  db: 12
-  concurrency: 10
-#JWT配置
-jwtConf:
-  adminKey: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
-  adminSingleLogin: 1
-  apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz
-  apiSingleLogin: 1
-  adminTimeout: 24
-  apiTimeout: 24
-#Snowflake配置
-snowflakeConf:
-  node: 1
+  db: 11
