@@ -1,7 +1,6 @@
 package bootstrap
 
 import (
-	"fmt"
 	"sync"
 	"ych/vgo/internal/database"
 	"ych/vgo/internal/global"
@@ -15,7 +14,6 @@ func InitRedis() {
 	redisLock.RLock()
 	defer redisLock.RUnlock()
 	global.RedisCon = database.ConnectRedis()
-	fmt.Println(global.RedisCon)
 	if global.RedisCon == nil {
 		panic("redis连接失败")
 	}
