@@ -22,7 +22,7 @@ Vgo 是一款基于 Gin 开发的开源服务端框架。
 - **下载：**
 
 ```shell
-git clone -b https://github.com/xuewuzhiijngych/vgo.git
+git clone https://github.com/xuewuzhiijngych/vgo.git
 ```
 
 - **安装：**
