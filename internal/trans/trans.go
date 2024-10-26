@@ -50,7 +50,7 @@ func Trans(ctx *gin.Context, key string, values ...interface{}) string {
 // buildFilePath 构建文件路径
 func buildFilePath(lang string) string {
 	var builder strings.Builder
-	builder.WriteString("lang\\")
+	builder.WriteString("i18n\\")
 	builder.WriteString(lang)
 	builder.WriteString("\\")
 	builder.WriteString(lang)
