@@ -6,8 +6,6 @@ import (
 	"log"
 	"strings"
 	"time"
-	"ych/vgo/app"
-	"ych/vgo/app/ws"
 	"ych/vgo/internal/global"
 	"ych/vgo/internal/pkg/middleware/requestLogger"
 	"ych/vgo/internal/trans"
@@ -46,15 +44,11 @@ func Run() {
 	global.Engine.NoRoute(func(c *gin.Context) {
 		response.Fail(c, trans.Trans(c, "请求地址不存在！"), nil)
 	})
+
 	// 找不到方法
 	global.Engine.NoMethod(func(c *gin.Context) {
 		response.Fail(c, trans.Trans(c, "请求方法不存在！"), nil)
 	})
-
-	global.Engine.GET("/ws/link", Ws.Link)
-	global.Engine.POST("/ws/send", Ws.Send)
-	global.Engine.POST("/ws/send_to_all", Ws.SendToAll)
-	global.Engine.GET("/test", app.Test)
 
 	err := global.Engine.Run(appConfig.Host + ":" + appConfig.Port)
 	if err != nil {

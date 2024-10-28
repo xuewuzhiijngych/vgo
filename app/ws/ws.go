@@ -1,4 +1,4 @@
-package Ws
+package ws
 
 import (
 	"encoding/json"
@@ -40,22 +40,18 @@ func Link(ctx *gin.Context) {
 			fmt.Println(err)
 		}
 	}()
-
 	// 生成唯一ID
 	id := snow.SnowflakeService().Generate()
-
 	// 存储连接
 	mu.Lock()
 	Connections[int64(id)] = ws
 	mu.Unlock()
-
 	// 通知客户端其ID
 	err = ws.WriteMessage(websocket.TextMessage, []byte("Your ID: "+strconv.FormatInt(int64(id), 10)))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
 	// 处理WebSocket消息
 	for {
 		messageType, p, err := ws.ReadMessage()
@@ -144,13 +140,11 @@ func SendToAll(ctx *gin.Context) {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-
 	byteParams, err := json.Marshal(params)
 	if err != nil {
 		response.Fail(ctx, "参数错误", err.Error(), nil)
 		return
 	}
-
 	mu.Lock()
 	defer mu.Unlock()
 	for id, conn := range Connections {
@@ -158,6 +152,5 @@ func SendToAll(ctx *gin.Context) {
 			fmt.Printf("发送消息到客户端 %d 失败: %v\n", id, err)
 		}
 	}
-
 	response.Success(ctx, "发送成功", nil)
 }

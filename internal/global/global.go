@@ -2,7 +2,6 @@ package global
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hibiken/asynq"
 	goRedis "github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -31,8 +30,8 @@ var RedisCon *goRedis.Client
 // Logger 日志
 var Logger *zap.Logger
 
-// QueueClient 队列客户端
-var QueueClient asynq.Client
+// Routers 全局路由
+type Routers struct{}
 
 // Engine 全局引擎
 var Engine *gin.Engine
