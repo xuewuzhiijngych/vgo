@@ -1,10 +1,11 @@
-package global
+package bootstrap
 
 import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"path/filepath"
+	"ych/vgo/internal/global"
 )
 
 // InitConfig 初始化配置
@@ -22,11 +23,11 @@ func InitConfig() {
 	}
 	vp.WatchConfig()
 	vp.OnConfigChange(func(in fsnotify.Event) {
-		if err := vp.Unmarshal(&Config); err != nil {
+		if err := vp.Unmarshal(&global.Config); err != nil {
 			fmt.Println(err)
 		}
 	})
-	err = vp.Unmarshal(&Config)
+	err = vp.Unmarshal(&global.Config)
 	if err != nil {
 		panic(err)
 	}

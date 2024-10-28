@@ -2,12 +2,11 @@ package internal
 
 import (
 	"ych/vgo/internal/bootstrap"
-	"ych/vgo/internal/global"
 )
 
 func Run() {
 	// 初始化配置
-	global.InitConfig()
+	bootstrap.InitConfig()
 
 	// 初始化日志
 	go func() {
