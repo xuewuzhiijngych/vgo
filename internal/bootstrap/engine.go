@@ -6,6 +6,7 @@ import (
 	"log"
 	"strings"
 	"time"
+	"ych/vgo/app"
 	"ych/vgo/internal/global"
 	"ych/vgo/internal/pkg/middleware/requestLogger"
 	"ych/vgo/internal/trans"
@@ -49,6 +50,8 @@ func Run() {
 	global.Engine.NoMethod(func(c *gin.Context) {
 		response.Fail(c, trans.Trans(c, "请求方法不存在！"), nil)
 	})
+
+	app.InitRouter()
 
 	err := global.Engine.Run(appConfig.Host + ":" + appConfig.Port)
 	if err != nil {
