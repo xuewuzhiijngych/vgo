@@ -57,7 +57,7 @@ func Test(ctx *gin.Context) {
 	//		for _, subEntry := range subEntries {
 	//			if subEntry.IsDir() {
 	//				// 打开Router文件夹下的路由文件
-	//				routerFilePath := fmt.Sprintf("app/%s/Router/%s/Router.go", entry.Name(), subEntry.Name())
+	//				routerFilePath := fmt.Sprintf("app/%s/Router/%s/ws.go", entry.Name(), subEntry.Name())
 	//				routerFile, err := os.Open(routerFilePath)
 	//				if err != nil {
 	//					fmt.Println(err.Error())

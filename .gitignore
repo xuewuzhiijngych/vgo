@@ -1,6 +1,7 @@
 /.idea
 /.vscode
 /storage/logs/*
+/storage/uploads/*
 /*.exe
 /*.exe~
 /*.log

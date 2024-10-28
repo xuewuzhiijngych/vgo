@@ -8,4 +8,5 @@ type App struct {
 	Lang       string `yaml:"lang"`
 	RequestLog int    `yaml:"requestLog"`
 	ApiOrigins string `yaml:"apiOrigins"`
+	FileDomain string `yaml:"fileDomain"`
 }

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"ych/vgo/internal"
+	"ych/vgo/internal/core"
 )
 
 func main() {
-	internal.Run()
+	core.Run()
 }

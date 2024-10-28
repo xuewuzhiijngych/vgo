@@ -51,6 +51,9 @@ func Run() {
 		response.Fail(c, trans.Trans(c, "请求方法不存在！"), nil)
 	})
 
+	// 静态资源
+	global.Engine.Static("/storage", "storage")
+
 	app.InitRouter()
 
 	err := global.Engine.Run(appConfig.Host + ":" + appConfig.Port)
