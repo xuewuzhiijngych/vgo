@@ -1,9 +1,13 @@
 package bootstrap
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
+	"strings"
+	"time"
 	"ych/vgo/app"
+	"ych/vgo/app/ws"
 	"ych/vgo/internal/global"
 	"ych/vgo/internal/pkg/middleware/requestLogger"
 )
@@ -20,6 +24,25 @@ func Run() {
 		global.Engine.Use(requestLogger.GetLogger())
 	}
 
+	// 跨域处理
+	origins := global.Config.App.ApiOrigins
+	if origins == "" {
+		log.Println("警告：未配置ApiOrigins，默认允许所有来源")
+	}
+	allowedOrigins := strings.Split(origins, ",")
+	corsConfig := cors.Config{
+		AllowOrigins:     allowedOrigins,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}
+	global.Engine.Use(cors.New(corsConfig))
+
+	global.Engine.GET("/ws/link", Ws.Link)
+	global.Engine.POST("/ws/send", Ws.Send)
+	global.Engine.POST("/ws/send_to_all", Ws.SendToAll)
 	global.Engine.GET("/test", app.Test)
 
 	err := global.Engine.Run(appConfig.Host + ":" + appConfig.Port)

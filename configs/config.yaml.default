@@ -5,6 +5,7 @@ app:
   port: 8080
   lang: zh-cn
   requestLog: 0
+  apiOrigins: http://localhost:8080,http://127.0.0.1:5500
 #Mysql数据库配置
 dbConf:
   driver: mysql
@@ -22,13 +23,13 @@ redisConf:
   db: 11
 #队列配置
 queueConf:
-  enable: 0
+  enable: 1
   hostname: 127.0.0.1
   hostPort: 6379
   username:
   password:
   db: 12
   concurrency: 10
- #Snowflake配置
- snowflakeConf:
-   node: 1
+#Snowflake配置
+snowflakeConf:
+  node: 1

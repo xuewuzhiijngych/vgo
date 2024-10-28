@@ -7,4 +7,5 @@ type App struct {
 	Port       string `yaml:"port"`
 	Lang       string `yaml:"lang"`
 	RequestLog int    `yaml:"requestLog"`
+	ApiOrigins string `yaml:"apiOrigins"`
 }
