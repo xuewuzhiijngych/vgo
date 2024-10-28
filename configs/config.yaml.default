@@ -20,3 +20,6 @@ redisConf:
   username:
   password:
   db: 11
+ #Snowflake配置
+ snowflakeConf:
+   node: 1

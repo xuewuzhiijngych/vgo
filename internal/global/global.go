@@ -10,10 +10,11 @@ import (
 
 // Configs 全局配置
 type Configs struct {
-	App       config.App       `yaml:"app"`
-	DbConf    config.DbConf    `yaml:"dbConf"`
-	RedisConf config.RedisConf `yaml:"redisConf"`
-	JwtConf   config.JwtConf   `yaml:"jwtConf"`
+	App           config.App           `yaml:"app"`
+	DbConf        config.DbConf        `yaml:"dbConf"`
+	RedisConf     config.RedisConf     `yaml:"redisConf"`
+	JwtConf       config.JwtConf       `yaml:"jwtConf"`
+	SnowflakeConf config.SnowflakeConf `yaml:"snowflakeConf"`
 }
 
 // Config 全局配置
