@@ -2,6 +2,7 @@ package global
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/hibiken/asynq"
 	goRedis "github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -13,6 +14,7 @@ type Configs struct {
 	App           config.App           `yaml:"app"`
 	DbConf        config.DbConf        `yaml:"dbConf"`
 	RedisConf     config.RedisConf     `yaml:"redisConf"`
+	QueueConf     config.QueueConf     `yaml:"queueConf"`
 	JwtConf       config.JwtConf       `yaml:"jwtConf"`
 	SnowflakeConf config.SnowflakeConf `yaml:"snowflakeConf"`
 }
@@ -28,6 +30,9 @@ var RedisCon *goRedis.Client
 
 // Logger 日志
 var Logger *zap.Logger
+
+// QueueClient 队列客户端
+var QueueClient asynq.Client
 
 // Engine 全局引擎
 var Engine *gin.Engine

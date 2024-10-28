@@ -14,6 +14,11 @@ func Run() {
 		bootstrap.InitLogger()
 	}()
 
+	// 初始化队列
+	go func() {
+		bootstrap.InitQueue()
+	}()
+
 	// 初始化数据库
 	bootstrap.InitDB()
 
