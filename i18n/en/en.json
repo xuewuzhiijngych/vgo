@@ -1,5 +1,7 @@
 {
     "用户名不能为空": "Username cannot be empty",
     "手机号不能为空" : "Phone number cannot be empty",
-    "Token无效": "Invalid Token"
+    "Token无效": "Invalid Token",
+    "请求地址不存在！": "Request URL does not exist!",
+    "请求方法不存在！": "Request method does not exist!"
 }

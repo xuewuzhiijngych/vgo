@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	upgrader = websocket.Upgrader{
+	upGrader = websocket.Upgrader{
 		HandshakeTimeout: time.Second * 10,
 		ReadBufferSize:   1024,
 		WriteBufferSize:  1024,
@@ -29,7 +29,7 @@ var (
 
 // Link 链接WebSocket
 func Link(ctx *gin.Context) {
-	ws, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	ws, err := upGrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
