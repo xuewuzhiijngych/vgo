@@ -20,7 +20,7 @@ func Run() {
 		global.Engine.Use(requestLogger.GetLogger())
 	}
 
-	global.Engine.Any("/test", app.Test)
+	global.Engine.GET("/test", app.Test)
 
 	err := global.Engine.Run(appConfig.Host + ":" + appConfig.Port)
 	if err != nil {

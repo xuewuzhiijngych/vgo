@@ -4,4 +4,5 @@
 /*.exe
 /*.exe~
 /*.log
+/configs/*.yaml
 vgo

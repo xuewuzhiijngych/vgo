@@ -1,0 +1,22 @@
+#App配置
+app:
+  env: debug #环境状态：debug=开发，release=生产
+  host: 0.0.0.0
+  port: 8080
+  lang: zh-cn
+  requestLog: 0
+#Mysql数据库配置
+dbConf:
+  driver: mysql
+  hostname: 127.0.0.1
+  hostPort: 3306
+  database: go_study
+  username: root
+  password: 110112...
+#Redis数据库配置
+redisConf:
+  hostname: 127.0.0.1
+  hostPort: 6379
+  username:
+  password:
+  db: 11
