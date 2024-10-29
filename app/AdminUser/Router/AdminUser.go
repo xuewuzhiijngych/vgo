@@ -1,10 +1,10 @@
 package Router
 
 import (
-	"ych/vgo/app/AdminUser/Bapi"
+	"ych/vgo/app/AdminUser/Backend"
 	"ych/vgo/internal/global"
 )
 
 func CollectRoutes() {
-	global.Engine.POST("/user/login", Bapi.Login)
+	global.BackendRouter.POST("/user/login", Backend.Login)
 }

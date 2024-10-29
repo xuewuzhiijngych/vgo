@@ -1,4 +1,4 @@
-package Bapi
+package Backend
 
 import (
 	"github.com/gin-gonic/gin"

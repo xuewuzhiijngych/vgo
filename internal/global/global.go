@@ -30,8 +30,11 @@ var RedisCon *goRedis.Client
 // Logger 日志
 var Logger *zap.Logger
 
-// Routers 全局路由
-type Routers struct{}
+// BackendRouter 后台路由
+var BackendRouter *gin.RouterGroup
+
+// ApiRouter 接口路由
+var ApiRouter *gin.RouterGroup
 
 // Engine 全局引擎
 var Engine *gin.Engine

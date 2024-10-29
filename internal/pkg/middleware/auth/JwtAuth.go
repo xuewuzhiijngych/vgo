@@ -47,7 +47,7 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 		if JwtConf.AdminSingleLogin == 1 {
 			redisToken := redisCon.Get(c, "admin_token"+strconv.Itoa(int(claims.UserID)))
 			if redisToken == nil || redisToken.Val() != tokenString {
-				// Token is invalid --Bapi-- redis00
+				// Token is invalid --Backend-- redis00
 				response.NotLogin(c, trans.Trans(c, "Token无效")+"04", nil)
 				c.Abort()
 				return

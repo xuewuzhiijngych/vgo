@@ -2,22 +2,20 @@ package Router
 
 import (
 	"ych/vgo/app/Article/Api"
-	"ych/vgo/app/Article/Bapi"
+	"ych/vgo/app/Article/Backend"
 	"ych/vgo/internal/global"
 )
 
 func CollectRoutes() {
-	baseBapiUri := "bapi/article"
-	global.Engine.GET("/"+baseBapiUri+"/index", Bapi.Index)
-	global.Engine.POST("/"+baseBapiUri+"/create", Bapi.Create)
-	global.Engine.POST("/"+baseBapiUri+"/update", Bapi.Update)
-	global.Engine.GET("/"+baseBapiUri+"/show", Bapi.Show)
-	global.Engine.POST("/"+baseBapiUri+"/delete", Bapi.Delete)
+	global.BackendRouter.GET("/article/index", Backend.Index)
+	global.BackendRouter.POST("/article/create", Backend.Create)
+	global.BackendRouter.POST("/article/update", Backend.Update)
+	global.BackendRouter.GET("/article/show", Backend.Show)
+	global.BackendRouter.POST("/article/delete", Backend.Delete)
 
-	baseApiUri := "api/article"
-	global.Engine.GET("/"+baseApiUri+"/index", Api.Index)
-	global.Engine.POST("/"+baseApiUri+"/create", Api.Create)
-	global.Engine.POST("/"+baseApiUri+"/update", Api.Update)
-	global.Engine.GET("/"+baseApiUri+"/show", Api.Show)
-	global.Engine.POST("/"+baseApiUri+"/delete", Api.Delete)
+	global.ApiRouter.GET("/article/index", Api.Index)
+	global.ApiRouter.POST("/article/create", Api.Create)
+	global.ApiRouter.POST("/article/update", Api.Update)
+	global.ApiRouter.GET("/article/show", Api.Show)
+	global.ApiRouter.POST("/article/delete", Api.Delete)
 }
