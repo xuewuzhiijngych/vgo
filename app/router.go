@@ -5,7 +5,7 @@ import (
 	ArticleRouter "ych/vgo/app/Article/Router"
 	CommonRouter "ych/vgo/app/Common/Router"
 	UploadRouter "ych/vgo/app/Upload/Router"
-	wsRouter "ych/vgo/app/ws/Router"
+	WsRouter "ych/vgo/app/Ws/Router"
 	"ych/vgo/internal/global"
 )
 
@@ -16,6 +16,6 @@ func InitRouter() {
 	AdminUserRouter.CollectRoutes()
 	CommonRouter.CollectRoutes()
 	ArticleRouter.CollectRoutes()
-	wsRouter.CollectRoutes()
+	WsRouter.CollectRoutes()
 	UploadRouter.CollectRoutes()
 }

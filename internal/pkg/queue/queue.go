@@ -3,8 +3,8 @@ package queue
 import (
 	"fmt"
 	"github.com/hibiken/asynq"
-	job "ych/vgo/app/jobs"
 	"ych/vgo/internal/global"
+	"ych/vgo/pkg/jobs"
 )
 
 // InitQueue 初始化队列
