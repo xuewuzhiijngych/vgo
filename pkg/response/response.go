@@ -4,12 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+	"ych/vgo/internal/trans"
 )
 
 func jsonResponse(ctx *gin.Context, code int, msg string, data interface{}, extraData ...interface{}) {
 	ctx.JSON(code, gin.H{
 		"code":    code,
-		"msg":     msg,
+		"msg":     trans.Trans(ctx, msg),
 		"data":    data,
 		"ext":     extraData,
 		"time":    time.Now().Unix(),
