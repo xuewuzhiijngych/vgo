@@ -54,6 +54,7 @@ func Run() {
 	// 静态资源
 	global.Engine.Static("/storage", "storage")
 
+	// 初始化路由
 	app.InitRouter()
 
 	err := global.Engine.Run(appConfig.Host + ":" + appConfig.Port)

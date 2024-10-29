@@ -2,6 +2,7 @@ package global
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	goRedis "github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -35,6 +36,8 @@ var BackendRouter *gin.RouterGroup
 
 // ApiRouter 接口路由
 var ApiRouter *gin.RouterGroup
+
+var Validator *validator.Validate
 
 // Engine 全局引擎
 var Engine *gin.Engine

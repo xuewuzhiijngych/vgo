@@ -3,9 +3,12 @@ package helper
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"io"
 	"strings"
+	"ych/vgo/internal/global"
 )
 
 // BindJSON 处理请求参数
@@ -32,4 +35,24 @@ func BindJSON(ctx *gin.Context, obj interface{}) error {
 		return err
 	}
 	return nil
+}
+
+// Validate 验证器
+func Validate(model interface{}, rules map[string]map[string]string) (bool, string) {
+	if err := global.Validator.Struct(model); err != nil {
+		var errs validator.ValidationErrors
+		if !errors.As(err, &errs) {
+			return false, "验证器异常：验证失败，但未能解析错误信息"
+		}
+		if len(errs) > 0 {
+			fieldName := errs[0].Field()
+			tag := errs[0].Tag()
+			if errMsg, ok := rules[fieldName][tag]; ok && errMsg != "" {
+				return false, errMsg
+			}
+			return false, errs[0].Error()
+		}
+		return false, "验证器：未知错误"
+	}
+	return true, ""
 }

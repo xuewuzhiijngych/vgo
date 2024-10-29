@@ -24,6 +24,9 @@ func Run() {
 	// 初始化Redis
 	bootstrap.InitRedis()
 
+	// 初始化验证器
+	bootstrap.InitValidator()
+
 	// 运行引导程序
 	bootstrap.Run()
 }

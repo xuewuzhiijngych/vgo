@@ -44,7 +44,7 @@ func Trans(ctx *gin.Context, key string, values ...interface{}) string {
 		return fmt.Sprintf(val, values...)
 	}
 	fmt.Println("获取翻译出错！")
-	return ""
+	return key
 }
 
 // buildFilePath 构建文件路径

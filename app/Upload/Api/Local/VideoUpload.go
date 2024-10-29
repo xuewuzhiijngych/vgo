@@ -107,8 +107,8 @@ func VideoUpload(ctx *gin.Context) {
 	}
 	imgDomain := global.Config.App.FileDomain
 	response.Success(ctx, "文件上传成功", gin.H{
-		"dbUrl":   respUrl,
-		"fileUrl": imgDomain + respUrl,
+		"fileUrl":    respUrl,
+		"previewUrl": imgDomain + respUrl,
 	}, nil)
 
 }

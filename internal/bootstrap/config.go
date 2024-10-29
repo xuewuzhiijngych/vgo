@@ -23,6 +23,7 @@ func InitConfig() {
 	}
 	vp.WatchConfig()
 	vp.OnConfigChange(func(in fsnotify.Event) {
+		fmt.Println("检测到配置文件变化:", in.Name)
 		if err := vp.Unmarshal(&global.Config); err != nil {
 			fmt.Println(err)
 		}
