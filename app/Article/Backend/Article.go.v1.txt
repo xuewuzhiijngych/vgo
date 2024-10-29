@@ -1,0 +1,102 @@
+package Backend
+
+import (
+	"github.com/gin-gonic/gin"
+	"strconv"
+	"ych/vgo/app/Article/Model"
+	"ych/vgo/internal/global"
+	"ych/vgo/internal/trans"
+	"ych/vgo/pkg/helper"
+	"ych/vgo/pkg/response"
+)
+
+// Index 列表
+func Index(ctx *gin.Context) {
+	pageNo, err := strconv.Atoi(ctx.DefaultQuery("pageNum", "1"))
+	pageSize, err := strconv.Atoi(ctx.DefaultQuery("pageSize", "10"))
+	if helper.HandleErr(ctx, err, "参数无效") {
+		return
+	}
+
+	var articles []Model.Article
+	var total int64
+	db := global.DbCon.Model(&Model.Article{})
+	if err := db.Count(&total).Error; helper.HandleErr(ctx, err, "数据库查询失败") {
+		return
+	}
+	if err := db.Order("id desc").Offset((pageNo - 1) * pageSize).Limit(pageSize).Find(&articles).Error; helper.HandleErr(ctx, err, "数据库查询失败") {
+		return
+	}
+	totalPages := (int(total) + pageSize - 1) / pageSize
+	response.Success(ctx, "成功", gin.H{
+		"pageNum":  pageNo,
+		"total":    totalPages,
+		"pageSize": pageSize,
+		"list":     articles,
+	}, nil)
+}
+
+// Create 新增
+func Create(ctx *gin.Context) {
+	var article Model.Article
+	if !helper.BindAndValidate(ctx, &article, map[string]map[string]string{
+		"Title": {"required": trans.Trans(ctx, "标题不能为空")},
+	}) {
+		return
+	}
+	global.DbCon.Create(&article)
+	response.Success(ctx, "成功", article, nil)
+}
+
+// Update 编辑
+func Update(ctx *gin.Context) {
+	var article Model.Article
+	if err := helper.BindJSON(ctx, &article); helper.HandleErr(ctx, err, "参数错误") {
+		return
+	}
+	var existingArticle Model.Article
+	if err := global.DbCon.First(&existingArticle, article.ID).Error; helper.HandleErr(ctx, err, "记录不存在") {
+		return
+	}
+	if err := global.DbCon.Model(&Model.Article{}).Where("id = ?", article.ID).Updates(article).Error; helper.HandleErr(ctx, err, "更新失败") {
+		return
+	}
+	response.Success(ctx, "成功", article, nil)
+}
+
+// Show 详情
+func Show(ctx *gin.Context) {
+	var request struct {
+		ID int64 `json:"id"`
+	}
+	if !helper.BindAndValidate(ctx, &request, nil) {
+		return
+	}
+	var article Model.Article
+	if err := global.DbCon.First(&article, request.ID).Error; helper.HandleErr(ctx, err, "查询失败") {
+		return
+	}
+	response.Success(ctx, "成功", article, nil)
+}
+
+// Delete 删除
+func Delete(ctx *gin.Context) {
+	var ids struct {
+		ID []int64 `json:"id"`
+	}
+	if !helper.BindAndValidate(ctx, &ids, nil) {
+		return
+	}
+	var existingCount int64
+	if err := global.DbCon.Model(&Model.Article{}).Where("id in (?)", ids.ID).Count(&existingCount).Error; helper.HandleErr(ctx, err, "查询失败") {
+		return
+	}
+	if existingCount != int64(len(ids.ID)) {
+		response.Fail(ctx, "部分或全部记录不存在", nil)
+		return
+	}
+	if err := global.DbCon.Delete(&Model.Article{}, "id in (?)", ids.ID).Error; helper.HandleErr(ctx, err, "删除失败") {
+		return
+	}
+	response.Success(ctx, "成功", nil, nil)
+}

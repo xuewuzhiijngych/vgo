@@ -7,11 +7,12 @@ import (
 )
 
 func CollectRoutes() {
-	global.BackendRouter.GET("/article/index", Backend.Index)
-	global.BackendRouter.POST("/article/create", Backend.Create)
-	global.BackendRouter.POST("/article/update", Backend.Update)
-	global.BackendRouter.GET("/article/show", Backend.Show)
-	global.BackendRouter.POST("/article/delete", Backend.Delete)
+	//global.BackendRouter.GET("/article/index", Backend.Index)
+	//global.BackendRouter.POST("/article/create", Backend.Create)
+	//global.BackendRouter.POST("/article/update", Backend.Update)
+	//global.BackendRouter.GET("/article/show", Backend.Show)
+	//global.BackendRouter.POST("/article/delete", Backend.Delete)
+	Backend.RegisterArticleRoutes()
 
 	global.ApiRouter.GET("/article/index", Api.Index)
 	global.ApiRouter.POST("/article/create", Api.Create)

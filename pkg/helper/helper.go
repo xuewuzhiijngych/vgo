@@ -6,9 +6,11 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 	"io"
 	"strings"
 	"ych/vgo/internal/global"
+	"ych/vgo/pkg/response"
 )
 
 // BindJSON 处理请求参数
@@ -55,4 +57,31 @@ func Validate(model interface{}, rules map[string]map[string]string) (bool, stri
 		return false, "验证器：未知错误"
 	}
 	return true, ""
+}
+
+// HandleErr 统一错误处理
+func HandleErr(ctx *gin.Context, err error, msg string) bool {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		response.Fail(ctx, "数据不存在", err.Error(), nil)
+		return true
+	}
+	if err != nil {
+		response.Fail(ctx, msg, err.Error(), nil)
+		return true
+	}
+	return false
+}
+
+// BindAndValidate 参数绑定和验证简化
+func BindAndValidate(ctx *gin.Context, obj interface{}, rules map[string]map[string]string) bool {
+	if err := BindJSON(ctx, obj); HandleErr(ctx, err, "参数错误") {
+		return false
+	}
+	if rules != nil {
+		if res, err := Validate(obj, rules); !res {
+			response.Fail(ctx, err, nil)
+			return false
+		}
+	}
+	return true
 }
