@@ -108,7 +108,6 @@ func (h *CRUDHandler) Update(ctx *gin.Context) {
 
 // Show 通用详情
 func (h *CRUDHandler) Show(ctx *gin.Context) {
-	// 从 URL 参数中获取 ID
 	idParam := ctx.Param("id")
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
