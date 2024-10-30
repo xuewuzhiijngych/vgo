@@ -1,9 +1,11 @@
 package Backend
 
 import (
+	"time"
 	"ych/vgo/app/Article/Model"
 	"ych/vgo/app/Common/Backend"
 	"ych/vgo/internal/global"
+	"ych/vgo/internal/pkg/middleware/rateLimiter"
 )
 
 func RegisterArticleRoutes() {
@@ -23,7 +25,7 @@ func RegisterArticleRoutes() {
 	}
 	articleHandler := Backend.NewCRUDHandler(&Model.Article{}, ArticleValidateRules)
 
-	global.BackendRouter.GET("/articles", articleHandler.Index)
+	global.BackendRouter.GET("/articles", rateLimiter.Limiter(1, time.Second*1), articleHandler.Index)
 	global.BackendRouter.POST("/articles", articleHandler.Create)
 	global.BackendRouter.PUT("/articles", articleHandler.Update)
 	global.BackendRouter.GET("/articles/:id", articleHandler.Show)
