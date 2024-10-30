@@ -9,12 +9,17 @@ import (
 	"ych/vgo/pkg/response"
 )
 
-type CRUDHandler struct {
-	Model    interface{}                  // 模型指针，用于创建实例
-	Validate map[string]map[string]string // 验证规则函数，返回验证规则
+type ValidationRules struct {
+	Create map[string]map[string]string `json:"Create"`
+	Update map[string]map[string]string `json:"Update"`
 }
 
-func NewCRUDHandler(model interface{}, validate map[string]map[string]string) *CRUDHandler {
+type CRUDHandler struct {
+	Model    interface{}      // 模型指针，用于创建实例
+	Validate *ValidationRules // 验证规则函数，返回验证规则
+}
+
+func NewCRUDHandler(model interface{}, validate *ValidationRules) *CRUDHandler {
 	return &CRUDHandler{
 		Model:    model,
 		Validate: validate,
@@ -57,8 +62,14 @@ func (h *CRUDHandler) Index(ctx *gin.Context) {
 // Create 通用创建
 func (h *CRUDHandler) Create(ctx *gin.Context) {
 	model := reflect.New(reflect.TypeOf(h.Model).Elem()).Interface()
-	if !helper.BindAndValidate(ctx, model, h.Validate) {
-		return
+	if h.Validate != nil && h.Validate.Create != nil {
+		if !helper.BindAndValidate(ctx, model, h.Validate.Create) {
+			return
+		}
+	} else {
+		if err := helper.BindJSON(ctx, model); helper.HandleErr(ctx, err, "参数错误") {
+			return
+		}
 	}
 	if err := global.DbCon.Create(model).Error; helper.HandleErr(ctx, err, "创建失败") {
 		return
@@ -69,10 +80,15 @@ func (h *CRUDHandler) Create(ctx *gin.Context) {
 // Update 通用编辑
 func (h *CRUDHandler) Update(ctx *gin.Context) {
 	model := reflect.New(reflect.TypeOf(h.Model).Elem()).Interface()
-	if err := helper.BindJSON(ctx, model); helper.HandleErr(ctx, err, "参数错误") {
-		return
+	if h.Validate != nil && h.Validate.Update != nil {
+		if !helper.BindAndValidate(ctx, model, h.Validate.Update) {
+			return
+		}
+	} else {
+		if err := helper.BindJSON(ctx, model); helper.HandleErr(ctx, err, "参数错误") {
+			return
+		}
 	}
-
 	idField := reflect.ValueOf(model).Elem().FieldByName("ID")
 	if !idField.IsValid() || idField.IsZero() {
 		response.Fail(ctx, "记录 ID 无效", nil)
