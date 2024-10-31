@@ -1,6 +1,7 @@
 package global
 
 import (
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	goRedis "github.com/redis/go-redis/v9"
@@ -37,7 +38,11 @@ var BackendRouter *gin.RouterGroup
 // ApiRouter 接口路由
 var ApiRouter *gin.RouterGroup
 
+// Validator 验证器
 var Validator *validator.Validate
+
+// Rbac 权限管理
+var Rbac *casbin.Enforcer
 
 // Engine 全局引擎
 var Engine *gin.Engine
