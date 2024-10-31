@@ -6,6 +6,6 @@ import (
 )
 
 func CollectRoutes() {
-	global.ApiRouter.POST("/upload/local/img", Local.ImgUpload)
-	global.ApiRouter.POST("/upload/local/video", Local.VideoUpload)
+	global.BackendRouter.POST("/upload/local/img", Local.ImgUpload)
+	global.BackendRouter.POST("/upload/local/video", Local.VideoUpload)
 }

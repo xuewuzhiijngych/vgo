@@ -12,6 +12,7 @@ func CollectRoutes() {
 	global.BackendRouter.PUT("/notices", Backend.Update)
 	global.BackendRouter.GET("/notices/:id", Backend.Show)
 	global.BackendRouter.DELETE("/notices", Backend.Delete)
+	global.BackendRouter.POST("/notices/change", Backend.Change)
 
 	global.ApiRouter.GET("/notices", Api.Index)
 	global.ApiRouter.GET("/notices/:id", Api.Show)

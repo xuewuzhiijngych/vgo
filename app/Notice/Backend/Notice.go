@@ -113,3 +113,17 @@ func Delete(ctx *gin.Context) {
 	}
 	response.Success(ctx, "成功", nil, nil)
 }
+
+// Change 改变状态
+func Change(ctx *gin.Context) {
+	var notice Model.Notice
+	if err := helper.BindJSON(ctx, &notice); err != nil {
+		response.Fail(ctx, "参数错误", err.Error(), nil)
+		return
+	}
+	if err := global.DbCon.Model(&Model.Notice{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
+		response.Fail(ctx, "更新失败", err.Error())
+		return
+	}
+	response.Success(ctx, "成功", nil, nil)
+}

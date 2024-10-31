@@ -109,8 +109,7 @@ func ImgUpload(ctx *gin.Context) {
 	}
 	imgDomain := global.Config.App.FileDomain
 	response.Success(ctx, "文件上传成功", gin.H{
-		"fileUrl":    respUrl,
-		"previewUrl": imgDomain + respUrl,
+		"fileUrl": imgDomain + respUrl,
 	}, nil)
 
 }
