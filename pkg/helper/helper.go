@@ -2,6 +2,8 @@ package helper
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -84,4 +86,10 @@ func BindAndValidate(ctx *gin.Context, obj interface{}, rules map[string]map[str
 		}
 	}
 	return true
+}
+
+func MakeMd5(str string) string {
+	h := md5.New()
+	h.Write([]byte(str))
+	return hex.EncodeToString(h.Sum(nil))
 }

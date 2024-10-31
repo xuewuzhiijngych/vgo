@@ -27,6 +27,9 @@ func Run() {
 	// 初始化验证器
 	bootstrap.InitValidator()
 
+	// 初始化JWT
+	bootstrap.InitAuth()
+
 	// 初始化RBAC
 	bootstrap.InitRbac()
 

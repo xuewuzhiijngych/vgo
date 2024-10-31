@@ -22,6 +22,14 @@ redisConf:
   username:
   password:
   db: 11
+ #JWT配置
+ jwtConf:
+   adminKey: pDxCHgMzlarDuWFeDVSlQNHyZVoxeBfJsGVz
+   adminSingleLogin: 1
+   apikey: pDxCHgMzlarDuWFeDVSlQNHyZVssssssssszxz
+   apiSingleLogin: 1
+   adminTimeout: 24
+   apiTimeout: 24
 #队列配置
 queueConf:
   enable: 1
