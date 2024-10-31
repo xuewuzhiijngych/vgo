@@ -1,6 +1,7 @@
 package Backend
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"reflect"
 	"strconv"
@@ -129,23 +130,49 @@ func (h *CRUDHandler) Show(ctx *gin.Context) {
 
 // Delete 通用删除
 func (h *CRUDHandler) Delete(ctx *gin.Context) {
-	var ids struct {
-		ID []int64 `json:"id"`
+	//var ids struct {
+	//	ID []int64 `json:"id"`
+	//}
+	//if !helper.BindAndValidate(ctx, &ids, nil) {
+	//	return
+	//}
+	//
+	//var existingCount int64
+	//if err := global.DbCon.Model(h.Model).Where("id in (?)", ids.ID).Count(&existingCount).Error; helper.HandleErr(ctx, err, "查询失败") {
+	//	return
+	//}
+	//if existingCount != int64(len(ids.ID)) {
+	//	response.Fail(ctx, "部分或全部记录不存在", nil)
+	//	return
+	//}
+	//
+	//if err := global.DbCon.Where("id in (?)", ids.ID).Delete(h.Model).Error; helper.HandleErr(ctx, err, "删除失败") {
+	//	return
+	//}
+	//response.Success(ctx, "成功", nil, nil)
+	idStrings := ctx.QueryArray("id[]")
+	var ids []int64
+	for _, idStr := range idStrings {
+		var id int64
+		if _, err := fmt.Sscan(idStr, &id); err == nil {
+			ids = append(ids, id)
+		}
 	}
-	if !helper.BindAndValidate(ctx, &ids, nil) {
+	if len(ids) == 0 {
+		response.Fail(ctx, "参数错误", "未提供有效的ID", nil)
 		return
 	}
-
+	fmt.Println(ids)
 	var existingCount int64
-	if err := global.DbCon.Model(h.Model).Where("id in (?)", ids.ID).Count(&existingCount).Error; helper.HandleErr(ctx, err, "查询失败") {
+	if err := global.DbCon.Model(h.Model).Where("id in (?)", ids).Count(&existingCount).Error; helper.HandleErr(ctx, err, "查询失败") {
 		return
 	}
-	if existingCount != int64(len(ids.ID)) {
+	if existingCount != int64(len(ids)) {
 		response.Fail(ctx, "部分或全部记录不存在", nil)
 		return
 	}
-
-	if err := global.DbCon.Where("id in (?)", ids.ID).Delete(h.Model).Error; helper.HandleErr(ctx, err, "删除失败") {
+	if err := global.DbCon.Where("id in (?)", ids).Delete(h.Model).Error; err != nil {
+		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}
 	response.Success(ctx, "成功", nil, nil)

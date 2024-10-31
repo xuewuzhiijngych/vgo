@@ -1,6 +1,7 @@
 package Backend
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"ych/vgo/app/Notice/Model"
@@ -85,22 +86,28 @@ func Show(ctx *gin.Context) {
 
 // Delete 删除
 func Delete(ctx *gin.Context) {
-	var ids struct {
-		ID []int64 `json:"id"`
+	idStrings := ctx.QueryArray("id[]")
+	var ids []int64
+	for _, idStr := range idStrings {
+		var id int64
+		if _, err := fmt.Sscan(idStr, &id); err == nil {
+			ids = append(ids, id)
+		}
 	}
-	if err := helper.BindJSON(ctx, &ids); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
+	if len(ids) == 0 {
+		response.Fail(ctx, "参数错误", "未提供有效的ID", nil)
 		return
 	}
+	fmt.Println(ids)
 	var existingCount int64
-	if err := global.DbCon.Model(&Model.Notice{}).Where("id in (?)", ids.ID).Count(&existingCount).Error; helper.HandleErr(ctx, err, "查询失败") {
+	if err := global.DbCon.Model(&Model.Notice{}).Where("id in (?)", ids).Count(&existingCount).Error; helper.HandleErr(ctx, err, "查询失败") {
 		return
 	}
-	if existingCount != int64(len(ids.ID)) {
+	if existingCount != int64(len(ids)) {
 		response.Fail(ctx, "部分或全部记录不存在", nil)
 		return
 	}
-	if err := global.DbCon.Delete(&Model.Notice{}, "id in (?)", ids.ID).Error; err != nil {
+	if err := global.DbCon.Delete(&Model.Notice{}, "id in (?)", ids).Error; err != nil {
 		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}

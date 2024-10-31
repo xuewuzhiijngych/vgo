@@ -6,5 +6,5 @@ import (
 )
 
 func CollectRoutes() {
-	global.BackendRouter.POST("/user/login", Backend.Login)
+	global.Engine.Group("/backend").POST("/user/login", Backend.Login)
 }
