@@ -5,6 +5,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"strconv"
 	"ych/vgo/app/AdminUser/Model"
+	"ych/vgo/app/Common/Backend"
 	"ych/vgo/internal/global"
 	"ych/vgo/internal/pkg/middleware/auth"
 	"ych/vgo/pkg/helper"
@@ -45,4 +46,16 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	response.Success(ctx, "登录成功", res)
+}
+
+func RegisterAdminUserRoutes() {
+	global.Engine.Group("/backend").POST("/user/login", Login)
+
+	articleHandler := Backend.NewCRUDHandler(&Model.AdminUser{}, nil)
+
+	global.BackendRouter.GET("/users", articleHandler.Index)
+	global.BackendRouter.POST("/users", articleHandler.Create)
+	global.BackendRouter.PUT("/users", articleHandler.Update)
+	global.BackendRouter.GET("/users/:id", articleHandler.Show)
+	global.BackendRouter.DELETE("/users", articleHandler.Delete)
 }
