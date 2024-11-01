@@ -6,6 +6,7 @@ import (
 	"ych/vgo/app/Menu/Model"
 	Role "ych/vgo/app/Role/Model"
 	"ych/vgo/internal/global"
+	"ych/vgo/pkg/Enum"
 	"ych/vgo/pkg/helper"
 	"ych/vgo/pkg/response"
 )
@@ -14,7 +15,7 @@ import (
 func Index(ctx *gin.Context) {
 	var menus []Model.Menu
 	var err error
-	if ctx.GetInt("super") == 1 { // 超级管理员
+	if ctx.GetInt("super") == Enum.CommonEnable { // 超级管理员
 		err = global.DbCon.Order("sort desc").Find(&menus).Error
 	} else {
 		menuIDs := Role.GetMenuIdsByRoleId(ctx.GetUint64("userID"))
@@ -34,7 +35,7 @@ func Buttons(ctx *gin.Context) {
 	var menus []Model.Menu
 	var err error
 
-	if ctx.GetInt("super") == 1 { // 超级管理员
+	if ctx.GetInt("super") == Enum.CommonEnable { // 超级管理员
 		if err = global.DbCon.Where("type = ?", 1).Find(&menus).Error; err != nil {
 			response.Fail(ctx, "数据库查询失败", err)
 			return

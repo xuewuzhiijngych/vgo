@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"strings"
 	"ych/vgo/internal/global"
-	"ych/vgo/internal/trans"
 	"ych/vgo/pkg/response"
 )
 
@@ -16,28 +15,28 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
 			// Header format is invalid
-			response.NotLogin(c, trans.Trans(c, "Token无效")+"00", nil)
+			response.NotLogin(c, "Token无效", nil)
 			c.Abort()
 			return
 		}
 		tokenString := parts[1]
 		if tokenString == "" {
 			// Header is missing
-			response.NotLogin(c, trans.Trans(c, "Token无效")+"01", nil)
+			response.NotLogin(c, "Token无效", nil)
 			c.Abort()
 			return
 		}
 		claims, err := ParseAdminToken(tokenString)
 		if err != nil {
 			//解析Fail
-			response.NotLogin(c, trans.Trans(c, "Token无效")+"02", nil)
+			response.NotLogin(c, "Token无效", nil)
 			c.Abort()
 			return
 		}
 
 		if AssertIsTokenInvalid(c, tokenString) {
 			//黑名单
-			response.NotLogin(c, trans.Trans(c, "Token无效")+"03", nil)
+			response.NotLogin(c, "Token无效", nil)
 			c.Abort()
 			return
 		}
@@ -48,19 +47,19 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 			redisToken := redisCon.Get(c, "admin_token"+strconv.Itoa(int(claims.UserID)))
 			if redisToken == nil || redisToken.Val() != tokenString {
 				// Token is invalid --Backend-- redis00
-				response.NotLogin(c, trans.Trans(c, "Token无效")+"04", nil)
+				response.NotLogin(c, "Token无效", nil)
 				c.Abort()
 				return
 			}
 		} else {
 			redisToken := redisCon.LRange(c, "admin_token_list"+strconv.Itoa(int(claims.UserID)), 0, -1)
 			if redisToken == nil || len(redisToken.Val()) == 0 {
-				response.NotLogin(c, trans.Trans(c, "Token无效")+"05", nil)
+				response.NotLogin(c, "Token无效", nil)
 				c.Abort()
 				return
 			}
 			if !strings.Contains(strings.Join(redisToken.Val(), ""), tokenString) {
-				response.NotLogin(c, trans.Trans(c, "Token无效")+"06", nil)
+				response.NotLogin(c, "Token无效", nil)
 				c.Abort()
 				return
 			}
@@ -79,14 +78,14 @@ func UserAuthMiddleware() gin.HandlerFunc {
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
 			// Header format is invalid
-			response.NotLogin(c, trans.Trans(c, "Token无效")+"00", nil)
+			response.NotLogin(c, "Token无效", nil)
 			c.Abort()
 			return
 		}
 		tokenString := parts[1]
 		if tokenString == "" {
 			// Header is missing
-			response.NotLogin(c, trans.Trans(c, "Token无效")+"01", nil)
+			response.NotLogin(c, "Token无效", nil)
 			c.Abort()
 			return
 		}
@@ -94,14 +93,14 @@ func UserAuthMiddleware() gin.HandlerFunc {
 		claims, err := ParseUserToken(tokenString)
 		if err != nil {
 			// 解析Fail
-			response.NotLogin(c, trans.Trans(c, "Token无效")+"02", nil)
+			response.NotLogin(c, "Token无效", nil)
 			c.Abort()
 			return
 		}
 
 		if AssertApiTokenIsInvalid(c, tokenString) {
 			// 黑名单
-			response.NotLogin(c, trans.Trans(c, "Token无效")+"03", nil)
+			response.NotLogin(c, "Token无效", nil)
 			c.Abort()
 			return
 		}
@@ -113,7 +112,7 @@ func UserAuthMiddleware() gin.HandlerFunc {
 			redisToken := redisCon.Get(c, "api_token"+strconv.FormatInt(int64(claims.UserID), 10))
 			if redisToken == nil || redisToken.Val() != tokenString {
 				//--api-- redis00
-				response.NotLogin(c, trans.Trans(c, "Token无效")+"04", nil)
+				response.NotLogin(c, "Token无效", nil)
 				c.Abort()
 				return
 			}
@@ -121,13 +120,13 @@ func UserAuthMiddleware() gin.HandlerFunc {
 			redisToken := redisCon.LRange(c, "api_token_list"+strconv.FormatInt(int64(claims.UserID), 10), 0, -1)
 			if redisToken == nil || len(redisToken.Val()) == 0 {
 				//--api-- redis0
-				response.NotLogin(c, trans.Trans(c, "Token无效")+"05", nil)
+				response.NotLogin(c, "Token无效", nil)
 				c.Abort()
 				return
 			}
 			if !strings.Contains(strings.Join(redisToken.Val(), ""), tokenString) {
 				// --api-- redis02
-				response.NotLogin(c, trans.Trans(c, "Token无效")+"06", nil)
+				response.NotLogin(c, "Token无效", nil)
 				c.Abort()
 				return
 			}
