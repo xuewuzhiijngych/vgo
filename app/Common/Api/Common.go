@@ -2,7 +2,8 @@ package Api
 
 import (
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
+	"ych/vgo/app/Notice/Model"
+	"ych/vgo/internal/global"
 	"ych/vgo/pkg/response"
 )
 
@@ -34,18 +35,10 @@ func Test(ctx *gin.Context) {
 	//}
 	//global.Logger.Info(fmt.Sprintf("enqueued task: id=%s queue=%s", info.ID, info.Queue))
 
-	//err := global.DbCon.AutoMigrate(&Model.Article{})
-	//if err != nil {
-	//	return
-	//}
-	//response.Success(ctx, "666", nil)
-	//return
-
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte("admin123"), bcrypt.DefaultCost)
+	err := global.DbCon.AutoMigrate(&Model.Notice{})
 	if err != nil {
-		response.Fail(ctx, "密码哈希失败", err.Error(), nil)
 		return
 	}
-	response.Success(ctx, string(hashedPassword), nil)
-
+	response.Success(ctx, "666", nil)
+	return
 }

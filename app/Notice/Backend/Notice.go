@@ -51,7 +51,11 @@ func Create(ctx *gin.Context) {
 		response.Fail(ctx, err, nil)
 		return
 	}
-	global.DbCon.Create(&model)
+	err := global.DbCon.Create(&model).Error
+	if err != nil {
+		response.Fail(ctx, "新增失败", err.Error())
+		return
+	}
 	response.Success(ctx, "成功", model, nil)
 }
 
