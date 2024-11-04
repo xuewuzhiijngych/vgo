@@ -2,6 +2,7 @@ package Backend
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -146,14 +147,51 @@ func GetRole(ctx *gin.Context) {
 
 func RegisterAdminUserRoutes() {
 	global.Engine.Group("/backend").POST("/user/login", Login)
+	handler := Backend.NewCRUDHandler(&Model.AdminUser{}, nil)
 
-	articleHandler := Backend.NewCRUDHandler(&Model.AdminUser{}, nil)
+	handler.BeforeCreate = func(ctx *gin.Context, model interface{}) error {
+		adminUser, ok := model.(*Model.AdminUser)
+		if !ok {
+			err := fmt.Errorf("类型断言失败")
+			response.Fail(ctx, "类型断言失败", err.Error(), nil)
+			return err
+		}
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(adminUser.Password), bcrypt.DefaultCost)
+		if err != nil {
+			response.Fail(ctx, "密码哈希失败", err.Error(), nil)
+			return err
+		}
+		adminUser.Password = string(hashedPassword)
+		fmt.Println("创建前")
+		return nil
+	}
+	handler.AfterCreate = func(ctx *gin.Context, model interface{}) error {
+		fmt.Println("创建后")
+		return nil
+	}
+	handler.BeforeUpdate = func(ctx *gin.Context, model interface{}) error {
+		fmt.Println("更新前")
+		return nil
+	}
+	handler.AfterUpdate = func(ctx *gin.Context, model interface{}) error {
+		fmt.Println("更新后")
+		return nil
+	}
+	handler.BeforeDelete = func(ctx *gin.Context, model interface{}) error {
+		fmt.Println("删除前")
+		return nil
+	}
+	handler.AfterDelete = func(ctx *gin.Context, model interface{}) error {
+		fmt.Println("删除后")
+		return nil
+	}
 
-	global.BackendRouter.GET("/users", articleHandler.Index)
-	global.BackendRouter.POST("/users", Create)
-	global.BackendRouter.PUT("/users", articleHandler.Update)
-	global.BackendRouter.GET("/users/:id", articleHandler.Show)
-	global.BackendRouter.DELETE("/users", articleHandler.Delete)
+	global.BackendRouter.GET("/users", handler.Index)
+	global.BackendRouter.POST("/users", handler.Create)
+	global.BackendRouter.PUT("/users", handler.Update)
+	global.BackendRouter.GET("/users/:id", handler.Show)
+	global.BackendRouter.DELETE("/users", handler.Delete)
+
 	global.BackendRouter.POST("/users/set/role", SetRole)
 	global.BackendRouter.POST("/users/get/role", GetRole)
 	global.BackendRouter.POST("/users/logout", LogOut)

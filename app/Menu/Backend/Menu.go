@@ -3,11 +3,11 @@ package Backend
 import (
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"ych/vgo/app/Common/Backend"
 	"ych/vgo/app/Menu/Model"
 	Role "ych/vgo/app/Role/Model"
 	"ych/vgo/internal/global"
 	"ych/vgo/pkg/Enum"
-	"ych/vgo/pkg/helper"
 	"ych/vgo/pkg/response"
 )
 
@@ -86,7 +86,7 @@ func Buttons(ctx *gin.Context) {
 			// 判断按钮是否有权限
 			hasPermission := false
 			for _, role := range roles {
-				if policy := enforcer.HasPolicy(role, buttonMenu.Api); policy {
+				if policy := enforcer.HasPolicy(role, buttonMenu.Api, buttonMenu.Act); policy {
 					hasPermission = true
 					break
 				}
@@ -137,47 +137,13 @@ func GetSelectTree(ctx *gin.Context) {
 	response.Success(ctx, "查询成功", menuSelects, nil)
 }
 
-// Create 创建
-func Create(ctx *gin.Context) {
-	var product Model.Menu
-	if err := helper.BindJSON(ctx, &product); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
-		return
-	}
-	global.DbCon.Create(&product)
-	response.Success(ctx, "成功", product, nil)
-}
+func RegisterMenuRoutes() {
+	handler := Backend.NewCRUDHandler(&Model.Menu{}, nil)
+	global.BackendRouter.POST("/menus", handler.Create)
+	global.BackendRouter.PUT("/menus", handler.Update)
+	global.BackendRouter.DELETE("/menus", handler.Delete)
 
-// Update 更新
-func Update(ctx *gin.Context) {
-	var notice Model.Menu
-	if err := helper.BindJSON(ctx, &notice); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
-		return
-	}
-	if err := global.DbCon.Model(&Model.Menu{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
-		response.Fail(ctx, "更新失败", err.Error())
-		return
-	}
-	response.Success(ctx, "成功", nil, nil)
-}
-
-// Delete 删除
-func Delete(ctx *gin.Context) {
-	var ids struct {
-		ID []int64 `json:"id"`
-	}
-	if err := helper.BindJSON(ctx, &ids); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
-		return
-	}
-	if err := global.DbCon.Delete(&Model.Menu{}, "parent_id in (?)", ids.ID).Error; err != nil {
-		response.Fail(ctx, "删除失败", err.Error())
-		return
-	}
-	if err := global.DbCon.Delete(&Model.Menu{}, "id in (?)", ids.ID).Error; err != nil {
-		response.Fail(ctx, "删除失败", err.Error())
-		return
-	}
-	response.Success(ctx, "成功", nil, nil)
+	global.BackendRouter.GET("/menus", Index)
+	global.BackendRouter.GET("/buttons", Buttons)
+	global.BackendRouter.GET("/menu/selectTreeDataSource", GetSelectTree)
 }

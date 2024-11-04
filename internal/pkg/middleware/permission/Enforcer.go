@@ -20,10 +20,10 @@ func SetupCasbin() *casbin.Enforcer {
 	}
 	m, err := model.NewModelFromString(`
 [request_definition]
-r = sub, obj
+r = sub, obj, act
 
 [policy_definition]
-p = sub, obj
+p = sub, obj, act
 
 [role_definition]
 g = _, _
@@ -32,7 +32,7 @@ g = _, _
 e = some(where (p.eft == allow))
 
 [matchers]
-m = g(r.sub, p.sub) && keyMatch2(r.obj, p.obj)
+m = g(r.sub, p.sub) && keyMatch2(r.obj, p.obj) && r.act == p.act
 `)
 	if err != nil {
 		log.Fatalf("error: model: %s", err)

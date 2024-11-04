@@ -13,6 +13,7 @@ type Menu struct {
 	Name        string                 `gorm:"column:name;type:varchar(50);not null;default:'';comment:路由name" json:"name"`
 	Redirect    string                 `gorm:"column:redirect;type:varchar(255);not null;default:'';comment:路由重定向地址" json:"redirect"`
 	Api         string                 `gorm:"column:api;type:varchar(255);not null;default:'';comment:请求接口地址" json:"api"`
+	Act         string                 `gorm:"column:act;type:varchar(255);not null;default:'';comment:请求方式" json:"act"`
 	Component   string                 `gorm:"column:component;type:varchar(255);not null;default:'';comment:视图文件路径" json:"component"`
 	Icon        string                 `gorm:"column:icon;type:varchar(50);not null;default:'';comment:菜单和面包屑对应的图标" json:"icon"`
 	Title       string                 `gorm:"column:title;type:varchar(50);not null;default:'';comment:路由标题(菜单名称)" json:"title"`

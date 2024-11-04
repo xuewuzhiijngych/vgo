@@ -127,3 +127,12 @@ func Change(ctx *gin.Context) {
 	}
 	response.Success(ctx, "成功", nil, nil)
 }
+
+func RegisterNoticeRoutes() {
+	global.BackendRouter.GET("/notices", Index)
+	global.BackendRouter.POST("/notices", Create)
+	global.BackendRouter.PUT("/notices", Update)
+	global.BackendRouter.GET("/notices/:id", Show)
+	global.BackendRouter.DELETE("/notices", Delete)
+	global.BackendRouter.POST("/notices/change", Change)
+}

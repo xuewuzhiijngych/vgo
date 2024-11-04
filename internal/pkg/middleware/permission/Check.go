@@ -22,9 +22,10 @@ func Check(e *casbin.Enforcer) gin.HandlerFunc {
 			c.Next()
 			return
 		}
+		act := c.Request.Method
 		sub := c.GetStringSlice("role") // 获取角色
 		for _, v := range sub {
-			if ok, _ := e.Enforce(v, obj); ok {
+			if ok, _ := e.Enforce(v, obj, act); ok {
 				c.Next()
 				return
 			}

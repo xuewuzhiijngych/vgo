@@ -3,6 +3,7 @@ package Backend
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"reflect"
 	"strconv"
 	"ych/vgo/internal/global"
@@ -16,8 +17,16 @@ type ValidationRules struct {
 }
 
 type CRUDHandler struct {
-	Model    interface{}      // 模型指针，用于创建实例
-	Validate *ValidationRules // 验证规则函数，返回验证规则
+	Model        interface{}      // 模型指针，用于创建实例
+	Validate     *ValidationRules // 验证规则
+	IndexWith    func(ctx *gin.Context, db *gorm.DB) *gorm.DB
+	BeforeCreate func(ctx *gin.Context, model interface{}) error
+	AfterCreate  func(ctx *gin.Context, model interface{}) error
+	BeforeUpdate func(ctx *gin.Context, model interface{}) error
+	AfterUpdate  func(ctx *gin.Context, model interface{}) error
+	ShowWith     func(ctx *gin.Context, db *gorm.DB) *gorm.DB
+	BeforeDelete func(ctx *gin.Context, model interface{}) error
+	AfterDelete  func(ctx *gin.Context, model interface{}) error
 }
 
 func NewCRUDHandler(model interface{}, validate *ValidationRules) *CRUDHandler {
@@ -40,6 +49,10 @@ func (h *CRUDHandler) Index(ctx *gin.Context) {
 
 	var total int64
 	db := global.DbCon.Model(h.Model)
+
+	if h.IndexWith != nil {
+		db = h.IndexWith(ctx, db)
+	}
 
 	if err := db.Count(&total).Error; helper.HandleErr(ctx, err, "数据库查询失败") {
 		return
@@ -72,8 +85,20 @@ func (h *CRUDHandler) Create(ctx *gin.Context) {
 			return
 		}
 	}
+	if h.BeforeCreate != nil {
+		if err := h.BeforeCreate(ctx, model); err != nil {
+			response.Fail(ctx, "BeforeCreate-hook-failed", err.Error())
+			return
+		}
+	}
 	if err := global.DbCon.Create(model).Error; helper.HandleErr(ctx, err, "创建失败") {
 		return
+	}
+	if h.AfterCreate != nil {
+		if err := h.AfterCreate(ctx, model); err != nil {
+			response.Fail(ctx, "AfterCreate-hook-failed", err.Error())
+			return
+		}
 	}
 	response.Success(ctx, "成功", model, nil)
 }
@@ -101,9 +126,24 @@ func (h *CRUDHandler) Update(ctx *gin.Context) {
 		return
 	}
 
+	if h.BeforeUpdate != nil {
+		if err := h.BeforeUpdate(ctx, model); err != nil {
+			response.Fail(ctx, "BeforeUpdate-hook-failed", err.Error())
+			return
+		}
+	}
+
 	if err := global.DbCon.Model(existing).Updates(model).Error; helper.HandleErr(ctx, err, "更新失败") {
 		return
 	}
+
+	if h.AfterUpdate != nil {
+		if err := h.AfterUpdate(ctx, model); err != nil {
+			response.Fail(ctx, "AfterUpdate-hook-failed", err.Error())
+			return
+		}
+	}
+
 	response.Success(ctx, "成功", model, nil)
 }
 
@@ -118,9 +158,13 @@ func (h *CRUDHandler) Show(ctx *gin.Context) {
 
 	// 创建模型实例
 	model := reflect.New(reflect.TypeOf(h.Model).Elem()).Interface()
+	db := global.DbCon
 
+	if h.ShowWith != nil {
+		db = h.ShowWith(ctx, db)
+	}
 	// 查询数据库
-	if err := global.DbCon.First(model, id).Error; helper.HandleErr(ctx, err, "查询失败") {
+	if err := db.First(model, id).Error; helper.HandleErr(ctx, err, "查询失败") {
 		return
 	}
 
@@ -130,26 +174,6 @@ func (h *CRUDHandler) Show(ctx *gin.Context) {
 
 // Delete 通用删除
 func (h *CRUDHandler) Delete(ctx *gin.Context) {
-	//var ids struct {
-	//	ID []int64 `json:"id"`
-	//}
-	//if !helper.BindAndValidate(ctx, &ids, nil) {
-	//	return
-	//}
-	//
-	//var existingCount int64
-	//if err := global.DbCon.Model(h.Model).Where("id in (?)", ids.ID).Count(&existingCount).Error; helper.HandleErr(ctx, err, "查询失败") {
-	//	return
-	//}
-	//if existingCount != int64(len(ids.ID)) {
-	//	response.Fail(ctx, "部分或全部记录不存在", nil)
-	//	return
-	//}
-	//
-	//if err := global.DbCon.Where("id in (?)", ids.ID).Delete(h.Model).Error; helper.HandleErr(ctx, err, "删除失败") {
-	//	return
-	//}
-	//response.Success(ctx, "成功", nil, nil)
 	idStrings := ctx.QueryArray("id[]")
 	var ids []int64
 	for _, idStr := range idStrings {
@@ -162,18 +186,36 @@ func (h *CRUDHandler) Delete(ctx *gin.Context) {
 		response.Fail(ctx, "参数错误", "未提供有效的ID", nil)
 		return
 	}
-	fmt.Println(ids)
-	var existingCount int64
-	if err := global.DbCon.Model(h.Model).Where("id in (?)", ids).Count(&existingCount).Error; helper.HandleErr(ctx, err, "查询失败") {
+	modelSlicePtr := reflect.New(reflect.SliceOf(reflect.TypeOf(h.Model).Elem())).Interface()
+	if err := global.DbCon.Where("id in (?)", ids).Find(modelSlicePtr).Error; helper.HandleErr(ctx, err, "查询失败") {
 		return
 	}
-	if existingCount != int64(len(ids)) {
-		response.Fail(ctx, "部分或全部记录不存在", nil)
-		return
+	modelSlice := reflect.ValueOf(modelSlicePtr).Elem().Interface()
+	if h.BeforeDelete != nil {
+		sliceValue := reflect.ValueOf(modelSlice)
+		for i := 0; i < sliceValue.Len(); i++ {
+			model := sliceValue.Index(i).Interface()
+			if err := h.BeforeDelete(ctx, model); err != nil {
+				response.Fail(ctx, "BeforeDelete-hook-failed", err.Error())
+				return
+			}
+		}
 	}
 	if err := global.DbCon.Where("id in (?)", ids).Delete(h.Model).Error; err != nil {
 		response.Fail(ctx, "删除失败", err.Error())
 		return
 	}
+
+	if h.AfterDelete != nil {
+		sliceValue := reflect.ValueOf(modelSlice)
+		for i := 0; i < sliceValue.Len(); i++ {
+			model := sliceValue.Index(i).Interface()
+			if err := h.AfterDelete(ctx, model); err != nil {
+				response.Fail(ctx, "AfterDelete-hook-failed", err.Error())
+				return
+			}
+		}
+	}
+
 	response.Success(ctx, "成功", nil, nil)
 }

@@ -47,3 +47,8 @@ func Show(ctx *gin.Context) {
 	}
 	response.Success(ctx, "成功", model, nil)
 }
+
+func RegisterNoticeApiRoutes() {
+	global.ApiRouter.GET("/notices", Index)
+	global.ApiRouter.GET("/notices/:id", Show)
+}

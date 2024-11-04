@@ -1,50 +1,14 @@
 package Backend
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/go-sql-driver/mysql"
-	"strconv"
+	"ych/vgo/app/Common/Backend"
 	MenuModel "ych/vgo/app/Menu/Model"
 	"ych/vgo/app/Role/Model"
 	"ych/vgo/internal/global"
 	"ych/vgo/pkg/helper"
 	"ych/vgo/pkg/response"
 )
-
-// Index 列表
-func Index(ctx *gin.Context) {
-	var res []Model.Role
-	var total int64
-	pageNo, err := strconv.Atoi(ctx.DefaultQuery("pageNum", "1"))
-	if err != nil {
-		response.Fail(ctx, "页码参数无效", nil)
-		return
-	}
-	Size, err := strconv.Atoi(ctx.DefaultQuery("pageSize", "10"))
-	if err != nil {
-		response.Fail(ctx, "每页大小参数无效", nil)
-		return
-	}
-	if err := global.DbCon.Model(&Model.Role{}).Count(&total).Error; err != nil {
-		response.Fail(ctx, "数据库查询失败", err.Error())
-		return
-	}
-	if err := global.DbCon.Order("id desc").Offset((pageNo - 1) * Size).Limit(Size).Find(&res).Error; err != nil {
-		response.Fail(ctx, "数据库查询失败", err.Error())
-		return
-	}
-	totalPage := int(total) / Size
-	if int(total)%Size != 0 {
-		totalPage++
-	}
-	response.Success(ctx, "成功", gin.H{
-		"pageNum":  pageNo,
-		"total":    total,
-		"pageSize": Size,
-		"list":     res,
-	}, nil)
-}
 
 // GetAll 获取全部
 func GetAll(ctx *gin.Context) {
@@ -54,25 +18,6 @@ func GetAll(ctx *gin.Context) {
 		return
 	}
 	response.Success(ctx, "成功", res, nil)
-}
-
-// Create 创建
-func Create(ctx *gin.Context) {
-	var role Model.Role
-	if err := helper.BindJSON(ctx, &role); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
-		return
-	}
-	// 插入数据
-	if err := global.DbCon.Create(&role).Error; err != nil {
-		// 检查是否是唯一键冲突错误
-		var mysqlErr *mysql.MySQLError
-		if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
-			response.Fail(ctx, "角色标识已存在", err.Error(), nil)
-		}
-		return
-	}
-	response.Success(ctx, "成功", role, nil)
 }
 
 // SetMenu 设置菜单
@@ -117,7 +62,7 @@ func SetMenu(ctx *gin.Context) {
 		if exists {
 			// 写入策略
 			if dbMenu.Api != "" {
-				_, err2 := enforcer.AddPolicy(role.Code, dbMenu.Api)
+				_, err2 := enforcer.AddPolicy(role.Code, dbMenu.Api, dbMenu.Act)
 				if err2 != nil {
 					response.Fail(ctx, "策略写入失败", err2.Error())
 					return
@@ -149,47 +94,14 @@ func GetMenu(ctx *gin.Context) {
 	response.Success(ctx, "成功", res, nil)
 }
 
-// Update 更新
-func Update(ctx *gin.Context) {
-	var notice Model.Role
-	if err := helper.BindJSON(ctx, &notice); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
-		return
-	}
-	if err := global.DbCon.Model(&Model.Role{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
-		response.Fail(ctx, "更新失败", err.Error())
-		return
-	}
-	response.Success(ctx, "成功", nil, nil)
-}
+func RegisterRoleRoutes() {
+	handler := Backend.NewCRUDHandler(&Model.Role{}, nil)
+	global.BackendRouter.GET("/roles", handler.Index)
+	global.BackendRouter.POST("/roles", handler.Create)
+	global.BackendRouter.PUT("/roles", handler.Update)
+	global.BackendRouter.DELETE("/roles", handler.Delete)
 
-// Delete 删除
-func Delete(ctx *gin.Context) {
-	var ids struct {
-		ID []int64 `json:"id"`
-	}
-	if err := helper.BindJSON(ctx, &ids); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
-		return
-	}
-	if err := global.DbCon.Delete(&Model.Role{}, "id in (?)", ids.ID).Error; err != nil {
-		response.Fail(ctx, "删除失败", err.Error())
-		return
-	}
-	response.Success(ctx, "成功", nil, nil)
-}
-
-// Change 改变状态
-func Change(ctx *gin.Context) {
-	var notice Model.Role
-	if err := helper.BindJSON(ctx, &notice); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
-		return
-	}
-	if err := global.DbCon.Model(&Model.Role{}).Where("id = ?", notice.ID).Updates(notice).Error; err != nil {
-		response.Fail(ctx, "更新失败", err.Error())
-		return
-	}
-	response.Success(ctx, "成功", nil, nil)
-
+	global.BackendRouter.GET("/role/allDataSource", GetAll)
+	global.BackendRouter.POST("/role/set/menu", SetMenu)
+	global.BackendRouter.POST("/role/get/menu", GetMenu)
 }
