@@ -2,9 +2,6 @@ package Api
 
 import (
 	"github.com/gin-gonic/gin"
-	"ych/vgo/app/Notice/Model"
-	"ych/vgo/internal/global"
-	"ych/vgo/pkg/response"
 )
 
 func Test(ctx *gin.Context) {
@@ -35,10 +32,10 @@ func Test(ctx *gin.Context) {
 	//}
 	//global.Logger.Info(fmt.Sprintf("enqueued task: id=%s queue=%s", info.ID, info.Queue))
 
-	err := global.DbCon.AutoMigrate(&Model.Notice{})
-	if err != nil {
-		return
-	}
-	response.Success(ctx, "666", nil)
-	return
+	//err := global.DbCon.AutoMigrate(&Model.Notice{})
+	//if err != nil {
+	//	return
+	//}
+	//response.Success(ctx, "666", nil)
+	//return
 }

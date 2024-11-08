@@ -42,3 +42,9 @@ queueConf:
 #Snowflake配置
 snowflakeConf:
   node: 1
+#阿里云OsS配置
+ossConf:
+  accessKeyID: xx
+  accessKeySecret: xx
+  endPoint: https://oss-cn-xx.aliyuncs.com
+  bucketName: xx

@@ -18,6 +18,7 @@ type Configs struct {
 	QueueConf     config.QueueConf     `yaml:"queueConf"`
 	JwtConf       config.JwtConf       `yaml:"jwtConf"`
 	SnowflakeConf config.SnowflakeConf `yaml:"snowflakeConf"`
+	OssConf       config.OssConf       `yaml:"ossConf"`
 }
 
 // Config 全局配置
