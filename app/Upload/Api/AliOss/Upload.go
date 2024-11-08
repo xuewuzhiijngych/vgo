@@ -23,15 +23,15 @@ func Run(ctx *gin.Context) {
 	files := form.File["file"]
 	var signedURLs []string
 	for _, file := range files {
-		imgname := file.Filename
-		imgtype := filepath.Ext(imgname) // 使用 filepath.Ext 获取文件扩展名
-		if imgtype == "" {
+		fileName := file.Filename
+		fileType := filepath.Ext(fileName)
+		if fileType == "" {
 			fmt.Println("Error: 文件没有扩展名")
 			continue
 		}
-		newimg := imgName() + imgtype
+		newFile := imgName() + fileType
 		var signedURL string
-		if err, signedURL = upload(newimg, file); err != nil {
+		if err, signedURL = upload(newFile, file); err != nil {
 			response.Fail(ctx, err.Error(), nil)
 			return
 		}
