@@ -9,4 +9,5 @@ type App struct {
 	RequestLog int    `yaml:"requestLog"`
 	ApiOrigins string `yaml:"apiOrigins"`
 	FileDomain string `yaml:"fileDomain"`
+	UploadType string `yaml:"uploadType"`
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/gin-gonic/gin"
 	"io"
+	"mime/multipart"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -61,54 +62,54 @@ func ImgUpload(ctx *gin.Context) {
 		response.Fail(ctx, "不支持的文件类型", nil)
 		return
 	}
-
-	// 获取当前日期
-	now := time.Now()
-	timeStr := now.Format("20060101")
-
-	// 创建保存文件的目标路径，包含年月日子文件夹
-	dstDir := filepath.Join("storage", "uploads", "img", timeStr)
-
-	// 判断文件夹是否存在，如果不存在则创建
-	if _, err := os.Stat(dstDir); os.IsNotExist(err) {
-		err := os.MkdirAll(dstDir, os.ModePerm)
-		if err != nil {
-			response.Fail(ctx, "创建文件夹失败", err.Error())
-			return
-		}
-	}
-
-	// 文件重命名
-	id := snow.SnowflakeService().Generate()
-	ext := filepath.Ext(file.Filename) // 获取文件的后缀
-	newFileName := strconv.FormatInt(int64(id), 10) + ext
-	dst := filepath.Join(dstDir, newFileName)
-	respUrl := "/storage/uploads/img/" + timeStr + "/" + newFileName
-
-	// 打开上传的文件【上一次的读取操作会将文件的读写指针移到文件末尾】
-	src, err = file.Open()
+	respUrl, err := UploadFile("img", file)
 	if err != nil {
-		response.Fail(ctx, "打开文件失败", err.Error())
-		return
-	}
-	defer src.Close()
-
-	// 创建目标文件
-	out, err := os.Create(dst)
-	if err != nil {
-		response.Fail(ctx, "创建目标文件失败", err.Error())
-		return
-	}
-	defer out.Close()
-
-	// 将上传的文件内容复制到目标文件
-	_, err = io.Copy(out, src)
-	if err != nil {
-		response.Fail(ctx, "保存文件失败", err.Error())
+		response.Fail(ctx, "文件上传失败", err.Error(), nil)
 		return
 	}
 	imgDomain := global.Config.App.FileDomain
 	response.Success(ctx, "文件上传成功", gin.H{
 		"fileUrl": imgDomain + respUrl,
 	}, nil)
+}
+
+// UploadFile 上传文件
+func UploadFile(folderName string, file *multipart.FileHeader) (string, error) {
+	// 获取当前日期
+	now := time.Now()
+	timeStr := now.Format("20060101")
+	// 创建保存文件的目标路径，包含年月日子文件夹
+	dstDir := filepath.Join("storage", "uploads", folderName, timeStr)
+	// 判断文件夹是否存在，如果不存在则创建
+	if _, err := os.Stat(dstDir); os.IsNotExist(err) {
+		err := os.MkdirAll(dstDir, os.ModePerm)
+		if err != nil {
+			return "", err
+		}
+	}
+	// 文件重命名
+	id := snow.SnowflakeService().Generate()
+	ext := filepath.Ext(file.Filename) // 获取文件的后缀
+	newFileName := strconv.FormatInt(int64(id), 10) + ext
+	dst := filepath.Join(dstDir, newFileName)
+	respUrl := "/storage/uploads/" + folderName + "/" + timeStr + "/" + newFileName
+
+	// 打开上传的文件【上一次的读取操作会将文件的读写指针移到文件末尾】
+	src, err := file.Open()
+	if err != nil {
+		return "", err
+	}
+	defer src.Close()
+	// 创建目标文件
+	out, err := os.Create(dst)
+	if err != nil {
+		return "", err
+	}
+	defer out.Close()
+	// 将上传的文件内容复制到目标文件
+	_, err = io.Copy(out, src)
+	if err != nil {
+		return "", err
+	}
+	return respUrl, nil
 }
