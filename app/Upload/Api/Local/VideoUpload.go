@@ -109,5 +109,4 @@ func VideoUpload(ctx *gin.Context) {
 	response.Success(ctx, "文件上传成功", gin.H{
 		"fileUrl": imgDomain + respUrl,
 	}, nil)
-
 }

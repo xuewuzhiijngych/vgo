@@ -19,6 +19,7 @@ type Configs struct {
 	JwtConf       config.JwtConf       `yaml:"jwtConf"`
 	SnowflakeConf config.SnowflakeConf `yaml:"snowflakeConf"`
 	OssConf       config.OssConf       `yaml:"ossConf"`
+	CosConf       config.CosConf       `yaml:"cosConf"`
 }
 
 // Config 全局配置

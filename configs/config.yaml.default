@@ -48,3 +48,8 @@ ossConf:
   accessKeySecret: xx
   endPoint: https://oss-cn-xx.aliyuncs.com
   bucketName: xx
+#腾讯云COS配置
+cosConf:
+  secretID: xx
+  secretKey: xx
+  endpoint: https://xx-xx.cos.ap-xxx.myqcloud.com

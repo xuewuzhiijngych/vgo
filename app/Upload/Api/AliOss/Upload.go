@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
-	"math/rand"
 	"mime/multipart"
 	"path/filepath"
 	"strings"
 	"time"
+	"ych/vgo/app/Upload/Common"
 	"ych/vgo/internal/global"
 	"ych/vgo/pkg/response"
 )
@@ -16,29 +16,26 @@ import (
 func Run(ctx *gin.Context) {
 	form, err := ctx.MultipartForm()
 	if err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("文件解析失败:", err)
 		return
 	}
-
 	files := form.File["file"]
-	var signedURLs []string
+	var fileUrl string
 	for _, file := range files {
 		fileName := file.Filename
 		fileType := filepath.Ext(fileName)
 		if fileType == "" {
-			fmt.Println("Error: 文件没有扩展名")
+			fmt.Println("文件解析失败: 文件没有扩展名")
 			continue
 		}
-		newFile := imgName() + fileType
-		var signedURL string
-		if err, signedURL = upload(newFile, file); err != nil {
+		newFile := Upload.RandomFileName() + "." + fileType
+		if err, fileUrl = upload(newFile, file); err != nil {
 			response.Fail(ctx, err.Error(), nil)
 			return
 		}
-		signedURLs = append(signedURLs, signedURL)
 	}
 	response.Success(ctx, "Oss文件上传成功", gin.H{
-		"fileUrls": signedURLs,
+		"fileUrl": fileUrl,
 	}, nil)
 }
 
@@ -87,13 +84,4 @@ func upload(filename string, s1 *multipart.FileHeader) (err error, signedURL str
 		return err, ""
 	}
 	return nil, signedURL
-}
-
-// 生成随机文件名
-func imgName() string {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	randomNum := r.Intn(10000)
-	nano := time.Now().UnixNano()
-	fileName := fmt.Sprintf("%d_%d", nano, randomNum)
-	return fileName + "."
 }
