@@ -28,6 +28,10 @@ func Run(ctx *gin.Context) {
 		size  int64
 		mimes []string
 	}{
+		"any": {
+			size:  50 * 1024 * 1024, // 50MB
+			mimes: []string{"image/jpeg", "image/png", "image/jpg", "video/mp4"},
+		},
 		"img": {
 			size:  10 * 1024 * 1024, // 10MB
 			mimes: []string{"image/jpeg", "image/png", "image/jpg"},

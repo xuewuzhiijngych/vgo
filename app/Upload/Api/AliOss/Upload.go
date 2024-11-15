@@ -39,7 +39,7 @@ func UploadFile(s1 *multipart.FileHeader) (signedURL string, err error) {
 	if fileType == "" {
 		return "", fmt.Errorf("文件后缀解析失败")
 	}
-	filename := Upload.RandomFileName() + "." + fileType
+	filename := Upload.RandomFileName() + fileType
 	// OSS配置
 	config := global.Config.OssConf
 	accessKeyID := config.AccessKeyID

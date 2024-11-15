@@ -36,7 +36,6 @@ func Run(ctx *gin.Context) {
 // UploadFile 上传文件到腾讯云对象存储
 func UploadFile(file *multipart.FileHeader) (signedURL string, err error) {
 	config := global.Config.CosConf
-	fmt.Println(config)
 	u, _ := url.Parse(config.Endpoint)
 	b := &cos.BaseURL{BucketURL: u}
 	client := cos.NewClient(b, &http.Client{
