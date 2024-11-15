@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-// LogDriver 初始化日志驱动
-func LogDriver() *zap.Logger {
+// InitLogDriver 初始化日志驱动
+func InitLogDriver() *zap.Logger {
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder
 	fileEncoder := zapcore.NewJSONEncoder(config)

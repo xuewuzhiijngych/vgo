@@ -88,6 +88,7 @@ func BindAndValidate(ctx *gin.Context, obj interface{}, rules map[string]map[str
 	return true
 }
 
+// MakeMd5 md5加密
 func MakeMd5(str string) string {
 	h := md5.New()
 	h.Write([]byte(str))

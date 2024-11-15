@@ -36,7 +36,7 @@ func InitQueue() {
 
 // SetupJobHandlers 注册任务处理器
 func SetupJobHandlers(mux *asynq.ServeMux) {
-	for jobName, handler := range job.JobMaps {
+	for jobName, handler := range job.DefineJobMaps {
 		mux.HandleFunc(jobName, handler)
 	}
 }

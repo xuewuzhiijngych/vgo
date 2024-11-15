@@ -14,8 +14,8 @@ var (
 	ApiTokenExpireDuration   time.Duration
 	AdminSecret              []byte
 	ApiSecret                []byte
-	AdminTokenBlacklist      = map[string]bool{} // 不使用redis设置黑名单时使用
-	ApiTokenBlacklist        = map[string]bool{} // 不使用redis设置黑名单时使用
+	//AdminTokenBlacklist      = map[string]bool{} // 不使用redis设置黑名单时使用
+	//ApiTokenBlacklist        = map[string]bool{} // 不使用redis设置黑名单时使用
 )
 
 // GenAdminToken 生成后台管理用户的JWT Token

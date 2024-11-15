@@ -1,12 +1,9 @@
 package Backend
 
 import (
-	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 	"strconv"
 	"ych/vgo/app/AdminUser/Model"
 	"ych/vgo/app/Common/Backend"
@@ -15,43 +12,6 @@ import (
 	"ych/vgo/pkg/helper"
 	"ych/vgo/pkg/response"
 )
-
-// Create 创建用户
-func Create(ctx *gin.Context) {
-	var user Model.AdminUser
-	if err := helper.BindJSON(ctx, &user); err != nil {
-		response.Fail(ctx, "参数错误", err.Error(), nil)
-		return
-	}
-	// 查询已存在的用户
-	var existingUser Model.AdminUser
-	if err := global.DbCon.Where("username = ?", user.UserName).First(&existingUser).Error; err != nil {
-		if !errors.Is(err, gorm.ErrRecordNotFound) {
-			response.Fail(ctx, "查询用户失败", err.Error(), nil)
-			return
-		}
-	} else {
-		response.Fail(ctx, "用户名已存在", nil, nil)
-		return
-	}
-	// 对密码进行哈希处理
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-	if err != nil {
-		response.Fail(ctx, "密码哈希失败", err.Error(), nil)
-		return
-	}
-	user.Password = string(hashedPassword)
-	// 插入用户数据
-	if err := global.DbCon.Create(&user).Error; err != nil {
-		// 检查是否是唯一键冲突错误
-		var mysqlErr *mysql.MySQLError
-		if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
-			response.Fail(ctx, "用户名已存在", err.Error(), nil)
-		}
-		return
-	}
-	response.Success(ctx, "成功", user, nil)
-}
 
 // Login 登录
 func Login(ctx *gin.Context) {

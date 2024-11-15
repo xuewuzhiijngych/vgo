@@ -13,7 +13,7 @@ var logLock sync.RWMutex
 func InitLogger() {
 	logLock.RLock()
 	defer logLock.RUnlock()
-	global.Logger = log.LogDriver()
+	global.Logger = log.InitLogDriver()
 	if global.Logger == nil {
 		panic("日志驱动初始化失败")
 	}

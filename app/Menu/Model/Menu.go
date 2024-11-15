@@ -31,7 +31,7 @@ type Menu struct {
 }
 
 // AfterFind 回调函数，在查询后执行
-func (m *Menu) AfterFind(tx *gorm.DB) (err error) {
+func (m *Menu) AfterFind(_ *gorm.DB) (err error) {
 	m.Meta = m.getMetaAttribute()
 	return
 }
