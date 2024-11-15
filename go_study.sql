@@ -11,7 +11,7 @@
  Target Server Version : 80031 (8.0.31)
  File Encoding         : 65001
 
- Date: 08/11/2024 16:13:46
+ Date: 15/11/2024 17:11:55
 */
 
 SET NAMES utf8mb4;
@@ -42,12 +42,13 @@ CREATE TABLE `admin_users`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_username_deletedat`(`username` ASC) USING BTREE,
   INDEX `idx_admin_users_user_name`(`username` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin_users
 -- ----------------------------
 INSERT INTO `admin_users` VALUES (1, '2024-07-11 00:00:00.000', '2024-08-19 17:25:46.000', 'superAdmin', '$2a$10$H6/FynuF4p0BT2jd4aAEIuiY3MMIr1cPdzJKZ5iMDg4/dCPxNrHz2', '100', 'superAdmin', '13888888888', 'admin@qq.com', '', '行胜于言，质胜于华。', 'statistics', 1, '127.0.0.1', '{\"mode\":\"light\",\"tag\":true,\"menuCollapse\":false,\"menuWidth\":230,\"layout\":\"classic\",\"skin\":\"mine\",\"i18n\":false,\"language\":\"zh_CN\",\"animation\":\"ma-slide-down\",\"color\":\"#165dff\",\"ws\":false}', '', 1);
+INSERT INTO `admin_users` VALUES (30, '2024-11-15 16:52:41.748', '2024-11-15 16:52:41.748', 'admin', '$2a$10$Vt.bJlPDD3cSDnLOVsL2..46jcoQ2uPug/k6lZZ7V/Mk5hZa0J2GC', '100', '', '', '', '', '', '', 1, '', '', '', 2);
 
 -- ----------------------------
 -- Table structure for articles
@@ -67,7 +68,7 @@ CREATE TABLE `articles`  (
 -- Records of articles
 -- ----------------------------
 INSERT INTO `articles` VALUES (13, '2024-10-31 16:40:40.371', '2024-11-04 14:17:37.689', '哈哈哈哈1', 1, '<p>哈哈哈哈哈哈哈哈哈哈哈哈1</p>');
-INSERT INTO `articles` VALUES (14, '2024-10-31 16:41:04.846', '2024-11-04 15:54:49.416', '哈哈哈哈2哈哈哈哈2', 1, '<p>哈哈哈哈2哈哈哈哈2哈哈哈哈2哈哈哈哈2哈哈哈哈2</p>');
+INSERT INTO `articles` VALUES (14, '2024-10-31 16:41:04.846', '2024-11-15 16:51:24.806', '文章', 2, '<p>哈哈哈哈2哈哈哈哈2哈哈哈哈2哈哈哈哈2哈哈哈哈2</p>');
 
 -- ----------------------------
 -- Table structure for casbin_rule
@@ -84,13 +85,38 @@ CREATE TABLE `casbin_rule`  (
   `v5` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_casbin_rule`(`ptype` ASC, `v0` ASC, `v1` ASC, `v2` ASC, `v3` ASC, `v4` ASC, `v5` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 371 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 450 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of casbin_rule
 -- ----------------------------
-INSERT INTO `casbin_rule` VALUES (370, 'p', 'admin', '/backend/buttons', 'GET', '', '', '');
-INSERT INTO `casbin_rule` VALUES (369, 'p', 'admin', '/backend/menus', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES (397, 'g', '30', 'admin', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES (436, 'p', 'admin', '/backend/articles', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES (433, 'p', 'admin', '/backend/articles', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES (434, 'p', 'admin', '/backend/articles', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (435, 'p', 'admin', '/backend/articles', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES (437, 'p', 'admin', '/backend/articles/change', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (425, 'p', 'admin', '/backend/buttons', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES (424, 'p', 'admin', '/backend/menus', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES (429, 'p', 'admin', '/backend/notices', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES (426, 'p', 'admin', '/backend/notices', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES (427, 'p', 'admin', '/backend/notices', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (428, 'p', 'admin', '/backend/notices', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES (430, 'p', 'admin', '/backend/notices/change', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (447, 'p', 'admin', '/backend/roles', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES (444, 'p', 'admin', '/backend/roles', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES (445, 'p', 'admin', '/backend/roles', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (446, 'p', 'admin', '/backend/roles', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES (449, 'p', 'admin', '/backend/roles/get/menu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (448, 'p', 'admin', '/backend/roles/set/menu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (431, 'p', 'admin', '/backend/upload/local/img', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (432, 'p', 'admin', '/backend/upload/local/video', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (441, 'p', 'admin', '/backend/users', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES (438, 'p', 'admin', '/backend/users', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES (439, 'p', 'admin', '/backend/users', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (440, 'p', 'admin', '/backend/users', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES (442, 'p', 'admin', '/backend/users/get/role', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES (443, 'p', 'admin', '/backend/users/set/role', 'POST', '', '', '');
 
 -- ----------------------------
 -- Table structure for menus
@@ -180,7 +206,7 @@ CREATE TABLE `notices`  (
 -- Records of notices
 -- ----------------------------
 INSERT INTO `notices` VALUES (1, '2024-11-04 14:42:30.404', '2024-11-04 14:42:30.404', '111', 1, '<p>111111111</p>', 1730702636);
-INSERT INTO `notices` VALUES (5, '2024-11-04 14:43:59.083', '2024-11-04 15:55:33.405', '333333333', 1, '<p>333333333333333</p>', 0);
+INSERT INTO `notices` VALUES (5, '2024-11-04 14:43:59.083', '2024-11-15 16:42:39.125', '333333333', 1, '<p>333333333333333<img src=\"https://asqy-1318214684.cos.ap-mumbai.myqcloud.com/1731660150860742400_5213.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p>', 0);
 
 -- ----------------------------
 -- Table structure for role_menus
@@ -193,14 +219,42 @@ CREATE TABLE `role_menus`  (
   `role_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色ID',
   `menu_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '菜单ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1262 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1353 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role_menus
 -- ----------------------------
-INSERT INTO `role_menus` VALUES (1259, '2024-11-04 17:01:47.346', '2024-11-04 17:01:47.346', 10, 1);
-INSERT INTO `role_menus` VALUES (1260, '2024-11-04 17:01:47.351', '2024-11-04 17:01:47.351', 10, 34);
-INSERT INTO `role_menus` VALUES (1261, '2024-11-04 17:01:47.355', '2024-11-04 17:01:47.355', 10, 35);
+INSERT INTO `role_menus` VALUES (1322, '2024-11-15 16:55:21.805', '2024-11-15 16:55:21.805', 10, 1);
+INSERT INTO `role_menus` VALUES (1323, '2024-11-15 16:55:21.807', '2024-11-15 16:55:21.807', 10, 34);
+INSERT INTO `role_menus` VALUES (1324, '2024-11-15 16:55:21.810', '2024-11-15 16:55:21.810', 10, 35);
+INSERT INTO `role_menus` VALUES (1325, '2024-11-15 16:55:21.811', '2024-11-15 16:55:21.811', 10, 3);
+INSERT INTO `role_menus` VALUES (1326, '2024-11-15 16:55:21.814', '2024-11-15 16:55:21.814', 10, 4);
+INSERT INTO `role_menus` VALUES (1327, '2024-11-15 16:55:21.815', '2024-11-15 16:55:21.815', 10, 5);
+INSERT INTO `role_menus` VALUES (1328, '2024-11-15 16:55:21.818', '2024-11-15 16:55:21.818', 10, 6);
+INSERT INTO `role_menus` VALUES (1329, '2024-11-15 16:55:21.820', '2024-11-15 16:55:21.820', 10, 7);
+INSERT INTO `role_menus` VALUES (1330, '2024-11-15 16:55:21.822', '2024-11-15 16:55:21.822', 10, 8);
+INSERT INTO `role_menus` VALUES (1331, '2024-11-15 16:55:21.824', '2024-11-15 16:55:21.824', 10, 10);
+INSERT INTO `role_menus` VALUES (1332, '2024-11-15 16:55:21.826', '2024-11-15 16:55:21.826', 10, 52);
+INSERT INTO `role_menus` VALUES (1333, '2024-11-15 16:55:21.828', '2024-11-15 16:55:21.828', 10, 53);
+INSERT INTO `role_menus` VALUES (1334, '2024-11-15 16:55:21.831', '2024-11-15 16:55:21.831', 10, 54);
+INSERT INTO `role_menus` VALUES (1335, '2024-11-15 16:55:21.833', '2024-11-15 16:55:21.833', 10, 55);
+INSERT INTO `role_menus` VALUES (1336, '2024-11-15 16:55:21.835', '2024-11-15 16:55:21.835', 10, 56);
+INSERT INTO `role_menus` VALUES (1337, '2024-11-15 16:55:21.837', '2024-11-15 16:55:21.837', 10, 57);
+INSERT INTO `role_menus` VALUES (1338, '2024-11-15 16:55:21.840', '2024-11-15 16:55:21.840', 10, 58);
+INSERT INTO `role_menus` VALUES (1339, '2024-11-15 16:55:21.842', '2024-11-15 16:55:21.842', 10, 60);
+INSERT INTO `role_menus` VALUES (1340, '2024-11-15 16:55:21.843', '2024-11-15 16:55:21.843', 10, 12);
+INSERT INTO `role_menus` VALUES (1341, '2024-11-15 16:55:21.846', '2024-11-15 16:55:21.846', 10, 30);
+INSERT INTO `role_menus` VALUES (1342, '2024-11-15 16:55:21.848', '2024-11-15 16:55:21.848', 10, 42);
+INSERT INTO `role_menus` VALUES (1343, '2024-11-15 16:55:21.851', '2024-11-15 16:55:21.851', 10, 43);
+INSERT INTO `role_menus` VALUES (1344, '2024-11-15 16:55:21.853', '2024-11-15 16:55:21.853', 10, 44);
+INSERT INTO `role_menus` VALUES (1345, '2024-11-15 16:55:21.855', '2024-11-15 16:55:21.855', 10, 45);
+INSERT INTO `role_menus` VALUES (1346, '2024-11-15 16:55:21.858', '2024-11-15 16:55:21.858', 10, 46);
+INSERT INTO `role_menus` VALUES (1347, '2024-11-15 16:55:21.860', '2024-11-15 16:55:21.860', 10, 31);
+INSERT INTO `role_menus` VALUES (1348, '2024-11-15 16:55:21.863', '2024-11-15 16:55:21.863', 10, 47);
+INSERT INTO `role_menus` VALUES (1349, '2024-11-15 16:55:21.865', '2024-11-15 16:55:21.865', 10, 48);
+INSERT INTO `role_menus` VALUES (1350, '2024-11-15 16:55:21.868', '2024-11-15 16:55:21.868', 10, 49);
+INSERT INTO `role_menus` VALUES (1351, '2024-11-15 16:55:21.870', '2024-11-15 16:55:21.870', 10, 50);
+INSERT INTO `role_menus` VALUES (1352, '2024-11-15 16:55:21.872', '2024-11-15 16:55:21.872', 10, 51);
 
 -- ----------------------------
 -- Table structure for roles
